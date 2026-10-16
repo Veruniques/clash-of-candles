@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Clash of Candles — 90 % lidí tohle tipne špatně</title>
+  <meta name="description" content="Dovednostní hra nad skutečnými historickými grafy. Tři minuty, dvě čáry, jedna správná strana. Hraj zdarma za coins, stoupej v rancích a měň výhry za skutečné věci.">
+  <meta name="theme-color" content="#7EF0F8">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="cs_CZ">
+  <meta property="og:title" content="Clash of Candles — 90 % lidí tohle tipne špatně">
+  <meta property="og:description" content="Skutečný graf. Dvě čáry. Tři minuty. Která padne první?">
+  <meta property="og:image" content="assets/img/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-standard-normal.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
+  <link rel="preload" as="image" href="assets/img/candle-green.webp">
+  <link rel="preload" as="image" href="assets/img/candle-red.webp">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>
+    // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
+    (function () {
+      var d = document.documentElement;
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      d.classList.add('js-anim');
+      setTimeout(function () { if (!d.classList.contains('anim-started')) d.classList.remove('js-anim'); }, 3500);
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip" href="#obsah">Přeskočit na obsah</a>
+
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top" aria-label="Clash of Candles — na začátek">
+      <img src="assets/img/wordmark.svg" alt="Clash of Candles" width="132" height="41">
+    </a>
+    <nav class="nav__links" aria-label="Hlavní navigace">
+      <a href="#demo">Ukázkové kolo</a>
+      <a href="#jak-to-funguje">Jak to funguje</a>
+      <a href="#ranky">Ranky</a>
+      <a href="#coins">Coins a shop</a>
+      <a href="#faq">Otázky</a>
+    </nav>
+    <a class="btn btn--ink btn--sm" href="#prvni-vlna">Do první vlny</a>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top" aria-label="Clash of Candles">
+    <div class="hero__light" aria-hidden="true"></div>
+    <div class="hero__scene" id="scene">
+      <h1 class="hero__title" id="heroTitle">
+        <img src="assets/img/wordmark.svg" alt="Clash of Candles" width="920" height="287">
+      </h1>
+
+      <div class="hero__floor" aria-hidden="true"></div>
+      <div class="duo" aria-hidden="true">
+        <div class="fighter fighter--green" id="fGreen">
+          <img class="fighter__img" src="assets/img/candle-green.webp" alt="" width="1600" height="1215">
+          <img class="fighter__refl" src="assets/img/candle-green-sm.webp" alt="" width="800" height="608">
+        </div>
+        <div class="fighter fighter--red" id="fRed">
+          <img class="fighter__img" src="assets/img/candle-red.webp" alt="" width="1600" height="1215">
+          <img class="fighter__refl" src="assets/img/candle-red-sm.webp" alt="" width="800" height="608">
+        </div>
+        <div class="fighter fighter--duo" id="fDuo">
+          <img class="fighter__img" src="assets/img/candles-duo.webp" alt="" width="1600" height="1215">
+          <img class="fighter__refl" src="assets/img/candles-duo-sm.webp" alt="" width="800" height="608">
+        </div>
+        <div class="impact" id="impact"></div>
+      </div>
+    </div>
+    <canvas class="hero__dust" id="dust" aria-hidden="true"></canvas>
+
+    <div class="hero__copy">
+      <p class="hook" id="hook"><span>90&nbsp;% lidí tohle tipne špatně.</span></p>
+      <p class="hero__sub" id="heroSub">Skutečný historický graf. Dvě čáry. Tři minuty. Řekni, kterou cena trefí dřív.</p>
+      <div class="hero__cta" id="heroCta">
+        <a class="btn btn--ink" href="#demo">Zkusit to hned</a>
+        <a class="btn btn--ghost" href="#prvni-vlna">Chci místo v první vlně</a>
+      </div>
+    </div>
+  </section>
+
+  <main id="obsah">
+
+    <!-- ============ DEMO / SHOWCASE ============ -->
+    <section class="demo" id="demo" aria-labelledby="demo-h">
+      <div class="wrap">
+        <div class="demo__head">
+          <h2 id="demo-h" class="h2">Tak schválně.</h2>
+          <p class="lede">Horní čára je průraz nahoru, dolní průraz dolů. Vyber, kterou cena trefí dřív. Bez registrace, bez coins. Jen ty a svíčky.</p>
+        </div>
+
+        <div class="arena" id="arena">
+          <div class="arena__bar">
+            <div class="arena__round"><span id="dRound">Kolo 1 ze 3</span></div>
+            <div class="arena__score" aria-live="polite">Trefy: <strong id="dScore">0</strong></div>
+            <div class="arena__tools">
+              <button class="chip" type="button" id="dEma" aria-pressed="true">EMA 100</button>
+              <button class="chip" type="button" id="dReveal">Odhalit svíčku · 1×</button>
+            </div>
+          </div>
+          <div class="arena__stage">
+            <canvas id="chart" role="img" aria-label="Svíčkový graf s horní čárou breakout a dolní čárou breakdown"></canvas>
+            <div class="arena__result" id="dResult" aria-live="polite" hidden>
+              <p class="arena__verdict" id="dVerdict"></p>
+              <p class="arena__note" id="dNote"></p>
+              <div class="arena__actions">
+                <button class="btn btn--ink" type="button" id="dNext">Další graf</button>
+                <a class="btn btn--coin" href="#prvni-vlna" id="dCta" hidden>Chci do první vlny</a>
+              </div>
+            </div>
+          </div>
+          <div class="arena__pick">
+            <button class="pick pick--up" type="button" id="pUp">
+              <span class="pick__name">Breakout</span>
+              <span class="pick__hint">cena trefí horní čáru</span>
+            </button>
+            <button class="pick pick--down" type="button" id="pDown">
+              <span class="pick__name">Breakdown</span>
+              <span class="pick__hint">cena trefí dolní čáru</span>
+            </button>
+          </div>
+          <p class="arena__toast" id="dToast" role="status" aria-live="polite"></p>
+        </div>
+        <p class="fine">Ukázka běží na simulovaném grafu. Ve hře hraješ na skutečných historických datech a datum se dozvíš až po výsledku.</p>
+      </div>
+    </section>
+
+    <!-- ============ FIRST WAVE / URGENCY ============ -->
+    <section class="wave" id="prvni-vlna" aria-labelledby="wave-h">
+      <div class="wrap wave__grid">
+        <div class="wave__copy">
+          <h2 id="wave-h" class="h2 h2--light">Brána se otevře brzy. Ne pro všechny naráz.</h2>
+          <p class="lede lede--light">Arénu spouštíme po vlnách. Kdo je na seznamu, jde v první. Ostatní budou chvíli stát před branou a koukat, jak se žebříček plní bez nich.</p>
+          <ul class="perks">
+            <li><strong>Vstup dřív než veřejnost.</strong> První vlna hraje, zatímco ostatní čekají na pozvánku.</li>
+            <li><strong>Startovní balík coins navíc.</strong> Začneš s plnější kapsou než zbytek arény.</li>
+            <li><strong>Odznak zakládajícího hráče.</strong> U tvého jména. Napořád. Nejde koupit, jde jen stihnout.</li>
+            <li><strong>Pozvánka do prvního contestu.</strong> Hraje se o 15 000 coins.</li>
+          </ul>
+        </div>
+
+        <!-- Set data-endpoint to the URL that collects sign-ups (POST JSON). See README. -->
+        <form class="signup" id="signup" novalidate data-endpoint="">
+          <p class="signup__title">Zapiš se do první vlny</p>
+          <label class="signup__label" for="email">Tvůj e-mail</label>
+          <input class="signup__input" id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="jmeno@email.cz" required>
+          <label class="check">
+            <input type="checkbox" name="age" id="age" required>
+            <span>Je mi 18 let nebo víc a souhlasím se zasláním pozvánky.</span>
+          </label>
+          <button class="btn btn--coin btn--block" type="submit">Zapsat se do první vlny</button>
+          <p class="signup__msg" id="signupMsg" role="status" aria-live="polite"></p>
+          <p class="signup__fine">Jeden e-mail, až se brána otevře. Na spam nemáme čas, hrajeme.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ HOW A ROUND WORKS ============ -->
+    <section class="section" id="jak-to-funguje" aria-labelledby="how-h">
+      <div class="wrap">
+        <h2 id="how-h" class="h2">Jedno kolo. Tři minuty. Žádné druhé šance.</h2>
+        <p class="lede">Žádné kostky, žádný automat. Graf, který se už jednou stal, a otázka, jestli ho umíš přečíst líp než člověk na druhé straně.</p>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step__n" aria-hidden="true">1</span>
+            <h3 class="h3">Přečti graf</h3>
+            <p>Dostaneš skutečný historický graf z více než 11 000 instrumentů a až 15 let dat. Kdy se to stalo, zjistíš až po výsledku. Žádné googlení.</p>
+          </li>
+          <li class="step">
+            <span class="step__n" aria-hidden="true">2</span>
+            <h3 class="h3">Kresli</h3>
+            <p>Čáry, horizontály, vertikály, obdélníky, EMA. Přepínej denní, hodinový a minutový pohled. Hledej odpor, podporu a to, co ostatní přehlédnou.</p>
+          </li>
+          <li class="step">
+            <span class="step__n" aria-hidden="true">3</span>
+            <h3 class="h3">Vyber stranu</h3>
+            <p>Breakout, nebo breakdown. Jakmile tipneš, spárujeme tě s hráčem, který vsadil na opak. Ty proti němu, graf jako rozhodčí.</p>
+          </li>
+          <li class="step">
+            <span class="step__n" aria-hidden="true">4</span>
+            <h3 class="h3">Historie rozhodne</h3>
+            <p>Vyhrává ta strana, jejíž čáru cena prorazí první. Data jsou skutečná a nejdou přepsat. Ani námi.</p>
+          </li>
+        </ol>
+
+        <dl class="facts">
+          <div><dt>90 s</dt><dd>a startuje další kolo</dd></div>
+          <div><dt>2</dt><dd>možné výsledky, žádná remíza</dd></div>
+          <div><dt>11 000+</dt><dd>instrumentů v historii</dd></div>
+          <div><dt>15 let</dt><dd>skutečných tržních dat</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ============ SHOWCASE SCREENS ============ -->
+    <section class="section section--tint" aria-labelledby="live-h">
+      <div class="wrap">
+        <h2 id="live-h" class="h2">Takhle vypadá kolo naostro.</h2>
+        <div class="shots" id="shots">
+          <div class="shots__tabs" role="tablist" aria-label="Fáze kola">
+            <button role="tab" id="t1" aria-controls="s1" aria-selected="true">1. Tip podán</button>
+            <button role="tab" id="t2" aria-controls="s2" aria-selected="false" tabindex="-1">2. Spárováno</button>
+            <button role="tab" id="t3" aria-controls="s3" aria-selected="false" tabindex="-1">3. Čára padla</button>
+          </div>
+          <div class="shots__frame">
+            <figure role="tabpanel" id="s1" aria-labelledby="t1">
+              <img src="assets/img/arena-waiting.webp" alt="Herní obrazovka: tip breakout je podaný, hráč čeká na soupeře z opačné strany" width="1600" height="815" loading="lazy">
+              <figcaption>Vybral sis horní čáru. Teď čekáš, až se najde někdo, kdo věří opaku.</figcaption>
+            </figure>
+            <figure role="tabpanel" id="s2" aria-labelledby="t2" hidden>
+              <img src="assets/img/arena-paired.webp" alt="Herní obrazovka: hráči spárováni, graf pokračuje směrem k horní čáře" width="1600" height="815" loading="lazy">
+              <figcaption>Soupeř nalezen. Od teď nerozhoduje nikdo z vás, jen to, co se tehdy skutečně stalo.</figcaption>
+            </figure>
+            <figure role="tabpanel" id="s3" aria-labelledby="t3" hidden>
+              <img src="assets/img/arena-win.webp" alt="Herní obrazovka: cena prorazila horní čáru, kolo vyhráno" width="1600" height="815" loading="lazy">
+              <figcaption>Horní čára proražena. Coins ze stolu jdou k tobě.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ REVEALS ============ -->
+    <section class="section" aria-labelledby="reveal-h">
+      <div class="wrap split">
+        <div>
+          <h2 id="reveal-h" class="h2">Jedna svíčka navíc. Použij ji chytře.</h2>
+          <p class="lede">Každá tvoje identita nosí zásobu odhalení. Jedno odhalení ti před rozhodnutím ukáže další pětiminutovou svíčku.</p>
+        </div>
+        <ul class="ticks">
+          <li>Odhalení přidá kontext, nikdy neprozradí výsledek. Tak jednoduché to nebude.</li>
+          <li>Dobíjí se aktivitou. Kdo hraje, ten vidí víc.</li>
+          <li>Různé identity unesou 1 až 7 odhalení. Vyber si, s kým jdeš do arény.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ COINS ============ -->
+    <section class="section section--deep" id="coins" aria-labelledby="coins-h">
+      <div class="wrap">
+        <h2 id="coins-h" class="h2 h2--light">Coins. Hrací měna, ne peníze.</h2>
+        <p class="lede lede--light">Tady se nevybírá. Tady se vyhrává, sbírá a mění za věci, které si jinak kupuješ za výplatu.</p>
+
+        <div class="flow">
+          <div class="flow__item">
+            <div class="coin" aria-hidden="true">100</div>
+            <h3 class="h3">Každý den zdarma</h3>
+            <p>Každý den se ti peněženka dobije zpátky na 100 coins. Hrát můžeš bez jediné koruny.</p>
+          </div>
+          <div class="flow__item">
+            <div class="coin" aria-hidden="true">10</div>
+            <h3 class="h3">Vstup do kola</h3>
+            <p>Základní kolo stojí 10 coins. Čím vyšší rank, tím dražší vstup a tím větší výhra.</p>
+          </div>
+          <div class="flow__item">
+            <div class="coin coin--stack" aria-hidden="true">+</div>
+            <h3 class="h3">Dobij si v shopu</h3>
+            <p>Došly? V shopu najdeš balíčky coins, když nechceš čekat na zítřek.</p>
+          </div>
+          <div class="flow__item">
+            <div class="coin coin--prize" aria-hidden="true">%</div>
+            <h3 class="h3">Vyměň za věci</h3>
+            <p>Nasbírané coins uplatníš jako slevu na skutečné produkty. Třeba na nový iPhone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RANKS ============ -->
+    <section class="section" id="ranky" aria-labelledby="ranks-h">
+      <div class="wrap">
+        <h2 id="ranks-h" class="h2">Čím výš, tím míň berliček.</h2>
+        <p class="lede">Vyhrávej a stoupej. Na každém ranku hraješ o víc coins, ale s menším počtem nástrojů a se zrádnějším grafem. Na vrcholu zbýváš jen ty a čistý graf.</p>
+
+        <div class="ranks" id="ranks">
+          <div class="ranks__ladder" role="tablist" aria-label="Ranky" id="rankLadder"></div>
+          <div class="ranks__panel" id="rankPanel" role="tabpanel" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LIVES ============ -->
+    <section class="section section--tint" aria-labelledby="lives-h">
+      <div class="wrap split">
+        <div>
+          <h2 id="lives-h" class="h2">Deset chyb a jsi venku.</h2>
+          <p class="lede">Každý špatný tip tě stojí jeden knot. Když zhasne poslední, aréna tě vyhodí.</p>
+          <p>Zpátky se dostaneš, když si koupíš návrat. Platí na následující 4 hodiny. Nebo počkáš a přijdeš s čistou hlavou. Obojí je legitimní strategie.</p>
+        </div>
+        <div class="wicks" aria-label="Ukázka: 7 ze 10 životů zbývá">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          <span class="out"></span><span class="out"></span><span class="out"></span>
+          <p class="wicks__label">7 ze 10. Ještě je čas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTESTS ============ -->
+    <section class="section section--deep" aria-labelledby="contest-h">
+      <div class="wrap split">
+        <div>
+          <h2 id="contest-h" class="h2 h2--light">Contesty. Jeden vstup pro všechny.</h2>
+          <p class="lede lede--light">Nováček i legenda platí za vstup stejně a hrají o stejný bank. Třeba o 15 000 coins. Rozhoduje jen to, kdo čte graf líp.</p>
+        </div>
+        <ul class="ticks ticks--light">
+          <li>Plň questy a každý tah tě posune dál v žebříčku.</li>
+          <li>Porovnej se s hráči z celé arény v reálném čase.</li>
+          <li>Vyšší pozice odemyká lepší odměny a speciální funkce.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ SHOP ============ -->
+    <section class="section" aria-labelledby="shop-h">
+      <div class="wrap">
+        <h2 id="shop-h" class="h2">Shop. Kde se coins mění ve věci.</h2>
+        <div class="shop">
+          <div class="shop__col">
+            <h3 class="h3">Dobij coins</h3>
+            <p>Balíčky coins pro chvíle, kdy denní stovka nestačí. Čím větší balíček, tím víc coins za stejnou cenu.</p>
+          </div>
+          <div class="shop__col">
+            <h3 class="h3">Utrať výhry</h3>
+            <ul class="shop__list">
+              <li><span>iPhone</span><span>sleva v coins</span></li>
+              <li><span>Bezdrátová sluchátka</span><span>sleva v coins</span></li>
+              <li><span>Herní konzole</span><span>sleva v coins</span></li>
+              <li><span>Merch Clash of Candles</span><span>sleva v coins</span></li>
+            </ul>
+            <p class="fine">Nabídka produktů se bude měnit. Coins nelze vyměnit za hotovost.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GET BETTER ============ -->
+    <section class="section section--tint" aria-labelledby="better-h">
+      <div class="wrap">
+        <h2 id="better-h" class="h2">Prohraj jednou. Podruhé už víš proč.</h2>
+        <div class="trio">
+          <div>
+            <h3 class="h3">Historie kol</h3>
+            <p>Každé odehrané kolo s počáteční cenou, tvým tipem a výsledkem. Barevné značky ukážou trefy i úlety na první pohled.</p>
+          </div>
+          <div>
+            <h3 class="h3">Rozbor do detailu</h3>
+            <p>Sentiment, likvidita, pohyb ceny, jak dlouho ses rozhodoval a která čára padla první. Statistiky a heatmapy prozradí, kde jsi silný a kde se pleteš.</p>
+          </div>
+          <div>
+            <h3 class="h3">Akademie</h3>
+            <p>Šest úrovní lekcí, kvízů a simulací. Nauč se mechaniku i nástroje. Test na 80 % a víc odemyká odměny.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRUST ============ -->
+    <section class="section" aria-labelledby="trust-h">
+      <div class="wrap split">
+        <div>
+          <h2 id="trust-h" class="h2">Data, která nejdou ohnout.</h2>
+          <p class="lede">Hrajeme na skutečných historických datech. Nikdo je nemůže upravit, ani my. Oba hráči v kole mají přesně stejné podmínky.</p>
+        </div>
+        <ul class="ticks">
+          <li>Nejsme broker. Nic se tu nekupuje ani neprodává.</li>
+          <li>Není to investování. Je to hra o tom, kdo líp čte graf.</li>
+          <li><strong>Hlasuj o budoucnosti hry.</strong> Čím víc hraješ, tím víc tvůj hlas váží při výběru novinek.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="section section--tint" id="faq" aria-labelledby="faq-h">
+      <div class="wrap wrap--narrow">
+        <h2 id="faq-h" class="h2">Otázky, které padnou dřív než čára.</h2>
+        <div class="faq">
+          <details>
+            <summary>Musím umět obchodovat?</summary>
+            <p>Ne. Stačí chuť naučit se číst graf. Začínáš na ranku, kde máš všechny nástroje k dispozici, a Akademie tě provede od úplných základů.</p>
+          </details>
+          <details>
+            <summary>Kolik to stojí?</summary>
+            <p>Hrát můžeš zdarma. Každý den se ti peněženka dobije na 100 coins a základní kolo stojí 10. Coins si můžeš v shopu dokoupit, ale nemusíš.</p>
+          </details>
+          <details>
+            <summary>Můžu coins vybrat jako peníze?</summary>
+            <p>Ne. Coins jsou hrací měna. Nevybírají se, ale můžeš je v shopu uplatnit jako slevu na skutečné produkty.</p>
+          </details>
+          <details>
+            <summary>Co když udělám deset chyb?</summary>
+            <p>Po desátém špatném tipu vypadneš z arény. Návrat si můžeš koupit a platí na následující 4 hodiny. Nebo počkáš.</p>
+          </details>
+          <details>
+            <summary>Jsou grafy opravdu skutečné?</summary>
+            <p>Ano. Každé kolo vychází ze skutečných historických dat. Přesné datum a čas uvidíš až po vyhodnocení, abys nemohl podvádět s kalendářem.</p>
+          </details>
+          <details>
+            <summary>Proč na vyšším ranku ubývají nástroje?</summary>
+            <p>Protože tam má vážit tvoje znalost, ne nástroje. Vyšší rank znamená vyšší výhry, ale i méně indikátorů a náročnější grafy.</p>
+          </details>
+          <details>
+            <summary>Kdy hru spustíte?</summary>
+            <p>Brzy. Hráči z první vlny se to dozví jako první a dostanou se dovnitř dřív než ostatní.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final" aria-labelledby="final-h">
+      <div class="wrap final__inner">
+        <img class="final__duo" src="assets/img/candles-duo.webp" alt="" width="1600" height="1215" loading="lazy">
+        <h2 id="final-h" class="h2">Zelená, nebo červená? Rozhodni se, než to udělá graf.</h2>
+        <a class="btn btn--ink" href="#prvni-vlna">Zapsat se do první vlny</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot__grid">
+      <img src="assets/img/wordmark-light.svg" alt="Clash of Candles" width="160" height="50">
+      <p class="foot__legal">Clash of Candles je dovednostní hra nad historickými daty grafů. Nejde o investiční službu, obchodování ani investiční poradenství. Žádné finanční nástroje se nekupují ani neprodávají. Coins jsou hrací měna a nelze je vyměnit za peníze. Hra je určena hráčům od 18 let.</p>
+      <p class="foot__meta">Obchodní podmínky, zásady ochrany osobních údajů a údaje o provozovateli zveřejníme před spuštěním. © 2026 Clash of Candles</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/vendor/gsap.min.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/demo.js" defer></script>
+</body>
+</html>
