@@ -286,10 +286,10 @@ p { margin: 0 0 1em; }
 .app__legend i { width: 6px; height: 6px; border-radius: 50%; background: #E2336B; }
 .app__legend button { border: 0; background: none; padding: 0 2px; font-size: 13px; line-height: 1; color: #A9B5BC; cursor: pointer; }
 .app__chips { position: absolute; right: 8px; top: 8px; display: flex; gap: 6px; }
-.chip { display: inline-flex; align-items: center; height: 18px; padding: 0 7px; margin: 0; border-radius: 3px; background: #fff; border: 1px solid #D9E1E6; font-size: 10px; font-weight: 700; color: #5D6E78; }
-.chip--pair i { font-style: normal; color: #10B871; } .chip--pair b { color: var(--red); }
-.chip--date { position: absolute; right: 8px; top: 31px; color: var(--ink2); }
-.chip--date[hidden] { display: none; }
+.gchip { display: inline-flex; align-items: center; height: 18px; padding: 0 7px; margin: 0; border-radius: 3px; background: #fff; border: 1px solid #D9E1E6; font-size: 10px; font-weight: 700; color: #5D6E78; }
+.gchip--pair i { font-style: normal; color: #10B871; } .gchip--pair b { color: var(--red); }
+.gchip--date { position: absolute; right: 8px; top: 31px; color: var(--ink2); }
+.gchip--date[hidden] { display: none; }
 .app__status { position: absolute; left: 8px; top: 8px; margin: 0; height: 20px; padding: 0 8px; display: flex; align-items: center; border-radius: 3px; background: #fff; font-size: 10.5px; font-weight: 800; animation: rwIn .35s ease; }
 .app__status[hidden] { display: none; }
 .app__status.is-wait { color: #C99400; border: 1.5px solid #F2B705; }
@@ -1066,3 +1066,145 @@ main { background: var(--noise), var(--night); }
 .rk__badges em { font-style: normal; margin-left: 4px; padding: 1px 6px; border-radius: 3px; background: #13232C; color: #fff; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
 .rk.is-locked { opacity: .6; }
 .rk.is-locked .rb { filter: saturate(.5); }
+
+/* =========================================================
+   v6 — light turquoise page (continues the hero) + punchier rewards panel
+   ========================================================= */
+:root { --text: #0B2C3A; --muted: #2F6474; --line: rgba(11,44,58,.12); --card: rgba(255,255,255,.55); --card-b: rgba(255,255,255,.75); }
+html, body { background: var(--arena); }
+main { background:
+  radial-gradient(70% 40% at 20% 10%, rgba(255,255,255,.45), transparent 70%),
+  radial-gradient(60% 40% at 90% 60%, rgba(255,255,255,.35), transparent 70%),
+  linear-gradient(180deg, #8FF2F9 0%, var(--arena) 40%, #74E9F3 100%); }
+.dark { background: radial-gradient(70% 60% at 85% 0%, rgba(255,255,255,.4), transparent 60%), radial-gradient(60% 60% at 0% 100%, rgba(46,226,154,.12), transparent 60%); }
+.section--tint { background: rgba(255,255,255,.18); }
+.section + .section, .wave + .section, .section + .wave { border-top: 1px solid rgba(11,44,58,.06); }
+.play__inner { background:
+  radial-gradient(60% 50% at 50% 0%, rgba(255,255,255,.6), transparent 70%),
+  linear-gradient(180deg, #B4F7FB 0%, #8FF2F9 30%, var(--arena) 100%);
+  box-shadow: 0 -30px 70px -30px rgba(4,60,80,.45), inset 0 1px 0 rgba(255,255,255,.9); }
+.play__inner::before { background: rgba(11,44,58,.18); }
+
+/* type */
+.h2, .h3, .kicker { color: var(--ink); }
+.kicker { background: none; -webkit-background-clip: border-box; background-clip: border-box; }
+.lede { color: #255A6B; }
+.fine { color: #3D7383; }
+.note { color: var(--ink); background: rgba(255,255,255,.45); box-shadow: inset 3px 0 0 var(--ink); }
+
+/* surfaces */
+.glass, .glass--dark { background: var(--card); border-color: var(--card-b); box-shadow: 0 1px 0 #fff inset, 0 24px 50px -30px rgba(4,60,80,.45); }
+.glass::before { background: linear-gradient(90deg, transparent, #fff, transparent); }
+.feat, .pts li, .perks li, .faq details, .hist li, .lb li, .fogcard, .ac-opts span, .stats__kpi div { background: var(--card); border-color: var(--card-b); }
+.feat:hover { background: rgba(255,255,255,.75); border-color: #fff; }
+.faq details[open] { background: rgba(255,255,255,.8); border-color: #fff; }
+
+/* everything that used to be white-on-dark */
+main :is(.perks b, .signup__title, .pts b, .rp__name, .rp__stats dd, .lives__label b, .calc__cap, .calc__row b, .faq summary,
+  .pod__name, .pod__price b, .fogcard p, .fog__title, .rankwin__title, .contest__name, .contest__meta b, .ac-q, .ac-score b,
+  .board__head, .lb__name, .ring b, .stats__kpi dd, .product .price b, .rw-price b) { color: var(--ink); }
+main :is(.ticks li, .rp__sub, .calc__row, .fog__text, .stats__label, .hist li) { color: #255A6B; }
+main :is(.feat p, .pts span, .perks span, .faq p, .contest__meta, .lb__name small, .pod__price, .ring span, .stats__kpi dt) { color: #2F6474; }
+.pod__need, .fogcard span, .contest__pool { color: #9A6A00; }
+.pts li::before { filter: none; }
+.tsteps { background: rgba(255,255,255,.4); border-color: rgba(255,255,255,.7); }
+.tsteps li { color: #2F6474; } .tsteps b { background: rgba(11,44,58,.1); color: var(--ink); }
+.tsteps li.is-on { background: var(--ink); color: #fff; } .tsteps li.is-on b { background: var(--arena); color: var(--ink); box-shadow: none; }
+.tsteps li.is-done b { background: var(--jade); color: #04301F; }
+
+/* buttons on light: primary goes dark everywhere, glass becomes an outline */
+main .btn--primary { --bg: linear-gradient(180deg, #123F52, #04202D); --fg: #fff; --glow: rgba(4,32,45,.45); box-shadow: 0 1px 0 rgba(255,255,255,.18) inset, 0 14px 30px -12px var(--glow); }
+main .btn--glass { --bg: rgba(255,255,255,.35); --fg: var(--ink); box-shadow: inset 0 0 0 2px rgba(11,44,58,.5); }
+main .btn--glass:hover { --bg: rgba(255,255,255,.6); box-shadow: inset 0 0 0 2px var(--ink); }
+.game .rw-actions .btn--glass { --bg: rgba(255,255,255,.08); --fg: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.3); }
+
+/* nav never turns dark now */
+.nav.is-dark { color: var(--ink); background: rgba(210,252,254,.7); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); box-shadow: 0 1px 0 rgba(11,44,58,.08); }
+.nav.is-dark .nav__brand img { filter: none; }
+.nav.is-dark .btn--primary { --bg: linear-gradient(180deg, #123F52, #04202D); --fg: #fff; }
+
+/* podium + fog */
+.pod__art { box-shadow: 0 0 0 1px #fff inset, 0 30px 50px -26px rgba(4,60,80,.55), 0 0 60px -10px var(--glow); }
+.fog { background: rgba(255,255,255,.25); border-color: rgba(255,255,255,.7); }
+.fog__veil::before { background: linear-gradient(90deg, var(--arena), transparent 18%, transparent 82%, var(--arena)); }
+.fog__veil { background: rgba(126,240,248,.25); }
+
+/* components with dark fills */
+.candlewall { background: radial-gradient(60% 60% at 50% 30%, rgba(255,194,51,.25), transparent 70%), rgba(255,255,255,.4); border-color: rgba(255,255,255,.75); }
+.candlewall__track { background: rgba(11,44,58,.12); }
+.cw-ms span { background: #fff; }
+.cw-ms em { color: var(--ink); }
+.contest { background: var(--card); border-color: var(--card-b); }
+.contest--hot { background: linear-gradient(180deg, rgba(255,214,110,.6), rgba(255,255,255,.55)); border-color: #FFD36B; }
+.ac-path span { color: #2F6474; }
+.ac-path span::before { background: rgba(255,255,255,.7); border-color: rgba(11,44,58,.2); }
+.ac-path span + span::after { background: rgba(11,44,58,.18); }
+.ring { background: radial-gradient(closest-side, #fff 78%, transparent 79% 100%), conic-gradient(var(--jade) calc(var(--p) * 1%), rgba(11,44,58,.1) 0); box-shadow: 0 10px 30px -12px rgba(4,60,80,.4); }
+.heat i { background: rgba(12,154,96, calc(var(--v) + .08)); }
+.board__tabs b { background: var(--ink); color: #fff; }
+.lb li.me { background: rgba(255,255,255,.9); border-color: var(--ink); }
+.lb .top1 .lb__pos { color: #B07C00; } .lb .top2 .lb__pos { color: #5E7F8C; } .lb .top3 .lb__pos { color: #A35A2A; }
+.lb__share { background: var(--ink); color: #fff; }
+.coinCard { background: linear-gradient(180deg, rgba(255,226,140,.55), rgba(255,255,255,.5)); border-color: rgba(255,255,255,.8); }
+.signup { box-shadow: 0 1px 0 #fff inset, 0 30px 60px -30px rgba(4,60,80,.5), 0 0 80px -20px rgba(255,194,51,.35); }
+.signup__input { background: #fff; color: var(--ink); border-color: rgba(11,44,58,.2); }
+.signup__input::placeholder { color: #6E97A4; }
+.playshot__screen { box-shadow: 0 40px 80px -40px rgba(4,60,80,.6); }
+.foot { background: var(--ink); color: #A6CEDB; }
+
+/* ---------- the game card on the light page ---------- */
+.game { box-shadow: 0 0 0 1px rgba(255,255,255,.8), 0 50px 100px -40px rgba(4,60,80,.6), 0 0 120px -30px rgba(255,255,255,.8); }
+
+/* rewards column: bold, deep, gold */
+.rewards { background:
+  radial-gradient(90% 50% at 50% 0%, rgba(255,194,51,.22), transparent 70%),
+  radial-gradient(80% 60% at 100% 100%, rgba(46,226,154,.14), transparent 70%),
+  linear-gradient(180deg, #0E3B4E 0%, #062433 100%); border-left: 0; }
+.rewards__in { gap: 12px; }
+.rw-featured { padding: 14px; border-radius: 22px; overflow: visible; background: linear-gradient(160deg, rgba(255,255,255,.1), rgba(255,255,255,.03));
+  box-shadow: 0 0 0 1.5px rgba(255,194,51,.55) inset, 0 20px 50px -20px rgba(0,0,0,.7), 0 0 50px -16px rgba(255,194,51,.55); }
+.rw-featured.is-hit { animation: rwHit .9s cubic-bezier(.2,.8,.2,1); }
+@keyframes rwHit { 20% { box-shadow: 0 0 0 3px #FFD36B inset, 0 0 80px 0 rgba(255,194,51,.9); transform: scale(1.02); } }
+.rwx__stage { --rx: 0deg; --ry: 0deg; --gx: 50%; --gy: 30%; position: relative; height: 190px; border-radius: 16px; overflow: hidden;
+  background: radial-gradient(70% 70% at var(--gx) var(--gy), #FFFFFF, #E9EEF1 80%);
+  transform: perspective(700px) rotateX(var(--rx)) rotateY(var(--ry)); transition: transform .25s ease-out; transform-style: preserve-3d; cursor: grab; }
+.rwx__stage::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(40% 40% at var(--gx) var(--gy), rgba(255,255,255,.8), transparent 70%); mix-blend-mode: soft-light; }
+.rwx__art { position: absolute; inset: 14px 40px; display: grid; place-items: center; }
+.rwx__art img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transform: translateZ(30px); }
+@media (prefers-reduced-motion: no-preference) { .rwx__art img { animation: hoverS 4s ease-in-out infinite alternate; } }
+.rwx__art .prod-ico { width: 100%; height: 100%; background: none; box-shadow: none; }
+.rwx__tag { position: absolute; left: 10px; top: 10px; z-index: 2; padding: 3px 9px; border-radius: 999px; background: #13232C; color: #FFD36B; font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.rwx__nav { position: absolute; top: 50%; z-index: 2; translate: 0 -50%; width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(19,35,44,.85); color: #fff; font-size: 20px; line-height: 1; cursor: pointer; display: grid; place-items: center; padding-bottom: 3px; transition: transform .2s, background .2s; }
+.rwx__nav:hover { background: #13232C; transform: scale(1.1); }
+.rwx__nav--prev { left: 8px; } .rwx__nav--next { right: 8px; }
+.rw-featured__name { margin: 14px 0 0; font-size: 24px; }
+.rw-featured .rw-price { margin: 2px 0 10px; }
+.rw-featured .rw-price b { color: #FFD36B; font-size: 20px; }
+.rw-prog { position: relative; height: 14px; border-radius: 7px; background: rgba(255,255,255,.1); margin: 0 0 8px; }
+.rw-prog i { box-shadow: 0 0 16px rgba(255,194,51,.8); }
+.rw-prog__glint { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.45) 45%, transparent 60%) -100% 0 / 60% 100% no-repeat; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { .rw-prog__glint { animation: glint 3s ease-in-out infinite; } }
+@keyframes glint { 60%, 100% { background-position: 250% 0; } }
+.rw-featured__meta b { color: #FFD36B; }
+.rwx__count { display: inline-flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
+.rwx__count .candle-ico { width: 7px; height: 11px; margin: 3px 4px 0; } .rwx__count .candle-ico::before { top: -7px; width: 6px; height: 8px; }
+.rw-sub { color: #FFD36B; text-transform: uppercase; letter-spacing: .06em; font-size: 11.5px; }
+.rw-list { gap: 6px; }
+.rw-list li { display: block; padding: 0; background: none; }
+.rwx__pick { width: 100%; display: grid; grid-template-columns: 48px 1fr auto; gap: 10px; align-items: center; padding: 7px; border: 0; border-radius: 14px; text-align: left; cursor: pointer;
+  background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); color: #fff; transition: background .2s, box-shadow .2s, transform .2s; }
+.rwx__pick:hover { background: rgba(255,255,255,.1); transform: translateX(3px); }
+.rwx__pick.is-on { background: rgba(255,194,51,.14); box-shadow: inset 0 0 0 1.5px #FFD36B; }
+.rwx__pick .prod-ico { width: 48px; height: 48px; border-radius: 12px; }
+.rwx__pn { min-width: 0; } .rwx__pn b { display: block; font-size: 13.5px; } .rwx__pn small { font-size: 12px; color: #8FB6C3; }
+.rwx__pick .pct { display: inline-flex; align-items: center; font-weight: 800; font-size: 13px; color: #FFD36B; }
+.rwx__pick .pct .candle-ico { width: 6px; height: 10px; margin: 3px 2px 0 5px; } .rwx__pick .pct .candle-ico::before { top: -6px; width: 5px; height: 7px; }
+.flycandle { position: absolute; left: 0; top: 0; z-index: 30; margin: 0; pointer-events: none; }
+
+.features { background: radial-gradient(60% 80% at 0% 0%, rgba(255,255,255,.7), transparent 60%), rgba(255,255,255,.35); border-color: rgba(255,255,255,.8); box-shadow: 0 40px 80px -50px rgba(4,60,80,.55); }
+.feat__num { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: var(--ink); }
+.chip { color: #0A7A4C; background: rgba(46,226,154,.18); border-color: rgba(12,154,96,.35); }
+.ac-lesson { background: rgba(255,255,255,.7); border-color: #fff; }
+.ac-kicker { color: #0A7A88; }
+.ac-opts .ok { color: #0A7A4C; background: rgba(46,226,154,.25); }
+.ac-score em { color: #0A7A4C; }

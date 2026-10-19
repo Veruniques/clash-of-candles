@@ -377,7 +377,10 @@
     ui.rwTitle.textContent = win ? 'Trefa. Graf jsi přečetl.' : 'Tentokrát ne.';
     ui.rwDelta.textContent = win ? '+' + per + ' svíčka' : 'Bez svíčky';
     ui.rwNote.textContent = 'Cena prorazila ' + where + ' hranici jako první. Skutečný graf EUR/USD z ' + d.getUTCFullYear() + '.' + (win ? ' Svíčka je tvoje.' : '');
-    renderRewards(); ui.rwActions.hidden = false;
+    var round = S.round;
+    if (win) setTimeout(function () { flyCandle().then(function () { if (round === S.round) renderRewards(true); }); }, 650);
+    else renderRewards();
+    ui.rwActions.hidden = false;
     if (S.mode === 'play') setTimeout(function () { ui.rwNext.focus({ preventScroll: true }); }, 450);
   }
 
@@ -392,23 +395,68 @@
     ui.rwNote.textContent = 'Vstup do kola ' + cfg.game.entry + ' coins. Svíčky tě dovedou ke slevám v shopu.';
     ui.rwActions.hidden = true; renderRewards();
   }
-  function renderRewards() {
-    var prods = cfg.products.slice(), feat = prods.filter(function (p) { return p.featured; })[0] || prods[0], cur = cfg.currency;
+  // the reward you're playing for: pick it, see your progress, watch the candle land in it
+  var RW = { target: null, prevPct: 0, prevCandles: 0 };
+  function targetProduct() {
+    var prods = cfg.products;
+    return prods.filter(function (p) { return p.id === RW.target; })[0] || prods.filter(function (p) { return p.featured; })[0] || prods[0];
+  }
+  function renderRewards(fromWin) {
+    var prods = cfg.products, feat = targetProduct(), cur = cfg.currency, idx = prods.indexOf(feat);
+    RW.target = feat.id;
     var need = candlesFor(feat), pct = Math.min(1, S.candles / need), left = Math.max(0, need - S.candles);
+    var art = feat.image ? window.CoC.img(feat.image, feat.name, 'rwx__img') : window.CoC.icon(feat);
     ui.rwFeatured.innerHTML =
-      '<div class="rw-featured__top">' + window.CoC.icon(feat) +
-      '<div><p class="rw-featured__name">' + feat.name + '</p>' +
+      '<div class="rwx__stage" data-tilt>' +
+        '<span class="rwx__tag">Tvůj cíl · ' + (idx + 1) + '/' + prods.length + '</span>' +
+        '<div class="rwx__art">' + art + '</div>' +
+        '<button type="button" class="rwx__nav rwx__nav--prev" data-step="-1" aria-label="Předchozí odměna">‹</button>' +
+        '<button type="button" class="rwx__nav rwx__nav--next" data-step="1" aria-label="Další odměna">›</button>' +
+      '</div>' +
+      '<p class="rw-featured__name">' + feat.name + '</p>' +
       '<p class="rw-price"><s>' + fmt(feat.price) + ' ' + cur + '</s> <b>od ' + fmt(withDisc(feat)) + ' ' + cur + '</b></p>' +
-      '<p class="rw-featured__tag">sleva až ' + fmt(discount(feat)) + ' ' + cur + ' za ' + fmt(need) + ' svíček</p></div></div>' +
-      '<div class="rw-prog" role="progressbar" aria-label="Postup k odměně ' + feat.name + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct * 100) + '"><i></i></div>' +
-      '<div class="rw-featured__meta"><span>' + (left > 0 ? 'Zbývá ' + fmt(left) + ' svíček' : 'Odměna odemčena') + '</span><span>' + fmt(S.candles) + ' / ' + fmt(need) + '</span></div>';
-    var bar = ui.rwFeatured.querySelector('.rw-prog i');
+      '<div class="rw-prog" role="progressbar" aria-label="Postup k odměně ' + feat.name + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct * 100) + '"><i></i><span class="rw-prog__glint"></span></div>' +
+      '<div class="rw-featured__meta"><span>' + (left > 0 ? 'Zbývá <b>' + fmt(left) + '</b> svíček' : 'Odměna odemčena') + '</span><span class="rwx__count"><i class="candle-ico"></i><b>' + fmt(S.candles) + '</b> / ' + fmt(need) + '</span></div>';
+    var bar = ui.rwFeatured.querySelector('.rw-prog i'), from = RW.prevPct;
+    bar.style.width = Math.max(from * 100, 2.5) + '%';
     requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = Math.max(pct * 100, 2.5) + '%'; }); });
-    ui.rwList.innerHTML = prods.filter(function (p) { return p !== feat; }).map(function (p) {
-      var n = candlesFor(p), q = Math.min(1, S.candles / n);
-      return '<li>' + window.CoC.icon(p) + '<div><b>' + p.name + '</b><small><s>' + fmt(p.price) + ' ' + cur + '</s> od ' + fmt(withDisc(p)) + ' ' + cur + '</small>' +
-        '<span class="rw-mini"><i style="width:' + Math.max(q * 100, 3).toFixed(1) + '%"></i></span></div><span class="pct">' + fmt(S.candles) + '/' + fmt(n) + '</span></li>';
+    if (fromWin) ui.rwFeatured.classList.remove('is-hit'), void ui.rwFeatured.offsetWidth, ui.rwFeatured.classList.add('is-hit');
+    RW.prevPct = pct;
+    ui.rwList.innerHTML = prods.map(function (p) {
+      var n = candlesFor(p), q = Math.min(1, S.candles / n), on = p === feat;
+      return '<li><button type="button" class="rwx__pick' + (on ? ' is-on' : '') + '" data-id="' + p.id + '" aria-pressed="' + on + '">' +
+        window.CoC.icon(p) + '<span class="rwx__pn"><b>' + p.name + '</b><small>od ' + fmt(withDisc(p)) + ' ' + cur + '</small>' +
+        '<span class="rw-mini"><i style="width:' + Math.max(q * 100, 3).toFixed(1) + '%"></i></span></span><span class="pct">' + fmt(n) + '<i class="candle-ico"></i></span></button></li>';
     }).join('');
+  }
+  function setTarget(id) { RW.target = id; RW.prevPct = 0; renderRewards(); }
+  ui.rwFeatured.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-step]'); if (!b) return;
+    var prods = cfg.products, i = prods.indexOf(targetProduct());
+    setTarget(prods[(i + +b.getAttribute('data-step') + prods.length) % prods.length].id);
+  });
+  ui.rwList.addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) setTarget(b.getAttribute('data-id')); });
+  // 3D tilt of the reward
+  ui.rwFeatured.addEventListener('pointermove', function (e) {
+    var st = e.target.closest('[data-tilt]'); if (!st || reduced) return;
+    var r = st.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+    st.style.setProperty('--ry', (x * 16).toFixed(1) + 'deg'); st.style.setProperty('--rx', (-y * 12).toFixed(1) + 'deg');
+    st.style.setProperty('--gx', ((x + 0.5) * 100).toFixed(0) + '%'); st.style.setProperty('--gy', ((y + 0.5) * 100).toFixed(0) + '%');
+  });
+  ui.rwFeatured.addEventListener('pointerleave', function () { var st = ui.rwFeatured.querySelector('[data-tilt]'); if (st) { st.style.setProperty('--rx', '0deg'); st.style.setProperty('--ry', '0deg'); } });
+  // a won candle flies from the win popup into the progress bar
+  function flyCandle() {
+    var from = ui.win.querySelector('.candle-ico--xl'), to = ui.rwFeatured.querySelector('.rw-prog');
+    if (!from || !to || reduced || !to.getClientRects().length) return Promise.resolve();
+    var g = game.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+    var el = document.createElement('i'); el.className = 'candle-ico candle-ico--xl flycandle'; game.appendChild(el);
+    var x0 = a.left - g.left, y0 = a.top - g.top, x1 = b.left - g.left + b.width * Math.max(RW.prevPct, 0.03), y1 = b.top - g.top - 30;
+    var anim = el.animate([
+      { transform: 'translate(' + x0 + 'px,' + y0 + 'px) scale(1)', opacity: 1 },
+      { transform: 'translate(' + ((x0 + x1) / 2) + 'px,' + (Math.min(y0, y1) - 80) + 'px) scale(.9) rotate(-12deg)', opacity: 1, offset: 0.55 },
+      { transform: 'translate(' + x1 + 'px,' + y1 + 'px) scale(.45)', opacity: 0.2 }
+    ], { duration: 900, easing: 'cubic-bezier(.5,0,.3,1)' });
+    return new Promise(function (res) { anim.onfinish = function () { el.remove(); res(); }; });
   }
 
   /* ---------- free-play controls ---------- */
