@@ -649,3 +649,16 @@ main { background: var(--noise), var(--night); }
   .tool { padding: 9px 11px; }
   .play__inner { border-radius: 28px 28px 0 0; }
 }
+
+/* wide screens: hero copy in two columns so the fighters get the height */
+@media (min-width: 1000px) {
+  .hero__scene { --w: min(1000px, 92vw, calc((100svh - var(--navh) - 175px) / 0.95)); }
+  .hero__copy {
+    display: grid; grid-template-columns: auto minmax(0, 520px); column-gap: 48px; align-items: center;
+    text-align: left; max-width: 1180px; margin-top: clamp(4px, 1.4svh, 16px);
+  }
+  .hero__q { grid-row: 1 / 3; margin: 0; font-size: clamp(30px, 2.9vw, 46px); max-width: 12ch; }
+  .hero__sub { margin: 0 0 14px; font-size: 15.5px; max-width: none; }
+  .hero__cta { justify-content: flex-start; gap: 20px; }
+  .hero__copy::before { inset: -40px -6%; }
+}
