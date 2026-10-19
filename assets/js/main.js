@@ -11,14 +11,15 @@
      Placeholder data lives in assets/data/rewards.json. When the shop API exists,
      point data-rewards on #game at it — everything below and game.js reads from it. */
   var DEFAULT_CONFIG = {
-    currency: 'Kč', coinValue: 1, maxDiscountPct: 80,
-    game: { startCoins: 100, entry: 10, win: 20, lives: 10, roundSeconds: 90 },
+    currency: 'Kč', candleValue: 50, maxDiscountPct: 80,
+    game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 90 },
     products: [
-      { id: 'iphone', name: 'iPhone', tagline: 'Využij coins jako slevu na nový telefon.', price: 24990, icon: 'phone', featured: true },
-      { id: 'headphones', name: 'Sluchátka', tagline: 'Získej něco navíc za svůj herní výkon.', price: 6990, icon: 'headphones' },
-      { id: 'gear', name: 'Gaming gear', tagline: 'Vylepši svou herní výbavu.', price: 3490, icon: 'gamepad' },
-      { id: 'merch', name: 'Clash of Candles merch', tagline: 'Ukaž, že patříš do arény.', price: 790, icon: 'tee' }
-    ]
+      { id: 'iphone', name: 'iPhone', tagline: 'Využij svíčky jako slevu na nový telefon.', price: 24990, icon: 'phone', image: 'assets/img/products/phone.svg', featured: true, podium: 1 },
+      { id: 'headphones', name: 'Sluchátka', tagline: 'Získej něco navíc za svůj herní výkon.', price: 6990, icon: 'headphones', image: 'assets/img/products/headphones.svg', podium: 2 },
+      { id: 'gear', name: 'Gaming gear', tagline: 'Vylepši svou herní výbavu.', price: 3490, icon: 'gamepad', image: 'assets/img/products/controller.svg', podium: 3 },
+      { id: 'merch', name: 'Clash of Candles merch', tagline: 'Ukaž, že patříš do arény.', price: 790, icon: 'tee', image: 'assets/img/products/tee.svg' }
+    ],
+    teasers: ['Herní notebook', 'Chytré hodinky', 'Konzole', 'Tablet', 'Dron', 'Herní židle']
   };
   var gameEl = $('#game');
   var src = gameEl && gameEl.getAttribute('data-rewards');
@@ -210,59 +211,140 @@
   window.addEventListener('resize', onScroll);
   navState(); if (!reduced) scrollFx();
 
-  /* ---------------- ranks (placeholder economy: edit here) ---------------- */
-  var TOOLS = ['Čáry', 'Horizontály', 'Vertikály', 'Obdélníky', 'EMA', 'Odhalení'];
+  /* ---------------- ranks = difficulty tiers (placeholder economy: edit here) ---------------- */
   var RANKS = [
-    { name: 'Knot',    entry: 10,  win: 20,   off: [], tag: 'Tady začíná každý. Všechny nástroje, čitelné grafy a prostor se učit.' },
-    { name: 'Jiskra',  entry: 25,  win: 50,   off: ['Obdélníky'], tag: 'První výhry za sebou. Obdélníky zůstávají dole, zóny si drž v hlavě.' },
-    { name: 'Plamen',  entry: 50,  win: 100,  off: ['Obdélníky', 'Vertikály'], tag: 'Grafy začínají klamat. Ubývá nápovědy, přibývá výzvy.' },
-    { name: 'Žár',     entry: 100, win: 200,  off: ['Obdélníky', 'Vertikály', 'Čáry'], tag: 'Zbývá EMA, horizontály a tvůj odhad.' },
-    { name: 'Výheň',   entry: 200, win: 400,  off: ['Obdélníky', 'Vertikály', 'Čáry', 'EMA'], tag: 'Bez EMA. Jedna horizontála a spousta ticha.' },
-    { name: 'Legenda', entry: 500, win: 1000, off: TOOLS.slice(), tag: 'Žádné nástroje, žádná odhalení. Jen ty a čistý graf.' }
+    { name: 'Knot',    entry: 10,  candles: 1,  tools: 'Všechny nástroje', diff: 1 },
+    { name: 'Jiskra',  entry: 25,  candles: 2,  tools: 'Bez obdélníků', diff: 2 },
+    { name: 'Plamen',  entry: 50,  candles: 4,  tools: 'Bez vertikál', diff: 3 },
+    { name: 'Žár',     entry: 100, candles: 8,  tools: 'Jen EMA a horizontály', diff: 4 },
+    { name: 'Výheň',   entry: 200, candles: 16, tools: 'Jen horizontály', diff: 5 },
+    { name: 'Legenda', entry: 500, candles: 40, tools: 'Čistý graf', diff: 6 }
   ];
+  var fmt = window.CoC.fmt;
   (function () {
-    var ladder = $('#rankLadder'), panel = $('#rankPanel'); if (!ladder) return;
-    var heights = [22, 34, 47, 61, 77, 94], fmt = window.CoC.fmt;
-    var btns = RANKS.map(function (r, i) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'rank'; b.setAttribute('role', 'tab'); b.id = 'rank-' + i;
-      b.setAttribute('aria-controls', 'rankPanel'); b.style.setProperty('--h', heights[i] + '%');
-      b.innerHTML = '<span class="rank__body"></span><span class="rank__name">' + r.name + '</span>';
-      ladder.appendChild(b); return b;
-    });
-    function show(i, focus) {
-      var r = RANKS[i];
-      btns.forEach(function (b, j) { b.setAttribute('aria-selected', j === i); b.tabIndex = j === i ? 0 : -1; });
-      panel.setAttribute('aria-labelledby', 'rank-' + i);
-      panel.innerHTML =
-        '<div class="rp__top"><p class="rp__name">' + r.name + '</p><span class="rp__lvl">Rank ' + (i + 1) + ' z ' + RANKS.length + '</span></div>' +
-        '<p class="rp__tag">' + r.tag + '</p>' +
-        '<dl class="rp__stats"><div><dt>Vstup</dt><dd>' + fmt(r.entry) + ' coins</dd></div><div><dt>Výhra</dt><dd>' + fmt(r.win) + ' coins</dd></div></dl>' +
-        '<p class="rp__sub">Analytické nástroje</p><ul class="tools-list">' +
-        TOOLS.map(function (t) { var off = r.off.indexOf(t) > -1; return '<li' + (off ? ' class="off"><span class="sr">nedostupné: </span>' : '>') + t + '</li>'; }).join('') + '</ul>' +
-        '<p class="rp__sub">Náročnost grafu</p><div class="meter" role="img" aria-label="Náročnost ' + (i + 1) + ' z 6">' +
-        heights.map(function (_, j) { return '<span' + (j <= i ? ' class="on"' : '') + '></span>'; }).join('') + '</div>';
+    var list = $('#rankList'), sum = $('#rankSummary'); if (!list) return;
+    list.innerHTML = RANKS.map(function (r, i) {
+      return '<button type="button" role="radio" class="rk" aria-checked="' + (i === 1) + '" data-i="' + i + '">' +
+        '<span class="rk__name">' + r.name + '</span><span class="rk__tools">' + r.tools + '</span>' +
+        '<span class="rk__diff" aria-label="Obtížnost ' + r.diff + ' z 6">' + '<i></i>'.repeat(r.diff) + '<i class="off"></i>'.repeat(6 - r.diff) + '</span>' +
+        '<span class="rk__cost"><i class="coin-ico"></i>' + r.entry + '</span><span class="rk__win"><i class="candle-ico"></i>+' + r.candles + '</span></button>';
+    }).join('');
+    var btns = Array.prototype.slice.call(list.children);
+    function pick(i, focus) {
+      btns.forEach(function (b, j) { b.setAttribute('aria-checked', j === i); b.tabIndex = j === i ? 0 : -1; });
+      sum.innerHTML = 'Vstup <b>' + RANKS[i].entry + ' coins</b> · výhra <b>+' + RANKS[i].candles + ' ' + (RANKS[i].candles === 1 ? 'svíčka' : RANKS[i].candles < 5 ? 'svíčky' : 'svíček') + '</b>';
       if (focus) btns[i].focus();
     }
     btns.forEach(function (b, i) {
-      b.addEventListener('click', function () { show(i); });
+      b.addEventListener('click', function () { pick(i); });
       b.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); show(Math.min(i + 1, btns.length - 1), true); }
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); show(Math.max(i - 1, 0), true); }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); pick(Math.min(i + 1, btns.length - 1), true); }
+        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); pick(Math.max(i - 1, 0), true); }
       });
     });
-    show(0);
+    pick(1);
   })();
 
-  /* ---------------- shop products (from config) ---------------- */
+  /* ---------------- play screenshot: a small static chart ---------------- */
+  (function () {
+    var cv = $('#psChart'); if (!cv) return;
+    function paint() {
+      var r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2), w = r.width, h = r.height; if (!w) return;
+      cv.width = w * d; cv.height = h * d; var c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0);
+      var n = 120, seed = 7, p = 0, pts = [];
+      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      for (var i = 0; i < n; i++) { p += (rnd() - 0.48) * 3 + Math.sin(i / 14) * 0.6; pts.push(p); }
+      var lo = Math.min.apply(null, pts), hi = Math.max.apply(null, pts), pad = (hi - lo) * 0.35; lo -= pad; hi += pad;
+      var X = function (i) { return 10 + i / (n - 1) * (w * 0.7); }, Y = function (v) { return 10 + (hi - v) / (hi - lo) * (h - 20); };
+      c.strokeStyle = 'rgba(255,255,255,.05)'; for (var g = 1; g < 6; g++) { c.beginPath(); c.moveTo(0, h * g / 6); c.lineTo(w, h * g / 6); c.stroke(); }
+      [['#4FF2B1', hi - pad * 0.45, 'BREAKOUT'], ['#FF6A86', lo + pad * 0.45, 'BREAKDOWN']].forEach(function (L) {
+        c.strokeStyle = L[0]; c.setLineDash([6, 5]); c.beginPath(); c.moveTo(0, Y(L[1])); c.lineTo(w - 76, Y(L[1])); c.stroke(); c.setLineDash([]);
+        c.fillStyle = L[0]; c.beginPath(); c.roundRect ? c.roundRect(w - 74, Y(L[1]) - 9, 68, 18, 6) : c.rect(w - 74, Y(L[1]) - 9, 68, 18); c.fill();
+        c.fillStyle = '#04202D'; c.font = '800 9px Archivo, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(L[2], w - 40, Y(L[1]) + 1);
+      });
+      c.beginPath(); pts.forEach(function (v, i) { i ? c.lineTo(X(i), Y(v)) : c.moveTo(X(i), Y(v)); });
+      c.strokeStyle = '#2EE29A'; c.lineWidth = 1.6; c.shadowColor = 'rgba(46,226,154,.6)'; c.shadowBlur = 6; c.stroke(); c.shadowBlur = 0;
+      for (var k = n - 26; k < n; k++) { var o = pts[k - 1], cl = pts[k], up = cl >= o; c.fillStyle = up ? '#2EE29A' : '#FF4767'; c.fillRect(X(k) - 1.6, Y(Math.max(o, cl)), 3.2, Math.max(1.5, Math.abs(Y(o) - Y(cl)))); }
+    }
+    paint(); window.addEventListener('resize', paint); if (document.fonts) document.fonts.ready.then(paint);
+  })();
+
+  /* ---------------- svíčky: a row that lights up when seen ---------------- */
+  (function () {
+    var row = $('#candleRow'); if (!row) return;
+    row.innerHTML = new Array(12).join('<span></span>') + '<span></span>';
+    var spans = row.children;
+    function light() { Array.prototype.forEach.call(spans, function (s, i) { setTimeout(function () { s.classList.add('lit'); }, reduced ? 0 : 140 * i); }); }
+    if (!('IntersectionObserver' in window)) return light();
+    var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); light(); } }, { threshold: 0.5 });
+    io.observe(row);
+  })();
+
+  /* ---------------- contests: live countdowns ---------------- */
+  (function () {
+    var els = Array.prototype.slice.call(document.querySelectorAll('[data-countdown]')); if (!els.length) return;
+    function end(kind) {
+      var n = new Date(), e = new Date(n);
+      if (kind === 'day') { e.setHours(24, 0, 0, 0); }
+      else if (kind === 'week') { e.setHours(24, 0, 0, 0); e.setDate(e.getDate() + ((7 - n.getDay()) % 7)); }
+      else { e = new Date(n.getFullYear(), n.getMonth() + 1, 1); }
+      return e;
+    }
+    function pad(x) { return (x < 10 ? '0' : '') + x; }
+    function tick() {
+      els.forEach(function (el) {
+        var ms = Math.max(0, end(el.getAttribute('data-countdown')) - new Date()), s = Math.floor(ms / 1000);
+        var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+        el.textContent = (d ? d + ' d ' : '') + pad(h) + ':' + pad(m) + ':' + pad(x);
+      });
+    }
+    tick(); setInterval(tick, 1000);
+  })();
+
+  /* ---------------- leaderboard + heatmap mock data ---------------- */
+  (function () {
+    var lb = $('#leaderboard');
+    if (lb) {
+      var rows = [['Graf_Hunter', 'Legenda', 412], ['MiraBreakout', 'Výheň', 377], ['SvíčkaZJeseníku', 'Výheň', 341], ['TyTi', 'Žár', 298], ['Ty', 'Plamen', 211, true], ['NightOwl', 'Plamen', 204]];
+      lb.innerHTML = rows.map(function (r, i) {
+        var pos = r[3] ? 27 : i + 1;
+        return '<li class="' + (r[3] ? 'me' : '') + (i < 3 ? ' top' + (i + 1) : '') + '"><span class="lb__pos">' + pos + '</span><span class="lb__av">' + r[0].charAt(0) + '</span>' +
+          '<span class="lb__name">' + r[0] + '<small>' + r[1] + '</small></span><span class="lb__pts"><i class="candle-ico"></i>' + r[2] + '</span>' +
+          (r[3] ? '<button type="button" class="lb__share" tabindex="-1" aria-hidden="true">Sdílet</button>' : '') + '</li>';
+      }).join('');
+    }
+    var heat = $('#heat');
+    if (heat) {
+      var html = '', seed = 3;
+      for (var i = 0; i < 24; i++) { seed = (seed * 16807) % 2147483647; var v = 0.25 + (seed / 2147483647) * 0.75 * (i > 7 && i < 22 ? 1 : 0.5); html += '<i style="--v:' + v.toFixed(2) + '" title="' + i + ':00"></i>'; }
+      heat.innerHTML = html;
+    }
+  })();
+
+  /* ---------------- prizes: TOP 3 podium + fog slider (from config) ---------------- */
   window.CoC.config.then(function (cfg) {
-    var box = $('#shopProducts'); if (!box) return;
-    box.innerHTML = cfg.products.map(function (p) {
-      return '<article class="product glass' + (p.featured ? ' is-featured' : '') + '">' + window.CoC.icon(p) +
-        '<h3 class="h3">' + p.name + '</h3><p>' + (p.tagline || '') + '</p>' +
-        '<p class="price"><s>' + window.CoC.fmt(p.price) + ' ' + cfg.currency + '</s> <b>od ' + window.CoC.fmt(p.price * (1 - cfg.maxDiscountPct / 100)) + ' ' + cfg.currency + '</b></p>' +
-        '<p class="disc">Sleva až ' + cfg.maxDiscountPct + '&nbsp;% v coins</p></article>';
-    }).join('');
+    var pod = $('#podium');
+    if (pod) {
+      var top = cfg.products.filter(function (p) { return p.podium; }).sort(function (a, b) { return a.podium - b.podium; }).slice(0, 3);
+      var order = [top[1], top[0], top[2]].filter(Boolean);
+      pod.innerHTML = order.map(function (p) {
+        var disc = p.price * cfg.maxDiscountPct / 100, need = Math.ceil(disc / (cfg.candleValue || 50));
+        return '<article class="pod pod--' + p.podium + '">' +
+          '<div class="pod__art">' + (p.image ? '<img src="' + p.image + '" alt="" loading="lazy">' : window.CoC.icon(p)) + '</div>' +
+          '<div class="pod__info"><h3 class="pod__name">' + p.name + '</h3>' +
+          '<p class="pod__price"><s>' + fmt(p.price) + ' ' + cfg.currency + '</s> <b>od ' + fmt(p.price - disc) + ' ' + cfg.currency + '</b></p>' +
+          '<p class="pod__need"><i class="candle-ico"></i>' + fmt(need) + ' svíček na max. slevu</p></div>' +
+          '<div class="pod__step"><span>' + p.podium + '</span></div></article>';
+      }).join('');
+    }
+    var track = $('#fogTrack');
+    if (track) {
+      var imgs = cfg.products.map(function (p) { return p.image; }).filter(Boolean);
+      var items = (cfg.teasers || []).map(function (t, i) {
+        return '<div class="fogcard"><div class="fogcard__art">' + (imgs.length ? '<img src="' + imgs[i % imgs.length] + '" alt="">' : '') + '</div><p>' + t + '</p><span>??? Kč</span></div>';
+      }).join('');
+      track.innerHTML = items + items; // duplicated for a seamless loop
+    }
   });
 
   /* ---------------- sign-up ---------------- */

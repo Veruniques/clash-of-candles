@@ -1,24 +1,23 @@
 {
-  "_note": "PLACEHOLDER. Ceny, kurz coins a slevy jsou ilustrační. 'image' = vlastní ilustrace; nahraďte fotkami produktů ze shopu (s licencí). Až bude shop/API, stačí tento soubor generovat ze serveru nebo změnit URL v data-rewards na #game.",
+  "_note": "PLACEHOLDER. Ceny, hodnota svíčky (candleValue = Kč slevy za 1 svíčku) a slevy jsou ilustrační. 'image' = vlastní ilustrace; nahraďte fotkami produktů ze shopu (s licencí). 'podium' = pořadí TOP 3 v sekci Odměny. 'teasers' = odměny v mlze.",
   "currency": "Kč",
-  "coinValue": 1,
   "maxDiscountPct": 80,
   "game": {
     "startCoins": 100,
     "entry": 10,
-    "win": 20,
-    "lives": 10,
+    "candlesPerWin": 1,
     "roundSeconds": 90
   },
   "products": [
     {
       "id": "iphone",
       "name": "iPhone",
-      "tagline": "Využij coins jako slevu na nový telefon.",
+      "tagline": "Využij svíčky jako slevu na nový telefon.",
       "price": 24990,
       "icon": "phone",
       "image": "assets/img/products/phone.svg",
-      "featured": true
+      "featured": true,
+      "podium": 1
     },
     {
       "id": "headphones",
@@ -26,7 +25,8 @@
       "tagline": "Získej něco navíc za svůj herní výkon.",
       "price": 6990,
       "icon": "headphones",
-      "image": "assets/img/products/headphones.svg"
+      "image": "assets/img/products/headphones.svg",
+      "podium": 2
     },
     {
       "id": "gear",
@@ -34,7 +34,8 @@
       "tagline": "Vylepši svou herní výbavu.",
       "price": 3490,
       "icon": "gamepad",
-      "image": "assets/img/products/controller.svg"
+      "image": "assets/img/products/controller.svg",
+      "podium": 3
     },
     {
       "id": "merch",
@@ -44,5 +45,16 @@
       "icon": "tee",
       "image": "assets/img/products/tee.svg"
     }
+  ],
+  "candleValue": 50,
+  "teasers": [
+    "Herní notebook",
+    "Chytré hodinky",
+    "Konzole",
+    "Tablet",
+    "Bezdrátová sluchátka",
+    "Dron",
+    "Herní židle",
+    "Voucher na výlet"
   ]
 }
