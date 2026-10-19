@@ -1054,3 +1054,7 @@ main { background: var(--noise), var(--night); }
 .rankwin__foot p { margin: 0 0 6px; }
 .rankwin__bar { height: 6px; border-radius: 3px; background: #E3E9ED; overflow: hidden; }
 .rankwin__bar i { display: block; height: 100%; background: #2EEA9C; }
+#gInd { overflow-y: auto; scrollbar-width: thin; }
+#gInd .drawer__t { position: sticky; top: -14px; background: #fff; z-index: 1; padding-top: 2px; padding-bottom: 8px; margin-bottom: 0; }
+.drawer__row.is-off { cursor: default; } .drawer__row.is-off .sw { opacity: .5; }
+.drawer__row i { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #E6ECF0; }
