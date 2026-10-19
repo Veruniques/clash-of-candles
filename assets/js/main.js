@@ -216,31 +216,28 @@
   navState(); if (!reduced) scrollFx();
 
   /* ---------------- ranks: earned, not chosen. Everyone starts at the bottom (placeholder economy: edit here) ---------------- */
-  // tiers as in the game: F → E → D → C → B → A → S → G.O.A.T., each with +/++ steps
+  // ranks exactly as in the game: F → E → D → C → B → A → S → G.O.A.T. with +/++ steps (entry/win = placeholder economy)
+  var TIER = { F: '#20E39B', E: '#20E39B', D: '#B4F23A', C: '#22DDEB', B: '#2F8CFF', A: '#8E1DB8', S: '#F2C524', G: '#F28A1F' };
   var RANKS = [
-    { name: 'F',       steps: ['F'],              col: '#2EEA9C', entry: 10,   candles: 1,   tools: 'Všech 20 indikátorů' },
-    { name: 'E',       steps: ['E', 'E+', 'E++'], col: '#2EEA9C', entry: 20,   candles: 2,   tools: '16 indikátorů' },
-    { name: 'D',       steps: ['D', 'D+', 'D++'], col: '#B6F23A', entry: 40,   candles: 4,   tools: '12 indikátorů' },
-    { name: 'C',       steps: ['C', 'C+', 'C++'], col: '#2EE0EE', entry: 80,   candles: 8,   tools: '8 indikátorů' },
-    { name: 'B',       steps: ['B', 'B+', 'B++'], col: '#2F8CFF', entry: 150,  candles: 15,  tools: '5 indikátorů' },
-    { name: 'A',       steps: ['A', 'A+', 'A++'], col: '#9C1FC4', entry: 300,  candles: 30,  tools: '3 indikátory', light: true },
-    { name: 'S',       steps: ['S', 'S+', 'S++'], col: '#F2C21F', entry: 500,  candles: 50,  tools: 'Jen kreslení' },
-    { name: 'G.O.A.T.', steps: ['G.O.A.T.'],      col: '#F2801F', entry: 1000, candles: 100, tools: 'Čistý graf', light: true }
+    ['F', 10, 1], ['E', 15, 1], ['E+', 20, 2], ['E++', 25, 2],
+    ['D', 30, 3], ['D+', 40, 4], ['D++', 50, 5], ['C', 60, 6], ['C+', 80, 8], ['C++', 100, 10],
+    ['B', 120, 12], ['B+', 150, 15], ['B++', 200, 20], ['A', 250, 25], ['A+', 300, 30], ['A++', 400, 40],
+    ['S', 500, 50], ['S+', 650, 65], ['S++', 800, 80], ['G.O.A.T.', 1000, 100]
   ];
   var fmt = window.CoC.fmt;
   (function () {
-    var list = $('#rankList'), sum = $('#rankSummary'); if (!list) return;
-    var me = 0, pct = 35; // demo player: fresh on F
+    var list = $('#rankList'); if (!list) return;
+    var me = 0, open = 4; // demo player: fresh on F; the first tier group is visible, the rest unlocks by playing
+    var lock = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
     list.innerHTML = RANKS.map(function (r, i) {
-      var st = i === me ? 'is-me' : i > me ? 'is-locked' : 'is-done';
-      var badges = r.steps.map(function (x) { return '<b class="rb' + (r.light ? ' rb--light' : '') + '" style="--rc:' + r.col + '">' + x + '</b>'; }).join('');
-      return '<li class="rk ' + st + '">' +
-        '<span class="rk__badges">' + badges + (i === me ? ' <em>tady začínáš</em>' : '') + '</span>' +
-        '<span class="rk__tools">' + (i > me ? '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>' : '') + r.tools + '</span>' +
-        '<span class="rk__cost"><i class="coin-ico"></i>' + fmt(r.entry) + '</span><span class="rk__win"><i class="candle-ico"></i>+' + r.candles + '</span></li>';
-    }).reverse().join('');
-    sum.innerHTML = '<p>Postup do ranku <b>E</b></p>' +
-      '<div class="rankwin__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + pct + '%"></i></div>';
+      var c = TIER[r[0][0]], dark = /[BAG]/.test(r[0][0]), goat = r[0][0] === 'G';
+      var row = '<li class="rkp' + (i === me ? ' is-me' : '') + (i >= open ? ' is-locked' : '') + '">' +
+        '<b class="rkp-badge' + (dark ? ' is-light' : '') + (goat ? ' is-goat' : '') + '" style="--rc:' + c + '">' + r[0] + '</b>' +
+        '<span class="rkp-val"><i class="coin-ico" aria-hidden="true"></i>' + fmt(r[1]) + '</span>' +
+        '<span class="rkp-val"><i class="candle-ico" aria-hidden="true"></i>+' + r[2] + '</span></li>';
+      if (i === open - 1) row += '<li class="rkp-lock">Postupuj hrou ' + lock + '</li>';
+      return row;
+    }).join('');
   })();
 
   /* ---------------- play screenshot: a small static chart ---------------- */

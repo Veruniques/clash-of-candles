@@ -17,7 +17,7 @@
     tf: $('#gTf'), date: $('#gDate'), status: $('#gStatus'), legend: $('#gLegend'), legendX: $('#gLegendX'),
     buy: $('#gBuy'), buyBtn: $('#gBuyBtn'), buyCost: $('#gBuyCost'),
     fab: $('#gFab'), menu: $('#gMenu'), indBtn: $('#gIndBtn'), drawBtn: $('#gDrawBtn'), actBtn: $('#gActBtn'),
-    ind: $('#gInd'), emaRow: $('#indEma'), drw: $('#gDraw'), rectRow: $('#drawRect'),
+    ind: $('#gInd'), emaRow: $('#indEma'), drw: $('#gDraw'), rectRow: $('#drawRect'), set: $('#gSet'), setBtn: $('#gSetBtn'), full: $('#gFull'),
     reveal: $('#gReveal'), revealN: $('#gRevealN'),
     up: $('#pUp'), down: $('#pDown'), toast: $('#gToast'), win: $('#gWin'),
     over: $('#gOver'), overTitle: $('#gOverTitle'), overText: $('#gOverText'), overBtn: $('#gOverBtn'),
@@ -98,7 +98,7 @@
   /* ---------- state ---------- */
   var cfg = null;
   var S = { sc: null, view: 'M', shown: 0, revealed: 0, bought: false, pick: null, playing: false, hitShown: false, round: 0,
-    ind: { ema: false, sma: false, bb: false }, shapes: [], tool: null, preview: null,
+    ind: { ema: false, sma: false, bb: false }, opt: { grid: true, axis: true, time: true }, shapes: [], tool: null, preview: null,
     coins: 100, candles: 0, t: 90, t2: 171, timerId: null, mode: 'tutorial', scale: null };
 
   /* ---------- drawing ---------- */
@@ -127,16 +127,16 @@
     ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
     for (var g = 0; g <= 7; g++) {
       var gy = Math.round(padT + ph * g / 7) + 0.5, gv = hi - (hi - lo) * g / 7;
-      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + pw, gy); ctx.stroke();
-      ctx.fillStyle = C.axis; ctx.fillText(gv.toFixed(5), padL + pw + 8, gy);
+      if (S.opt.grid) { ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + pw, gy); ctx.stroke(); }
+      if (S.opt.axis) { ctx.fillStyle = C.axis; ctx.fillText(gv.toFixed(5), padL + pw + 8, gy); }
     }
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
     var every = isLine ? Math.round(slots / (compact ? 4 : 8)) : (compact ? 24 : 12);
     for (var t = 0; t < slots; t += every) {
       var gx = Math.round(x(t)) + 0.5;
-      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(gx, padT - 20); ctx.lineTo(gx, padT + ph); ctx.stroke();
+      if (S.opt.grid) { ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(gx, padT - 20); ctx.lineTo(gx, padT + ph); ctx.stroke(); }
       var lab = S.view === 'M' ? hhmm(sc.startMin + t * 5) : S.view === 'H' ? '−' + Math.max(0, Math.round((series.length - t) / 24)) + ' d' : '−' + Math.max(0, Math.round((series.length - t) / 21)) + ' m';
-      ctx.fillStyle = C.axis; ctx.fillText(lab, gx, H - 8);
+      if (S.opt.time) { ctx.fillStyle = C.axis; ctx.fillText(lab, gx, H - 8); }
     }
     ctx.strokeStyle = '#D5DEE4'; ctx.beginPath(); ctx.moveTo(padL + pw + 0.5, 0); ctx.lineTo(padL + pw + 0.5, H); ctx.stroke();
 
@@ -229,7 +229,7 @@
   /* ---------- HUD ---------- */
   function bump(el) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
   function renderCoins(b) { ui.coins.textContent = fmt(S.coins); if (b) bump(ui.coins); }
-  function renderCandles(b) { ui.candles.textContent = fmt(S.candles); ui.rwBalance.textContent = fmt(S.candles); if (b) bump(ui.candles); }
+  function renderCandles(b) { ui.candles.textContent = fmt(S.candles); if (b) bump(ui.candles); }
   function mmss(s) { s = Math.max(0, s); var m = Math.floor(s / 60), r = s % 60; return m + ':' + (r < 10 ? '0' : '') + r; }
   function renderTimer() {
     ui.timer.textContent = S.pick ? (S.pick === 'up' ? '↑' : '↓') : mmss(S.t);
@@ -265,12 +265,13 @@
     if (keep !== 'menu') { ui.menu.hidden = true; ui.fab.setAttribute('aria-expanded', 'false'); }
     if (keep !== 'ind') ui.ind.hidden = true;
     if (keep !== 'draw') ui.drw.hidden = true;
+    if (keep !== 'set') ui.set.hidden = true;
   }
   function toggleMenu(open) {
     open = open == null ? ui.menu.hidden : open; closePanels(open ? 'menu' : null);
     ui.menu.hidden = !open; ui.fab.setAttribute('aria-expanded', String(open));
   }
-  function openDrawer(which) { closePanels(which); (which === 'ind' ? ui.ind : ui.drw).hidden = false; }
+  function openDrawer(which) { closePanels(which); ({ ind: ui.ind, draw: ui.drw, set: ui.set })[which].hidden = false; }
   function setTool(t) {
     S.tool = t; stage.classList.toggle('is-drawing', !!t);
     if (t && S.mode === 'play') toast(t === 'h' || t === 'v' ? 'Klikni do grafu tam, kam chceš čáru.' : 'Táhni v grafu myší nebo prstem.');
@@ -283,13 +284,21 @@
     if (!S.bought) { ui.buy.hidden = false; ui.buyBtn.focus({ preventScroll: true }); }
     else if (!S.pick) toast('Kolo běží. Klikni na BREAKOUT, nebo BREAKDOWN.');
   });
+  ui.setBtn.addEventListener('click', function () { openDrawer('set'); });
+  ui.set.addEventListener('change', function (e) { var k = e.target.getAttribute('data-set'); if (k) { S.opt[k] = e.target.checked; draw(); } });
+  ui.full.addEventListener('click', function () {
+    var el = game, d = document;
+    if (d.fullscreenElement) { d.exitFullscreen(); return; }
+    if (el.requestFullscreen) el.requestFullscreen().catch(function () { game.classList.toggle('is-full'); }); else game.classList.toggle('is-full');
+  });
+  document.addEventListener('fullscreenchange', function () { setTimeout(resize, 60); });
   $$('[data-close]', stage).forEach(function (b) { b.addEventListener('click', function () { closePanels(); }); });
   ui.drw.addEventListener('click', function (e) { var b = e.target.closest('[data-draw]'); if (!b) return; closePanels(); setTool(b.getAttribute('data-draw')); });
   ui.ind.addEventListener('change', function (e) { var k = e.target.getAttribute('data-ind'); if (k) setInd(k, e.target.checked); });
   ui.legendX.addEventListener('click', function () { setInd('ema', false); });
   document.addEventListener('click', function (e) {
     if (S.mode !== 'play') return;
-    if ([ui.menu, ui.ind, ui.drw, ui.fab].some(function (el) { return el.contains(e.target); })) return;
+    if ([ui.menu, ui.ind, ui.drw, ui.set, ui.fab].some(function (el) { return el.contains(e.target); })) return;
     closePanels();
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closePanels(); setTool(null); S.preview = null; draw(); } });
@@ -349,11 +358,11 @@
     (side === 'up' ? ui.up : ui.down).classList.add('is-chosen');
     (side === 'up' ? ui.down : ui.up).classList.add('is-lost');
     if (S.view !== 'M') setView('M'); else draw();
-    setStatus('wait', 'Čeká na soupeře · ' + entry + ' coins');
+    setStatus('wait', 'Waiting ' + entry + ' coins');
     var target = S.sc.hit + 1, tail = Math.min(5, FUT - target);
     return wait(1100).then(function () {
       if (round !== S.round) return;
-      setStatus('paired', 'Spárováno · ' + entry + ' coins');
+      setStatus('paired', 'Paired ' + entry + ' coins');
       return wait(800);
     }).then(function () {
       if (round !== S.round) return;
@@ -370,7 +379,7 @@
   function finish() {
     S.playing = false; ui.fab.disabled = false;
     var win = S.pick === S.sc.side, where = S.sc.side === 'up' ? 'horní' : 'dolní', per = cfg.game.candlesPerWin;
-    setStatus(win ? 'win' : 'loss', win ? 'Výhra · +' + per + ' svíčka' : 'Prohra · bez svíčky');
+    setStatus(win ? 'win' : 'loss', win ? 'Win +' + per + ' svíčka' : 'Loss');
     var d = S.sc.date; ui.date.textContent = d.getUTCDate() + '. ' + (d.getUTCMonth() + 1) + '. ' + d.getUTCFullYear() + ' v ' + hhmm(S.sc.startMin + (HIST + S.sc.hit) * 5); ui.date.hidden = false;
     if (win) { S.candles += per; renderCandles(true); ui.win.hidden = false; }
     ui.rwResult.className = 'rw-result ' + (win ? 'is-win' : 'is-loss');
@@ -406,30 +415,44 @@
     RW.target = feat.id;
     var need = candlesFor(feat), pct = Math.min(1, S.candles / need), left = Math.max(0, need - S.candles);
     var art = feat.image ? window.CoC.img(feat.image, feat.name, 'rwx__img') : window.CoC.icon(feat);
+    var sim = RW.sim == null ? need : Math.min(RW.sim, need);
     ui.rwFeatured.innerHTML =
       '<div class="rwx__stage" data-tilt>' +
-        '<span class="rwx__tag">Tvůj cíl · ' + (idx + 1) + '/' + prods.length + '</span>' +
+        '<span class="rwx__rays" aria-hidden="true"></span>' +
+        '<span class="rwx__tag">Tvůj cíl</span><span class="rwx__idx">' + (idx + 1) + ' / ' + prods.length + '</span>' +
         '<div class="rwx__art">' + art + '</div>' +
         '<button type="button" class="rwx__nav rwx__nav--prev" data-step="-1" aria-label="Předchozí odměna">‹</button>' +
         '<button type="button" class="rwx__nav rwx__nav--next" data-step="1" aria-label="Další odměna">›</button>' +
       '</div>' +
-      '<p class="rw-featured__name">' + feat.name + '</p>' +
-      '<p class="rw-price"><s>' + fmt(feat.price) + ' ' + cur + '</s> <b>od ' + fmt(withDisc(feat)) + ' ' + cur + '</b></p>' +
-      '<div class="rw-prog" role="progressbar" aria-label="Postup k odměně ' + feat.name + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct * 100) + '"><i></i><span class="rw-prog__glint"></span></div>' +
-      '<div class="rw-featured__meta"><span>' + (left > 0 ? 'Zbývá <b>' + fmt(left) + '</b> svíček' : 'Odměna odemčena') + '</span><span class="rwx__count"><i class="candle-ico"></i><b>' + fmt(S.candles) + '</b> / ' + fmt(need) + '</span></div>';
+      '<div class="rwx__head"><p class="rw-featured__name">' + feat.name + '</p><p class="rwx__full"><s>' + fmt(feat.price) + ' ' + cur + '</s></p></div>' +
+      '<div class="rwx__calc">' +
+        '<p class="rwx__pay"><span>Zaplatíš</span><b id="rwPay">' + fmt(feat.price - Math.min(sim * (cfg.candleValue || 50), discount(feat))) + ' ' + cur + '</b></p>' +
+        '<label class="rwx__slider"><span class="sr">Kolik svíček použiješ</span><input type="range" min="0" max="' + need + '" step="1" value="' + sim + '" id="rwSim" style="--v:' + (sim / need * 100).toFixed(1) + '%"></label>' +
+        '<p class="rwx__simtxt"><span><i class="candle-ico"></i><b id="rwSimN">' + fmt(sim) + '</b> svíček</span><span>sleva <b id="rwSimD">' + fmt(Math.min(sim * (cfg.candleValue || 50), discount(feat))) + ' ' + cur + '</b></span></p>' +
+      '</div>' +
+      '<div class="rwx__mine"><p><span>Tvoje svíčky</span><span class="rwx__count"><b>' + fmt(S.candles) + '</b> / ' + fmt(need) + '</span></p>' +
+        '<div class="rw-prog" role="progressbar" aria-label="Postup k odměně ' + feat.name + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct * 100) + '"><i></i><span class="rw-prog__glint"></span></div>' +
+        '<p class="rwx__left">' + (left > 0 ? 'Do maximální slevy zbývá <b>' + fmt(left) + '</b> svíček' : 'Maximální sleva odemčena') + '</p></div>';
     var bar = ui.rwFeatured.querySelector('.rw-prog i'), from = RW.prevPct;
     bar.style.width = Math.max(from * 100, 2.5) + '%';
     requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = Math.max(pct * 100, 2.5) + '%'; }); });
-    if (fromWin) ui.rwFeatured.classList.remove('is-hit'), void ui.rwFeatured.offsetWidth, ui.rwFeatured.classList.add('is-hit');
+    if (fromWin) { ui.rwFeatured.classList.remove('is-hit'); void ui.rwFeatured.offsetWidth; ui.rwFeatured.classList.add('is-hit'); }
     RW.prevPct = pct;
     ui.rwList.innerHTML = prods.map(function (p) {
-      var n = candlesFor(p), q = Math.min(1, S.candles / n), on = p === feat;
-      return '<li><button type="button" class="rwx__pick' + (on ? ' is-on' : '') + '" data-id="' + p.id + '" aria-pressed="' + on + '">' +
-        window.CoC.icon(p) + '<span class="rwx__pn"><b>' + p.name + '</b><small>od ' + fmt(withDisc(p)) + ' ' + cur + '</small>' +
-        '<span class="rw-mini"><i style="width:' + Math.max(q * 100, 3).toFixed(1) + '%"></i></span></span><span class="pct">' + fmt(n) + '<i class="candle-ico"></i></span></button></li>';
+      var n = candlesFor(p), on = p === feat;
+      return '<li><button type="button" class="rwx__pick' + (on ? ' is-on' : '') + '" data-id="' + p.id + '" aria-pressed="' + on + '" aria-label="' + p.name + ', ' + fmt(n) + ' svíček na maximální slevu">' +
+        window.CoC.icon(p) + '<span class="rwx__pn">' + p.name.replace(/ (Series \d+|\d+ Pro|Pro \d+|Max)$/, '<br>$1') + '</span><span class="pct"><i class="candle-ico"></i>' + fmt(n) + '</span></button></li>';
     }).join('');
   }
-  function setTarget(id) { RW.target = id; RW.prevPct = 0; renderRewards(); }
+  // "what if" slider: drag how many candles you'd spend, see the price drop
+  ui.rwFeatured.addEventListener('input', function (e) {
+    if (e.target.id !== 'rwSim') return;
+    var feat = targetProduct(), v = +e.target.value, cv = cfg.candleValue || 50, d = Math.min(v * cv, discount(feat));
+    RW.sim = v; e.target.style.setProperty('--v', (v / +e.target.max * 100).toFixed(1) + '%');
+    $('#rwSimN').textContent = fmt(v); $('#rwSimD').textContent = fmt(d) + ' ' + cfg.currency;
+    $('#rwPay').textContent = fmt(feat.price - d) + ' ' + cfg.currency;
+  });
+  function setTarget(id) { RW.target = id; RW.prevPct = 0; RW.sim = null; renderRewards(); }
   ui.rwFeatured.addEventListener('click', function (e) {
     var b = e.target.closest('[data-step]'); if (!b) return;
     var prods = cfg.products, i = prods.indexOf(targetProduct());
