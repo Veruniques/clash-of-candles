@@ -1208,3 +1208,7 @@ main .btn--glass:hover { --bg: rgba(255,255,255,.6); box-shadow: inset 0 0 0 2px
 .ac-kicker { color: #0A7A88; }
 .ac-opts .ok { color: #0A7A4C; background: rgba(46,226,154,.25); }
 .ac-score em { color: #0A7A4C; }
+main .game .rw-price b, main .game .rw-featured .rw-price b { color: #FFD36B; }
+main .game .rw-price { color: #8FB6C3; }
+.rwx__stage { height: 160px; }
+@media (max-width: 900px) { .rwx__stage { height: 200px; } }
