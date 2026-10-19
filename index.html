@@ -16,9 +16,9 @@
 
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-standard-normal.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
-  <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610191448">
-  <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610191448">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610191448">
+  <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610191453">
+  <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610191453">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610191453">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -71,8 +71,9 @@
   <div class="hero-wrap" id="top">
     <section class="hero" aria-label="Clash of Candles">
       <div class="hero__light" aria-hidden="true"></div>
+      <div class="hero__orbs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
       <div class="hero__scene" id="scene">
-        <div class="hero__grid" aria-hidden="true"><div class="hero__grid-plane"></div></div>
+        <div class="hero__floor" aria-hidden="true"></div>
         <div class="hero__titlewrap" id="titleWrap">
           <h1 class="hero__title" id="heroTitle">
             <img src="assets/img/wordmark.svg" alt="Clash of Candles" width="920" height="287">
@@ -82,10 +83,10 @@
           <div class="duo__shadow"></div>
           <div class="duo__bob" id="duoBob">
             <div class="fighter fighter--red" id="exitRed"><div class="fighter__in" id="fRed">
-              <img src="assets/img/candle-red.webp?v=202610191448" alt="" width="1600" height="1215">
+              <img src="assets/img/candle-red.webp?v=202610191453" alt="" width="1600" height="1215">
             </div></div>
             <div class="fighter fighter--green" id="exitGreen"><div class="fighter__in" id="fGreen">
-              <img src="assets/img/candle-green.webp?v=202610191448" alt="" width="1600" height="1215">
+              <img src="assets/img/candle-green.webp?v=202610191453" alt="" width="1600" height="1215">
             </div></div>
           </div>
           <div class="impact" id="impact"></div>
@@ -116,7 +117,7 @@
             <p class="lede">Každý graf vypráví svůj příběh. Sleduj cenový vývoj, hledej důležité úrovně a rozhodni, kterou hranici cena prorazí jako první. Tvoje znalosti a analytické schopnosti jsou tvou největší výhodou.</p>
           </header>
 
-          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610191448">
+          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610191453">
             <div class="game__main">
               <div class="hud">
                 <div class="views" role="radiogroup" aria-label="Pohled na graf">
@@ -498,7 +499,7 @@
     <!-- ============ 16. FINAL CTA ============ -->
     <section class="final" aria-labelledby="final-h">
       <div class="wrap final__inner">
-        <img class="final__duo" src="assets/img/candles-duo.webp?v=202610191448" alt="" width="1600" height="1215" loading="lazy">
+        <img class="final__duo" src="assets/img/candles-duo.webp?v=202610191453" alt="" width="1600" height="1215" loading="lazy">
         <p class="final__kick">Ready to play?</p>
         <h2 id="final-h" class="h2">Přečti graf. Udělej svůj tah.</h2>
         <p class="lede">Analyzuj historická data, zdokonaluj své skills, soutěž s ostatními hráči a sbírej coins, které můžeš proměnit ve skutečné odměny.</p>
@@ -516,8 +517,8 @@
     </div>
   </footer>
 
-  <script src="assets/js/vendor/gsap.min.js?v=202610191448" defer></script>
-  <script src="assets/js/main.js?v=202610191448" defer></script>
-  <script src="assets/js/game.js?v=202610191448" defer></script>
+  <script src="assets/js/vendor/gsap.min.js?v=202610191453" defer></script>
+  <script src="assets/js/main.js?v=202610191453" defer></script>
+  <script src="assets/js/game.js?v=202610191453" defer></script>
 </body>
 </html>

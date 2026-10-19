@@ -40,7 +40,12 @@
 
   /* ---------------- nav ---------------- */
   var nav = $('#nav');
-  function navState() { nav.classList.toggle('is-solid', window.scrollY > 40); }
+  function navState() {
+    var y = window.scrollY, vh = window.innerHeight;
+    nav.classList.toggle('is-solid', y > 40);
+    var fin = document.querySelector('.final'), fr = fin && fin.getBoundingClientRect();
+    nav.classList.toggle('is-dark', y > (reduced ? vh * 0.9 : vh * 0.97) - 72 && !(fr && fr.top < 72 && fr.bottom > 0));
+  }
 
   /* ---------------- dust / sparks ---------------- */
   var Dust = (function () {
