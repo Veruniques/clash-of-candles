@@ -215,38 +215,30 @@
   window.addEventListener('resize', onScroll);
   navState(); if (!reduced) scrollFx();
 
-  /* ---------------- ranks = difficulty tiers (placeholder economy: edit here) ---------------- */
+  /* ---------------- ranks: earned, not chosen. Everyone starts at the bottom (placeholder economy: edit here) ---------------- */
   var RANKS = [
-    { name: 'Knot',    entry: 10,  candles: 1,  tools: 'Všechny nástroje', diff: 1 },
-    { name: 'Jiskra',  entry: 25,  candles: 2,  tools: 'Bez obdélníků', diff: 2 },
-    { name: 'Plamen',  entry: 50,  candles: 4,  tools: 'Bez vertikál', diff: 3 },
-    { name: 'Žár',     entry: 100, candles: 8,  tools: 'Jen EMA a horizontály', diff: 4 },
-    { name: 'Výheň',   entry: 200, candles: 16, tools: 'Jen horizontály', diff: 5 },
-    { name: 'Legenda', entry: 500, candles: 40, tools: 'Čistý graf', diff: 6 }
+    { name: 'Knot',    entry: 10,  candles: 1,  tools: 'Všechny nástroje', need: 0 },
+    { name: 'Jiskra',  entry: 25,  candles: 2,  tools: 'Bez obdélníků', need: 20 },
+    { name: 'Plamen',  entry: 50,  candles: 4,  tools: 'Bez vertikál', need: 60 },
+    { name: 'Žár',     entry: 100, candles: 8,  tools: 'Jen EMA a horizontály', need: 150 },
+    { name: 'Výheň',   entry: 200, candles: 16, tools: 'Jen horizontály', need: 350 },
+    { name: 'Legenda', entry: 500, candles: 40, tools: 'Čistý graf', need: 800 }
   ];
   var fmt = window.CoC.fmt;
   (function () {
     var list = $('#rankList'), sum = $('#rankSummary'); if (!list) return;
+    var me = 0, wins = 7; // demo player: fresh on Knot
     list.innerHTML = RANKS.map(function (r, i) {
-      return '<button type="button" role="radio" class="rk" aria-checked="' + (i === 1) + '" data-i="' + i + '">' +
-        '<span class="rk__name">' + r.name + '</span><span class="rk__tools">' + r.tools + '</span>' +
-        '<span class="rk__diff" aria-label="Obtížnost ' + r.diff + ' z 6">' + '<i></i>'.repeat(r.diff) + '<i class="off"></i>'.repeat(6 - r.diff) + '</span>' +
-        '<span class="rk__cost"><i class="coin-ico"></i>' + r.entry + '</span><span class="rk__win"><i class="candle-ico"></i>+' + r.candles + '</span></button>';
-    }).join('');
-    var btns = Array.prototype.slice.call(list.children);
-    function pick(i, focus) {
-      btns.forEach(function (b, j) { b.setAttribute('aria-checked', j === i); b.tabIndex = j === i ? 0 : -1; });
-      sum.innerHTML = 'Vstup <b>' + RANKS[i].entry + ' coins</b> · výhra <b>+' + RANKS[i].candles + ' ' + (RANKS[i].candles === 1 ? 'svíčka' : RANKS[i].candles < 5 ? 'svíčky' : 'svíček') + '</b>';
-      if (focus) btns[i].focus();
-    }
-    btns.forEach(function (b, i) {
-      b.addEventListener('click', function () { pick(i); });
-      b.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); pick(Math.min(i + 1, btns.length - 1), true); }
-        if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); pick(Math.max(i - 1, 0), true); }
-      });
-    });
-    pick(1);
+      var st = i === me ? 'is-me' : i > me ? 'is-locked' : 'is-done';
+      return '<li class="rk ' + st + '">' +
+        '<span class="rk__lv">' + (i + 1) + '</span>' +
+        '<span class="rk__name">' + r.name + (i === me ? ' <em>tady začínáš</em>' : '') + '</span>' +
+        '<span class="rk__tools">' + (i > me ? '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>' + fmt(r.need) + ' výher · ' : '') + r.tools + '</span>' +
+        '<span class="rk__cost"><i class="coin-ico"></i>' + r.entry + '</span><span class="rk__win"><i class="candle-ico"></i>+' + r.candles + '</span></li>';
+    }).reverse().join('');
+    var next = RANKS[me + 1], pct = Math.round(wins / next.need * 100);
+    sum.innerHTML = '<p>Do ranku <b>' + next.name + '</b>: ' + wins + ' / ' + next.need + ' výher</p>' +
+      '<div class="rankwin__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + pct + '%"></i></div>';
   })();
 
   /* ---------------- play screenshot: a small static chart ---------------- */

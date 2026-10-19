@@ -1034,3 +1034,23 @@ main { background: var(--noise), var(--night); }
 .rankwin__foot { color: #6C7C86; } .rankwin__foot b { color: #13232C; }
 
 .rewards__in > * { flex-shrink: 0; }
+
+/* rank ladder: earned, not chosen */
+.rankwin__title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.rankwin__title span { font-size: 11px; font-weight: 700; color: #6C7C86; text-transform: uppercase; letter-spacing: .05em; }
+.rankwin__list { list-style: none; margin: 0; padding: 0; gap: 4px; }
+.rk { grid-template-columns: 26px 1fr auto; cursor: default; padding: 7px 10px; }
+.rk:hover { border-color: transparent; }
+.rk__lv { grid-row: 1 / 3; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: #D3DCE1; color: #13232C; }
+.rk__name { grid-column: 2; }
+.rk__name em { font-style: normal; margin-left: 6px; padding: 1px 6px; border-radius: 3px; background: #2EEA9C; color: #04301F; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; vertical-align: 1px; }
+.rk__tools { grid-column: 2; display: flex; align-items: center; gap: 4px; }
+.rk__tools svg { width: 11px; height: 11px; flex: none; }
+.rk.is-locked { opacity: .55; }
+.rk.is-locked .rk__name { color: #3F4F59; }
+.rk.is-me { background: #E6FFF3; border-color: #2EEA9C; }
+.rk.is-me .rk__lv { background: #2EEA9C; }
+.rankwin__foot { display: block; margin-top: 10px; }
+.rankwin__foot p { margin: 0 0 6px; }
+.rankwin__bar { height: 6px; border-radius: 3px; background: #E3E9ED; overflow: hidden; }
+.rankwin__bar i { display: block; height: 100%; background: #2EEA9C; }
