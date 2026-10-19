@@ -1,0 +1,48 @@
+{
+  "_note": "PLACEHOLDER. Ceny, kurz coins a slevy jsou ilustrační. Až bude shop/API, stačí tento soubor generovat ze serveru nebo změnit URL v data-rewards na #demo.",
+  "currency": "Kč",
+  "coinValue": 1,
+  "maxDiscountPct": 80,
+  "game": {
+    "startCoins": 100,
+    "entry": 10,
+    "win": 20,
+    "lives": 10,
+    "roundSeconds": 90
+  },
+  "products": [
+    {
+      "id": "iphone",
+      "name": "iPhone",
+      "tagline": "Využij coins jako slevu na nový telefon.",
+      "price": 24990,
+      "icon": "phone",
+      "image": "",
+      "featured": true
+    },
+    {
+      "id": "headphones",
+      "name": "Sluchátka",
+      "tagline": "Získej něco navíc za svůj herní výkon.",
+      "price": 6990,
+      "icon": "headphones",
+      "image": ""
+    },
+    {
+      "id": "gear",
+      "name": "Gaming gear",
+      "tagline": "Vylepši svou herní výbavu.",
+      "price": 3490,
+      "icon": "gamepad",
+      "image": ""
+    },
+    {
+      "id": "merch",
+      "name": "Clash of Candles merch",
+      "tagline": "Ukaž, že patříš do arény.",
+      "price": 790,
+      "icon": "tee",
+      "image": ""
+    }
+  ]
+}
