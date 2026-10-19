@@ -16,9 +16,9 @@
 
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-standard-normal.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
-  <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610191850">
-  <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610191850">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610191850">
+  <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610191717">
+  <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610191717">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610191717">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -85,10 +85,10 @@
           <div class="duo__shadow"></div>
           <div class="duo__bob" id="duoBob">
             <div class="fighter fighter--red" id="exitRed"><div class="fighter__in" id="fRed">
-              <img src="assets/img/candle-red.webp?v=202610191850" alt="" width="1600" height="1215">
+              <img src="assets/img/candle-red.webp?v=202610191717" alt="" width="1600" height="1215">
             </div></div>
             <div class="fighter fighter--green" id="exitGreen"><div class="fighter__in" id="fGreen">
-              <img src="assets/img/candle-green.webp?v=202610191850" alt="" width="1600" height="1215">
+              <img src="assets/img/candle-green.webp?v=202610191717" alt="" width="1600" height="1215">
             </div></div>
           </div>
           <div class="impact" id="impact"></div>
@@ -116,58 +116,83 @@
         <div class="wrap">
           <header class="play__head">
             <h2 id="demo-h" class="h2">Jedno kolo za 30 sekund.</h2>
-            <p class="lede">Koukni, jak se hraje. Koupíš graf, prohlédneš si celou příležitost, nakreslíš si úrovně a vybereš stranu. Pak to zkus sám.</p>
+            <p class="lede">Tohle je skutečné rozhraní hry. Koupíš graf, prohlédneš si celou příležitost, nakreslíš si zónu a klikneš na breakout, nebo breakdown. Pak to zkus sám.</p>
           </header>
 
           <ol class="tsteps" id="tSteps" aria-label="Kroky tutoriálu">
             <li data-step="0"><b>1</b><span>Kup graf</span></li>
             <li data-step="1"><b>2</b><span>Celá příležitost</span></li>
             <li data-step="2"><b>3</b><span>Indikátor</span></li>
-            <li data-step="3"><b>4</b><span>Nakresli čáru</span></li>
+            <li data-step="3"><b>4</b><span>Nakresli zónu</span></li>
             <li data-step="4"><b>5</b><span>Zadej úroveň</span></li>
             <li data-step="5"><b>6</b><span>Výhra</span></li>
           </ol>
 
-          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610191850">
-            <div class="game__main">
-              <div class="hud">
-                <div class="views" role="radiogroup" aria-label="Pohled na graf">
-                  <button type="button" role="radio" aria-checked="false" data-view="D" class="views__b"><svg aria-hidden="true"><use href="#i-daily"/></svg><span>Denní</span></button>
-                  <button type="button" role="radio" aria-checked="false" data-view="H" class="views__b"><svg aria-hidden="true"><use href="#i-hourly"/></svg><span>Hodinový</span></button>
-                  <button type="button" role="radio" aria-checked="true" data-view="M" class="views__b"><svg aria-hidden="true"><use href="#i-minutes"/></svg><span>Minutový</span></button>
+          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610191717">
+            <div class="game__main app">
+              <div class="app__bar">
+                <div class="app__views">
+                  <span class="app__lbl">Pohled</span>
+                  <div class="views" role="radiogroup" aria-label="Pohled na graf">
+                    <button type="button" role="radio" aria-checked="false" data-view="D" class="views__b"><svg aria-hidden="true"><use href="#i-daily"/></svg><span>Denní</span></button>
+                    <button type="button" role="radio" aria-checked="false" data-view="H" class="views__b"><svg aria-hidden="true"><use href="#i-hourly"/></svg><span>Hodinový</span></button>
+                    <button type="button" role="radio" aria-checked="true" data-view="M" class="views__b"><svg aria-hidden="true"><use href="#i-minutes"/></svg><span>Minutový</span></button>
+                  </div>
                 </div>
-                <div class="hud__chip hud__timer" title="Čas na rozhodnutí"><svg aria-hidden="true"><use href="#i-clock"/></svg><strong id="gTimer">1:30</strong></div>
-                <div class="hud__chip hud__coins" title="Coins — palivo do her"><i class="coin-ico" aria-hidden="true"></i><strong id="gCoins">100</strong><span class="sr"> coins</span></div>
-                <div class="hud__chip hud__candles" title="Svíčky — získáváš je za výhry"><i class="candle-ico" aria-hidden="true"></i><strong id="gCandles">0</strong><span class="sr"> svíček</span></div>
-                <div class="hud__sent" aria-label="Sentiment hráčů">
-                  <div class="hud__sent-row"><span class="dn" id="gSentDn">47 %</span><span>breakdowny vs breakouty</span><span class="up" id="gSentUp">53 %</span></div>
-                  <div class="hud__sent-bar"><i id="gSentBar"></i></div>
+                <span class="app__hand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11m0-6.5V3.5a1.5 1.5 0 0 1 3 0V11m0-6a1.5 1.5 0 0 1 3 0v6m0-4a1.5 1.5 0 0 1 3 0v7.5a6.5 6.5 0 0 1-6.5 6.5h-1.3a6.5 6.5 0 0 1-5.4-2.9L4.3 15a1.6 1.6 0 0 1 2.6-1.9L8 14.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <div class="app__g app__g--on" id="gG1" title="Čas na rozhodnutí">G1: <strong id="gTimer">1:30</strong></div>
+                <div class="app__g" title="Další graf ve frontě">G2: <strong id="gTimer2">2:51</strong></div>
+                <div class="app__fame" title="Coins (palivo) a svíčky (výhry)"><i class="coin-ico" aria-hidden="true"></i><strong id="gCoins">100</strong><span class="sr"> coins</span><i class="candle-ico" aria-hidden="true"></i><strong id="gCandles">0</strong><span class="sr"> svíček</span></div>
+                <div class="app__sent" aria-label="Jak tipují ostatní hráči">
+                  <p><b class="dn" id="gSentDn">47%</b> <span class="dn">Breakdowns</span> vs <span class="up">Breakouts</span> <b class="up" id="gSentUp">53%</b></p>
+                  <div class="app__sentbar"><i id="gSentBar"></i></div>
+                </div>
+                <div class="app__clock" aria-hidden="true">
+                  <p class="app__cities"><span>UTC</span><span>LON</span><span>TOK</span><span>SYD</span><b>NY</b></p>
+                  <p>Server time <b id="gClock">12:00</b></p>
                 </div>
               </div>
 
-              <div class="game__stage" id="gStage">
-                <canvas id="chart" role="img" aria-label="Graf s horní hranicí breakout a dolní hranicí breakdown"></canvas>
-                <span class="game__tf" id="gTf">5m · instrument skrytý do výsledku</span>
+              <div class="game__stage app__stage" id="gStage">
+                <canvas id="chart" role="img" aria-label="Graf s hranicemi breakout a breakdown"></canvas>
+                <p class="app__legend" id="gLegend" hidden><i></i>EMA (100) <button type="button" id="gLegendX" aria-label="Vypnout EMA">×</button></p>
+                <div class="app__chips"><span class="chip" id="gTf">5m</span><span class="chip chip--pair"><i>EUR</i><b>USD</b></span></div>
+                <p class="chip chip--date" id="gDate" hidden></p>
+                <p class="app__status" id="gStatus" hidden></p>
+
+                <button type="button" class="lvl lvl--up" id="pUp" aria-label="Tipnout breakout — průraz horní hranice">Breakout</button>
+                <button type="button" class="lvl lvl--down" id="pDown" aria-label="Tipnout breakdown — průraz dolní hranice">Breakdown</button>
+
+                <button type="button" class="app__avatar" id="gReveal" aria-label="Odhalit další pětiminutovou svíčku"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="7" fill="#0A1A22"/><path d="M6 37c1.5-8 7-12 14-12s12.5 4 14 12z" fill="#0A1A22"/><path d="M17 25l3 6 3-6" fill="#fff"/></svg><b id="gRevealN">1×</b></button>
+
+                <button type="button" class="fab" id="gFab" aria-expanded="false" aria-controls="gMenu" aria-label="Nástroje"><i></i><i></i><i></i></button>
+                <div class="fabmenu" id="gMenu" hidden>
+                  <button type="button" id="gIndBtn" aria-controls="gInd"><svg aria-hidden="true"><use href="#i-sliders"/></svg>Indikátory</button>
+                  <button type="button" id="gDrawBtn" aria-controls="gDraw"><svg aria-hidden="true"><use href="#i-line"/></svg>Kreslení</button>
+                  <button type="button" id="gActBtn"><i class="coin-ico" aria-hidden="true"></i>Akce</button>
+                </div>
+
+                <div class="drawer" id="gInd" hidden>
+                  <p class="drawer__t">Přidat indikátor <button type="button" class="drawer__x" data-close aria-label="Zavřít">×</button></p>
+                  <label class="drawer__row" id="indEma"><i style="--c:#E2336B"></i><span>EMA</span><em>100</em><input type="checkbox" data-ind="ema"><b class="sw"></b></label>
+                  <label class="drawer__row"><i style="--c:#7B61FF"></i><span>SMA</span><em>50</em><input type="checkbox" data-ind="sma"><b class="sw"></b></label>
+                  <label class="drawer__row"><i style="--c:#3D8BFD"></i><span>Bollinger</span><em>20</em><input type="checkbox" data-ind="bb"><b class="sw"></b></label>
+                  <p class="drawer__more">Ve hře i ADX, ATR, RSI, MACD, Ichimoku a další. Čím vyšší rank, tím méně nástrojů.</p>
+                </div>
+                <div class="drawer" id="gDraw" hidden>
+                  <p class="drawer__t">Přidat kresbu <button type="button" class="drawer__x" data-close aria-label="Zavřít">×</button></p>
+                  <button type="button" class="drawer__row" data-draw="line"><i style="--c:#E0195A"></i><span>Čára</span><b class="plus">+</b></button>
+                  <button type="button" class="drawer__row" data-draw="h"><i style="--c:#3D7BFF"></i><span>Horizontální čára</span><b class="plus">+</b></button>
+                  <button type="button" class="drawer__row" data-draw="v"><i style="--c:#22C77E"></i><span>Vertikální čára</span><b class="plus">+</b></button>
+                  <button type="button" class="drawer__row" data-draw="rect" id="drawRect"><i style="--c:#F2B705"></i><span>Obdélník (zóna)</span><b class="plus">+</b></button>
+                </div>
 
                 <div class="buy" id="gBuy" hidden>
                   <div class="buy__card">
-                    <p class="buy__title">Nový graf je připravený</p>
-                    <p class="buy__text">Vstup do kola stojí <b id="gBuyCost">10</b> coins.</p>
-                    <button type="button" class="btn btn--coin" id="gBuyBtn"><i class="coin-ico" aria-hidden="true"></i>Koupit graf</button>
+                    <p class="buy__title">Nový graf</p>
+                    <p class="buy__text">Skutečný historický graf. Vstup do kola stojí <b id="gBuyCost">10</b> coins.</p>
+                    <button type="button" class="btn btn--coin" id="gBuyBtn"><i class="coin-ico" aria-hidden="true"></i>Potvrdit a hrát</button>
                   </div>
-                </div>
-
-                <div class="tools">
-                  <button type="button" class="tool" id="gIndBtn" aria-expanded="false" aria-controls="gInd"><svg aria-hidden="true"><use href="#i-sliders"/></svg><span>Indikátory</span></button>
-                  <button type="button" class="tool" id="gLineBtn" aria-pressed="false"><svg aria-hidden="true"><use href="#i-line"/></svg><span>Čára</span></button>
-                  <button type="button" class="tool" id="gReveal"><svg aria-hidden="true"><use href="#i-eye"/></svg><span>Odhalit svíčku</span><b id="gRevealN">1</b></button>
-                </div>
-                <div class="ind" id="gInd" hidden>
-                  <p class="ind__title">Indikátory</p>
-                  <label class="ind__row" id="indEma"><i style="--c:#E2588A"></i><span>EMA</span><em>100</em><input type="checkbox" data-ind="ema"><b class="sw"></b></label>
-                  <label class="ind__row"><i style="--c:#9A82FF"></i><span>SMA</span><em>50</em><input type="checkbox" data-ind="sma"><b class="sw"></b></label>
-                  <label class="ind__row"><i style="--c:#4EA6F5"></i><span>Bollinger</span><em>20</em><input type="checkbox" data-ind="bb"><b class="sw"></b></label>
-                  <p class="ind__more">Ve hře najdeš i ADX, ATR, RSI, MACD, Ichimoku a další.</p>
                 </div>
 
                 <p class="toast" id="gToast" role="status" aria-live="polite"></p>
@@ -176,7 +201,7 @@
                     <div class="win__burst" aria-hidden="true"></div>
                     <p class="win__title">Výhra!</p>
                     <div class="win__prize"><i class="candle-ico candle-ico--xl" aria-hidden="true"></i><span>+1 svíčka</span></div>
-                    <p class="win__text">Svíčky sbíráš za každé vyhrané kolo. Pomůžou ti ke skutečným odměnám.</p>
+                    <p class="win__text">Svíčky sbíráš za každé vyhrané kolo. Mění se na slevu na skutečné odměny.</p>
                   </div>
                 </div>
                 <div class="over" id="gOver" hidden>
@@ -187,15 +212,7 @@
                   </div>
                 </div>
                 <div class="cursor" id="tCursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 2l15 9-6.5 1.6L16 20l-3 1.5-3.6-7.6L4 18z" fill="#fff" stroke="#03161F" stroke-width="1.5" stroke-linejoin="round"/></svg><i></i></div>
-                <p class="tcap" id="tCap" aria-live="polite"></p>
-              </div>
-
-              <div class="move">
-                <p class="move__prompt"><b>Your move</b> — teď je řada na tobě.</p>
-                <div class="picks">
-                  <button type="button" class="pick pick--up" id="pUp"><svg aria-hidden="true"><use href="#i-up"/></svg><span class="pick__name">Breakout</span><span class="pick__hint">průraz horní hranice</span></button>
-                  <button type="button" class="pick pick--down" id="pDown"><svg aria-hidden="true"><use href="#i-down"/></svg><span class="pick__name">Breakdown</span><span class="pick__hint">průraz dolní hranice</span></button>
-                </div>
+                <div class="tcap" id="tCap" aria-live="polite"><p class="tcap__h"><b id="tCapT"></b><span id="tCapN"></span></p><p id="tCapX"></p></div>
               </div>
             </div>
 
@@ -298,9 +315,8 @@
           </ul>
         </div>
         <div class="playshot" aria-label="Ukázka obrazovky Play s výběrem obtížnosti">
-          <div class="playshot__screen">
-            <div class="ps-hud"><span class="ps-v on"></span><span class="ps-v"></span><span class="ps-v"></span><span class="ps-chip">G1 1:48</span><span class="ps-chip ps-chip--dim">G2 0:12</span><span class="ps-sent"><i></i></span></div>
-            <canvas class="ps-chart" id="psChart" aria-hidden="true"></canvas>
+          <div class="playshot__screen playshot__screen--real">
+            <img src="assets/img/play-real.webp?v=202610191717" width="1400" height="972" alt="Skutečná obrazovka hry: graf EUR/USD s EMA 100, pohledy denní, hodinový a minutový, odpočet kola a hranice breakout a breakdown" loading="lazy" decoding="async">
           </div>
           <div class="rankwin glass" id="rankWin">
             <p class="rankwin__title">Vyber si obtížnost</p>
@@ -317,10 +333,10 @@
         <div class="candlewall" aria-hidden="true">
           <div class="candlewall__row" id="candleRow"></div>
           <div class="candlewall__track">
-            <div class="cw-ms" style="--p:12%"><i class="candle-ico"></i><span></span><em>13 svíček<br>merch</em></div>
-            <div class="cw-ms" style="--p:40%"><i class="candle-ico"></i><span></span><em>56 svíček<br>gaming gear</em></div>
-            <div class="cw-ms" style="--p:68%"><i class="candle-ico"></i><span></span><em>112 svíček<br>sluchátka</em></div>
-            <div class="cw-ms cw-ms--top" style="--p:96%"><i class="candle-ico"></i><span></span><em>400 svíček<br>iPhone</em></div>
+            <div class="cw-ms" style="--p:19%"><i class="candle-ico"></i><span></span><em>104 svíček<br>AirPods Pro 3</em></div>
+            <div class="cw-ms" style="--p:40%"><i class="candle-ico"></i><span></span><em>176 svíček<br>Apple Watch</em></div>
+            <div class="cw-ms" style="--p:64%"><i class="candle-ico"></i><span></span><em>224 svíček<br>AirPods Max</em></div>
+            <div class="cw-ms cw-ms--top" style="--p:96%"><i class="candle-ico"></i><span></span><em>560 svíček<br>iPhone 18 Pro</em></div>
             <div class="candlewall__fill"></div>
           </div>
         </div>
@@ -512,7 +528,7 @@
     <!-- ============ FINAL CTA ============ -->
     <section class="final" aria-labelledby="final-h">
       <div class="wrap final__inner">
-        <img class="final__duo" src="assets/img/candles-duo.webp?v=202610191850" alt="" width="1600" height="1215" loading="lazy">
+        <img class="final__duo" src="assets/img/candles-duo.webp?v=202610191717" alt="" width="1600" height="1215" loading="lazy">
         <p class="final__kick">Ready to play?</p>
         <h2 id="final-h" class="h2">Přečti graf líp než soupeř.</h2>
         <p class="lede">Hraj zdarma, sbírej svíčky a poměř se s ostatními. Aréna se otevírá brzy.</p>
@@ -530,8 +546,8 @@
     </div>
   </footer>
 
-  <script src="assets/js/vendor/gsap.min.js?v=202610191850" defer></script>
-  <script src="assets/js/main.js?v=202610191850" defer></script>
-  <script src="assets/js/game.js?v=202610191850" defer></script>
+  <script src="assets/js/vendor/gsap.min.js?v=202610191717" defer></script>
+  <script src="assets/js/main.js?v=202610191717" defer></script>
+  <script src="assets/js/game.js?v=202610191717" defer></script>
 </body>
 </html>

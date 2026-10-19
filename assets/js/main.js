@@ -14,12 +14,12 @@
     currency: 'Kč', candleValue: 50, maxDiscountPct: 80,
     game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 90 },
     products: [
-      { id: 'iphone', name: 'iPhone', tagline: 'Využij svíčky jako slevu na nový telefon.', price: 24990, icon: 'phone', image: 'assets/img/products/phone.svg', featured: true, podium: 1 },
-      { id: 'headphones', name: 'Sluchátka', tagline: 'Získej něco navíc za svůj herní výkon.', price: 6990, icon: 'headphones', image: 'assets/img/products/headphones.svg', podium: 2 },
-      { id: 'gear', name: 'Gaming gear', tagline: 'Vylepši svou herní výbavu.', price: 3490, icon: 'gamepad', image: 'assets/img/products/controller.svg', podium: 3 },
-      { id: 'merch', name: 'Clash of Candles merch', tagline: 'Ukaž, že patříš do arény.', price: 790, icon: 'tee', image: 'assets/img/products/tee.svg' }
+      { id: 'iphone', name: 'iPhone 18 Pro', price: 34990, icon: 'phone', image: 'assets/img/products/phone.svg', featured: true, podium: 1 },
+      { id: 'airpods-max', name: 'AirPods Max', price: 13990, icon: 'headphones', image: 'assets/img/products/headphones.svg', podium: 2 },
+      { id: 'watch', name: 'Apple Watch Series 12', price: 10990, icon: 'clock', podium: 3 },
+      { id: 'airpods-pro', name: 'AirPods Pro 3', price: 6490, icon: 'headphones' }
     ],
-    teasers: ['Herní notebook', 'Chytré hodinky', 'Konzole', 'Tablet', 'Dron', 'Herní židle']
+    teasers: ['MacBook Air', 'iPad Air', 'Herní konzole', 'Voucher na výlet']
   };
   var gameEl = $('#game');
   var src = gameEl && gameEl.getAttribute('data-rewards');
@@ -34,8 +34,12 @@
   }).catch(function () { return DEFAULT_CONFIG; });
 
   window.CoC.fmt = function (n) { return Math.round(n).toLocaleString('cs-CZ'); };
+  // product photo; if it fails to load, fall back to the icon
+  window.CoC.img = function (src, alt, cls) {
+    return '<img' + (cls ? ' class="' + cls + '"' : '') + ' src="' + src + '" alt="' + (alt || '') + '" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.visibility=\'hidden\'">';
+  };
   window.CoC.icon = function (p) {
-    if (p.image) return '<span class="prod-ico"><img src="' + p.image + '" alt=""></span>';
+    if (p.image) return '<span class="prod-ico">' + window.CoC.img(p.image, p.name) + '</span>';
     return '<span class="prod-ico"><svg aria-hidden="true"><use href="#i-' + (p.icon || 'phone') + '"/></svg></span>';
   };
 
@@ -330,7 +334,7 @@
       pod.innerHTML = order.map(function (p) {
         var disc = p.price * cfg.maxDiscountPct / 100, need = Math.ceil(disc / (cfg.candleValue || 50));
         return '<article class="pod pod--' + p.podium + '">' +
-          '<div class="pod__art">' + (p.image ? '<img src="' + p.image + '" alt="" loading="lazy">' : window.CoC.icon(p)) + '</div>' +
+          '<div class="pod__art">' + (p.image ? window.CoC.img(p.image, p.name) : window.CoC.icon(p)) + '</div>' +
           '<div class="pod__info"><h3 class="pod__name">' + p.name + '</h3>' +
           '<p class="pod__price"><s>' + fmt(p.price) + ' ' + cfg.currency + '</s> <b>od ' + fmt(p.price - disc) + ' ' + cfg.currency + '</b></p>' +
           '<p class="pod__need"><i class="candle-ico"></i>' + fmt(need) + ' svíček na max. slevu</p></div>' +
@@ -339,9 +343,9 @@
     }
     var track = $('#fogTrack');
     if (track) {
-      var imgs = cfg.products.map(function (p) { return p.image; }).filter(Boolean);
-      var items = (cfg.teasers || []).map(function (t, i) {
-        return '<div class="fogcard"><div class="fogcard__art">' + (imgs.length ? '<img src="' + imgs[i % imgs.length] + '" alt="">' : '') + '</div><p>' + t + '</p><span>??? Kč</span></div>';
+      var items = (cfg.teasers || []).map(function (t) {
+        if (typeof t === 'string') t = { name: t };
+        return '<div class="fogcard"><div class="fogcard__art">' + (t.image ? window.CoC.img(t.image, '') : '<span class="fogcard__q">?</span>') + '</div><p>' + t.name + '</p><span>??? Kč</span></div>';
       }).join('');
       track.innerHTML = items + items; // duplicated for a seamless loop
     }

@@ -1,34 +1,38 @@
-/* Clash of Candles — demo game: auto-playing tutorial + free play.
+/* Clash of Candles — demo game in the real game UI: auto-playing tutorial + free play.
    Simulated chart (random walk) so it works offline and nobody can look the answer up.
    Economy + products come from window.CoC.config (assets/data/rewards.json):
    coins pay the entry ("fuel"), each win lights one svíčka, svíčky lead to rewards. */
 (function () {
   'use strict';
   var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
   var game = $('#game'); if (!game) return;
   var cv = $('#chart'), ctx = cv.getContext('2d'), stage = $('#gStage');
   var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fmt = function (n) { return window.CoC && window.CoC.fmt ? window.CoC.fmt(n) : String(Math.round(n)); };
 
   var ui = {
-    views: Array.prototype.slice.call(document.querySelectorAll('.views__b')),
-    timer: $('#gTimer'), timerChip: $('.hud__timer'), coins: $('#gCoins'), candles: $('#gCandles'),
-    sentDn: $('#gSentDn'), sentUp: $('#gSentUp'), sentBar: $('#gSentBar'), tf: $('#gTf'),
+    views: $$('.views__b'), timer: $('#gTimer'), g1: $('#gG1'), timer2: $('#gTimer2'), clock: $('#gClock'),
+    coins: $('#gCoins'), candles: $('#gCandles'), sentDn: $('#gSentDn'), sentUp: $('#gSentUp'), sentBar: $('#gSentBar'),
+    tf: $('#gTf'), date: $('#gDate'), status: $('#gStatus'), legend: $('#gLegend'), legendX: $('#gLegendX'),
     buy: $('#gBuy'), buyBtn: $('#gBuyBtn'), buyCost: $('#gBuyCost'),
-    indBtn: $('#gIndBtn'), ind: $('#gInd'), emaRow: $('#indEma'), lineBtn: $('#gLineBtn'),
+    fab: $('#gFab'), menu: $('#gMenu'), indBtn: $('#gIndBtn'), drawBtn: $('#gDrawBtn'), actBtn: $('#gActBtn'),
+    ind: $('#gInd'), emaRow: $('#indEma'), drw: $('#gDraw'), rectRow: $('#drawRect'),
     reveal: $('#gReveal'), revealN: $('#gRevealN'),
     up: $('#pUp'), down: $('#pDown'), toast: $('#gToast'), win: $('#gWin'),
     over: $('#gOver'), overTitle: $('#gOverTitle'), overText: $('#gOverText'), overBtn: $('#gOverBtn'),
     rwResult: $('#rwResult'), rwTitle: $('#rwTitle'), rwDelta: $('#rwDelta'), rwNote: $('#rwNote'),
     rwBalance: $('#rwBalance'), rwFeatured: $('#rwFeatured'), rwList: $('#rwList'), rwNext: $('#rwNext'), rwActions: $('.rw-actions'),
-    cursor: $('#tCursor'), cap: $('#tCap'), steps: Array.prototype.slice.call(document.querySelectorAll('#tSteps li')),
-    tPlay: $('#tPlay'), tReplay: $('#tReplay')
+    cursor: $('#tCursor'), cap: $('#tCap'), capT: $('#tCapT'), capN: $('#tCapN'), capX: $('#tCapX'),
+    steps: $$('#tSteps li'), tPlay: $('#tPlay'), tReplay: $('#tReplay')
   };
   game.appendChild(ui.cursor);
 
+  // colours of the real game UI (light chart)
   var C = {
-    grid: 'rgba(255,255,255,0.055)', axis: '#5F8796', up: '#2EE29A', down: '#FF4767', line: '#2EE29A',
-    upLine: '#4FF2B1', downLine: '#FF6A86', ema: '#E2588A', sma: '#9A82FF', bb: '#4EA6F5', user: '#FFFFFF', fog: 'rgba(255,255,255,0.035)'
+    grid: '#E4EBF0', axis: '#9AA8B1', up: '#22D98C', down: '#E0195A', line: '#2EEA9C',
+    ema: '#E2336B', sma: '#7B61FF', bb: '#3D8BFD', blue: '#3D7BFF', blueFill: 'rgba(61,123,255,0.11)',
+    upLvl: '#2EEA9C', downLvl: '#E0195A', zone: '#F2B705'
   };
   var HIST = 90, FUT = 60;
 
@@ -77,9 +81,13 @@
     if (hit < 4 || hit > FUT - 6) return null;
     var hourly = walkBack(r, last, 260, 0.0009); addInd(hourly);
     var daily = walkBack(r, last, 240, 0.0045); addInd(daily);
-    var res = last + (upper - last) * 0.45;
-    return { hist: hist, fut: fut, upper: upper, lower: lower, hit: hit, side: side, hourly: hourly, daily: daily, res: res,
-      startMin: Math.floor(r() * 288) * 5, sent: 35 + Math.floor(r() * 31) };
+    // the swing high of the last ~60 candles = the resistance zone the tutorial marks
+    var hiI = HIST - 60, hiV = -1;
+    for (var k = HIST - 60; k < HIST - 4; k++) if (hist[k].h > hiV) { hiV = hist[k].h; hiI = k; }
+    var d = new Date(Date.UTC(2009 + Math.floor(r() * 15), Math.floor(r() * 12), 1 + Math.floor(r() * 27)));
+    return { hist: hist, fut: fut, upper: upper, lower: lower, hit: hit, side: side, hourly: hourly, daily: daily,
+      zone: { i0: Math.max(2, hiI - 10), i1: HIST - 3, p0: hiV - atr * 0.9, p1: hiV + atr * 0.5 },
+      startMin: Math.floor(r() * 288) * 5, sent: 35 + Math.floor(r() * 31), date: d };
   }
   function newScenario(want) {
     var s = null, seed = (Math.random() * 1e9) | 0;
@@ -89,150 +97,237 @@
 
   /* ---------- state ---------- */
   var cfg = null;
-  var S = { sc: null, view: 'M', shown: 0, revealed: 0, bought: false, pick: null, playing: false, hitShown: false,
-    ind: { ema: false, sma: false, bb: false }, lines: [], drawing: false, drawAnim: null,
-    coins: 100, candles: 0, t: 90, timerId: null, mode: 'tutorial', scale: null };
+  var S = { sc: null, view: 'M', shown: 0, revealed: 0, bought: false, pick: null, playing: false, hitShown: false, round: 0,
+    ind: { ema: false, sma: false, bb: false }, shapes: [], tool: null, preview: null,
+    coins: 100, candles: 0, t: 90, t2: 171, timerId: null, mode: 'tutorial', scale: null };
 
   /* ---------- drawing ---------- */
   var W = 0, H = 0, dpr = 1;
-  function resize() { var r = cv.getBoundingClientRect(); dpr = Math.min(window.devicePixelRatio || 1, 2); W = r.width; H = r.height; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); draw(); }
+  function resize() { dpr = Math.min(window.devicePixelRatio || 1, 2); W = cv.clientWidth; H = cv.clientHeight; // layout size, unaffected by the panel's 3D tilt
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); draw(); }
   function hhmm(m) { m = ((m % 1440) + 1440) % 1440; var h = Math.floor(m / 60), mm = m % 60; return (h < 10 ? '0' : '') + h + ':' + (mm < 10 ? '0' : '') + mm; }
-  function rr(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 
   function draw() {
     var sc = S.sc; if (!sc || !W) return;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
-    var compact = W < 560, padL = 8, padR = compact ? 74 : 98, padT = 40, padB = 84;
+    var compact = W < 560, padL = 0, padR = compact ? 56 : 70, padT = compact ? 46 : 54, padB = 26;
     var pw = W - padL - padR, ph = H - padT - padB;
     var series, slots, isLine = S.view !== 'M';
     if (S.view === 'M') { series = sc.hist.concat(sc.fut.slice(0, S.shown)); slots = HIST + FUT; }
-    else { series = S.view === 'H' ? sc.hourly : sc.daily; slots = Math.round(series.length / 0.78); }
+    else { series = S.view === 'H' ? sc.hourly : sc.daily; slots = Math.round(series.length / 0.8); }
     var step = pw / slots, vis = isLine ? series : sc.hist, lo = sc.lower, hi = sc.upper;
     vis.forEach(function (b) { lo = Math.min(lo, isLine ? b.c : b.l); hi = Math.max(hi, isLine ? b.c : b.h); });
-    var pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
+    var pad = (hi - lo) * 0.14; lo -= pad; hi += pad;
     var y = function (v) { return padT + (hi - v) / (hi - lo) * ph; };
     var x = function (i) { return padL + (i + 0.5) * step; };
-    S.scale = { lo: lo, hi: hi, padT: padT, ph: ph, padL: padL, pw: pw };
+    S.scale = { lo: lo, hi: hi, padT: padT, ph: ph, padL: padL, pw: pw, step: step };
 
-    ctx.font = (compact ? '10px' : '11px') + ' ui-monospace, Menlo, monospace'; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
-    for (var g = 0; g <= 6; g++) {
-      var gy = padT + ph * g / 6, gv = hi - (hi - lo) * g / 6;
-      ctx.strokeStyle = C.grid; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + pw, gy); ctx.stroke();
+    // grid + axes
+    ctx.lineWidth = 1; ctx.font = (compact ? '9.5px' : '10.5px') + ' ui-monospace, Menlo, monospace';
+    ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+    for (var g = 0; g <= 7; g++) {
+      var gy = Math.round(padT + ph * g / 7) + 0.5, gv = hi - (hi - lo) * g / 7;
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(padL, gy); ctx.lineTo(padL + pw, gy); ctx.stroke();
       ctx.fillStyle = C.axis; ctx.fillText(gv.toFixed(5), padL + pw + 8, gy);
     }
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-    var every = isLine ? Math.round(slots / (compact ? 4 : 7)) : (compact ? 30 : 15);
+    var every = isLine ? Math.round(slots / (compact ? 4 : 8)) : (compact ? 24 : 12);
     for (var t = 0; t < slots; t += every) {
-      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(x(t), padT); ctx.lineTo(x(t), padT + ph); ctx.stroke();
-      var lab = S.view === 'M' ? hhmm(sc.startMin + t * 5) : S.view === 'H' ? '−' + Math.max(0, Math.round((series.length - t) / 24)) + ' d' : '−' + Math.max(0, Math.round((series.length - t) / 21)) + ' měs.';
-      ctx.fillStyle = C.axis; ctx.fillText(lab, x(t), padT + ph + 16);
+      var gx = Math.round(x(t)) + 0.5;
+      ctx.strokeStyle = C.grid; ctx.beginPath(); ctx.moveTo(gx, padT - 20); ctx.lineTo(gx, padT + ph); ctx.stroke();
+      var lab = S.view === 'M' ? hhmm(sc.startMin + t * 5) : S.view === 'H' ? '−' + Math.max(0, Math.round((series.length - t) / 24)) + ' d' : '−' + Math.max(0, Math.round((series.length - t) / 21)) + ' m';
+      ctx.fillStyle = C.axis; ctx.fillText(lab, gx, H - 8);
     }
-    var known = isLine ? series.length : HIST + S.shown, fx = padL + known * step;
-    if (known < slots) {
-      ctx.fillStyle = C.fog; ctx.fillRect(fx, padT, padL + pw - fx, ph);
-      ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.setLineDash([3, 5]); ctx.beginPath(); ctx.moveTo(fx, padT); ctx.lineTo(fx, padT + ph); ctx.stroke(); ctx.setLineDash([]);
-      if (!S.pick) { ctx.fillStyle = 'rgba(255,255,255,0.10)'; ctx.font = '800 ' + Math.round(Math.min(ph * 0.4, 130)) + 'px Archivo, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('?', fx + (padL + pw - fx) / 2, padT + ph / 2); }
-    }
+    ctx.strokeStyle = '#D5DEE4'; ctx.beginPath(); ctx.moveTo(padL + pw + 0.5, 0); ctx.lineTo(padL + pw + 0.5, H); ctx.stroke();
 
-    ctx.save(); ctx.beginPath(); ctx.rect(padL, padT, pw, ph); ctx.clip();
+    var known = isLine ? series.length : HIST + S.shown, fx = x(known - 1) + step / 2;
+
+    ctx.save(); ctx.beginPath(); ctx.rect(padL, 0, pw, padT + ph); ctx.clip();
+    // chosen side: the blue zone from the level to the edge, up to the moment of decision (as in the game)
+    if (S.pick && S.view === 'M') {
+      var dx = x(HIST - 1) + step / 2, ly = y(S.pick === 'up' ? sc.upper : sc.lower);
+      var top = S.pick === 'up' ? 0 : ly, hgt = S.pick === 'up' ? ly : padT + ph - ly;
+      ctx.fillStyle = C.blueFill; ctx.fillRect(padL, top, dx - padL, hgt);
+      ctx.strokeStyle = C.blue; ctx.lineWidth = 1.2; ctx.strokeRect(padL - 1, top + (S.pick === 'up' ? -1 : 0.5), dx - padL + 1, hgt + 0.5);
+    }
+    // user drawings (zone, lines)
+    S.shapes.concat(S.preview ? [S.preview] : []).forEach(function (sh) {
+      if (sh.view !== S.view) return;
+      if (sh.t === 'rect') {
+        var x0 = x(Math.min(sh.i0, sh.i1)), x1 = x(Math.max(sh.i0, sh.i1)), y0 = y(Math.max(sh.p0, sh.p1)), y1 = y(Math.min(sh.p0, sh.p1));
+        ctx.fillStyle = C.blueFill; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+        ctx.strokeStyle = C.blue; ctx.lineWidth = 1.2; ctx.strokeRect(x0 + 0.5, y0 + 0.5, x1 - x0, y1 - y0);
+        if (x1 - x0 > 80) { ctx.fillStyle = C.blue; ctx.font = '600 11px Archivo, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom'; ctx.fillText('Zóna odporu', x1 - 4, y0 - 3); }
+      } else if (sh.t === 'h') {
+        ctx.strokeStyle = C.blue; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(padL, y(sh.p)); ctx.lineTo(padL + pw, y(sh.p)); ctx.stroke();
+      } else if (sh.t === 'v') {
+        ctx.strokeStyle = '#22C77E'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(x(sh.i), 0); ctx.lineTo(x(sh.i), padT + ph); ctx.stroke();
+      } else if (sh.t === 'line') {
+        ctx.strokeStyle = C.down; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.moveTo(x(sh.i0), y(sh.p0)); ctx.lineTo(x(sh.i1), y(sh.p1)); ctx.stroke();
+        [[sh.i0, sh.p0], [sh.i1, sh.p1]].forEach(function (q) { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x(q[0]), y(q[1]), 3.5, 0, 7); ctx.fill(); ctx.stroke(); });
+      }
+    });
     function path(key, col, width, dash) {
       ctx.strokeStyle = col; ctx.lineWidth = width; ctx.setLineDash(dash || []); ctx.beginPath(); var st = false;
       for (var i = 0; i < series.length; i++) { var v = series[i][key]; if (v == null) continue; st ? ctx.lineTo(x(i), y(v)) : ctx.moveTo(x(i), y(v)); st = true; }
       ctx.stroke(); ctx.setLineDash([]);
     }
     if (S.ind.bb) {
-      ctx.fillStyle = 'rgba(78,166,245,0.08)'; ctx.beginPath(); var st = -1, i2;
+      ctx.fillStyle = 'rgba(61,139,253,0.07)'; ctx.beginPath(); var st = -1, i2;
       for (i2 = 0; i2 < series.length; i2++) if (series[i2].bbU != null) { if (st < 0) { st = i2; ctx.moveTo(x(i2), y(series[i2].bbU)); } else ctx.lineTo(x(i2), y(series[i2].bbU)); }
       for (i2 = series.length - 1; i2 >= st && st >= 0; i2--) ctx.lineTo(x(i2), y(series[i2].bbL));
-      ctx.fill(); path('bbU', C.bb, 1.2); path('bbL', C.bb, 1.2); path('bbM', C.bb, 1, [4, 4]);
+      ctx.fill(); path('bbU', C.bb, 1); path('bbL', C.bb, 1); path('bbM', C.bb, 1, [4, 4]);
     }
-    if (S.ind.sma) path('sma', C.sma, 1.8);
-    if (S.ind.ema) path('ema', C.ema, 2);
+    if (S.ind.sma) path('sma', C.sma, 1.4);
+    var dim = S.pick && S.view === 'M';
     if (isLine) {
-      var grd = ctx.createLinearGradient(0, padT, 0, padT + ph); grd.addColorStop(0, 'rgba(46,226,154,0.28)'); grd.addColorStop(1, 'rgba(46,226,154,0)');
       ctx.beginPath(); for (var k = 0; k < series.length; k++) k ? ctx.lineTo(x(k), y(series[k].c)) : ctx.moveTo(x(k), y(series[k].c));
-      ctx.lineTo(x(series.length - 1), padT + ph); ctx.lineTo(x(0), padT + ph); ctx.closePath(); ctx.fillStyle = grd; ctx.fill();
-      ctx.beginPath(); for (k = 0; k < series.length; k++) k ? ctx.lineTo(x(k), y(series[k].c)) : ctx.moveTo(x(k), y(series[k].c));
-      ctx.strokeStyle = C.line; ctx.lineWidth = 1.8; ctx.shadowColor = 'rgba(46,226,154,0.6)'; ctx.shadowBlur = 8; ctx.stroke(); ctx.shadowBlur = 0;
+      ctx.strokeStyle = C.line; ctx.lineWidth = 1.6; ctx.lineJoin = 'round'; ctx.stroke();
     } else {
-      var bw = Math.max(1.6, step * 0.62);
+      var bw = Math.max(1.6, step * 0.6);
       for (var c = 0; c < series.length; c++) {
-        var b = series[c], col = b.c >= b.o ? C.up : C.down;
-        ctx.globalAlpha = (c >= HIST && !S.pick) ? 0.8 : 1;
-        ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x(c), y(b.h)); ctx.lineTo(x(c), y(b.l)); ctx.stroke();
-        ctx.fillStyle = col; ctx.fillRect(x(c) - bw / 2, y(Math.max(b.o, b.c)), bw, Math.max(1.2, Math.abs(y(b.o) - y(b.c))));
+        var b = series[c], col = b.c >= b.o ? C.up : C.down, xc = Math.round(x(c)) + 0.5;
+        ctx.globalAlpha = dim && c < HIST ? 0.3 : 1;
+        ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xc, y(b.h)); ctx.lineTo(xc, y(b.l)); ctx.stroke();
+        ctx.fillStyle = col; ctx.fillRect(xc - bw / 2, y(Math.max(b.o, b.c)), bw, Math.max(1.2, Math.abs(y(b.o) - y(b.c))));
       }
       ctx.globalAlpha = 1;
     }
-    S.lines.forEach(function (ln, idx) {
-      var prog = (S.drawAnim && S.drawAnim.idx === idx) ? S.drawAnim.p : 1, ly = y(ln);
-      ctx.strokeStyle = C.user; ctx.lineWidth = 1.6; ctx.shadowColor = 'rgba(255,255,255,0.7)'; ctx.shadowBlur = 6;
-      ctx.beginPath(); ctx.moveTo(padL, ly); ctx.lineTo(padL + pw * prog, ly); ctx.stroke(); ctx.shadowBlur = 0;
-      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(padL + pw * prog, ly, 3.5, 0, Math.PI * 2); ctx.fill();
-    });
+    if (S.ind.ema) {
+      path('ema', C.ema, 1.5);
+      var le = series[series.length - 1];
+      if (le && le.ema != null) { ctx.fillStyle = C.ema; ctx.font = '600 10px Archivo, sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText('EMA 100', Math.min(x(series.length - 1) + 6, padL + pw - 50), y(le.ema) + 10); }
+    }
     ctx.restore();
 
-    level(y(sc.upper), C.upLine, 'BREAKOUT', padL, pw, compact);
-    level(y(sc.lower), C.downLine, 'BREAKDOWN', padL, pw, compact);
-    S.lines.forEach(function (ln) {
-      var ly = y(ln); ctx.font = '700 10px ui-monospace, Menlo, monospace';
-      var bx = padL + pw + 4, bw2 = W - bx - 4; ctx.fillStyle = '#fff'; rr(bx, ly - 9, bw2, 18, 6); ctx.fill();
-      ctx.fillStyle = '#03161F'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(ln.toFixed(5), bx + bw2 / 2, ly + 1);
+    // breakout / breakdown levels: dashed from "now" to the tag
+    [['up', sc.upper, C.upLvl], ['down', sc.lower, C.downLvl]].forEach(function (L) {
+      var ly = Math.round(y(L[1])) + 0.5;
+      ctx.strokeStyle = S.pick && S.pick !== L[0] ? '#C9D3D9' : L[2]; ctx.globalAlpha = 0.85; ctx.lineWidth = 1; ctx.setLineDash([5, 5]);
+      ctx.beginPath(); ctx.moveTo(Math.min(fx + 8, padL + pw - 40), ly); ctx.lineTo(padL + pw, ly); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
     });
     if (S.hitShown && S.view === 'M') {
-      var hx = x(HIST + sc.hit), hy = sc.side === 'up' ? y(sc.upper) : y(sc.lower), hc = sc.side === 'up' ? C.upLine : C.downLine;
-      ctx.shadowColor = hc; ctx.shadowBlur = 18; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(hx, hy, 12, 0, Math.PI * 2); ctx.stroke(); ctx.shadowBlur = 0;
-      ctx.fillStyle = hc; ctx.beginPath(); ctx.arc(hx, hy, 5, 0, Math.PI * 2); ctx.fill();
+      var hx = x(HIST + sc.hit), hy = sc.side === 'up' ? y(sc.upper) : y(sc.lower), hc = sc.side === 'up' ? C.up : C.down;
+      ctx.strokeStyle = hc; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(hx, hy, 11, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = hc; ctx.beginPath(); ctx.arc(hx, hy, 4, 0, Math.PI * 2); ctx.fill();
     }
+    // HTML tags follow the levels
+    ui.up.style.top = y(sc.upper) + 'px'; ui.down.style.top = y(sc.lower) + 'px';
+    stage.style.setProperty('--padR', padR + 'px');
   }
-  function level(ly, col, label, padL, pw, compact) {
-    ctx.save(); ctx.shadowColor = col; ctx.shadowBlur = 10; ctx.strokeStyle = col; ctx.lineWidth = 1.6; ctx.setLineDash([8, 6]);
-    ctx.beginPath(); ctx.moveTo(padL, ly); ctx.lineTo(padL + pw, ly); ctx.stroke(); ctx.setLineDash([]);
-    ctx.font = '800 ' + (compact ? 10 : 11) + 'px Archivo, sans-serif';
-    var bx = padL + pw + 4, bw = W - bx - 4; ctx.fillStyle = col; rr(bx, ly - 12, bw, 24, 8); ctx.fill(); ctx.shadowBlur = 0;
-    ctx.fillStyle = '#04202D'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, bx + bw / 2, ly + 1); ctx.restore();
-  }
-  function priceAt(clientY) {
+  function toData(e) {
     var r = cv.getBoundingClientRect(), sc = S.scale; if (!sc) return null;
-    var yy = clientY - r.top; if (yy < sc.padT || yy > sc.padT + sc.ph) return null;
-    return sc.hi - (yy - sc.padT) / sc.ph * (sc.hi - sc.lo);
+    var px = e.clientX - r.left, py = e.clientY - r.top;
+    if (px < sc.padL || px > sc.padL + sc.pw || py < 0 || py > sc.padT + sc.ph) return null;
+    return { i: (px - sc.padL) / sc.step - 0.5, p: sc.hi - (py - sc.padT) / sc.ph * (sc.hi - sc.lo) };
   }
-  function yOf(price) { var sc = S.scale; return sc.padT + (sc.hi - price) / (sc.hi - sc.lo) * sc.ph; }
+  function ptOf(i, p) { // data -> coordinates inside #game (for the tutorial cursor)
+    var sc = S.scale, c = cv.getBoundingClientRect(), g = game.getBoundingClientRect();
+    return { x: c.left - g.left + sc.padL + (i + 0.5) * sc.step, y: c.top - g.top + sc.padT + (sc.hi - p) / (sc.hi - sc.lo) * sc.ph };
+  }
 
   /* ---------- HUD ---------- */
   function bump(el) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
   function renderCoins(b) { ui.coins.textContent = fmt(S.coins); if (b) bump(ui.coins); }
   function renderCandles(b) { ui.candles.textContent = fmt(S.candles); ui.rwBalance.textContent = fmt(S.candles); if (b) bump(ui.candles); }
-  function renderTimer() { var m = Math.floor(S.t / 60), s = S.t % 60; ui.timer.textContent = m + ':' + (s < 10 ? '0' : '') + s; ui.timerChip.classList.toggle('is-low', S.t <= 10 && !S.pick && S.bought); }
+  function mmss(s) { s = Math.max(0, s); var m = Math.floor(s / 60), r = s % 60; return m + ':' + (r < 10 ? '0' : '') + r; }
+  function renderTimer() {
+    ui.timer.textContent = S.pick ? (S.pick === 'up' ? '↑' : '↓') : mmss(S.t);
+    ui.timer2.textContent = mmss(S.t2);
+    ui.g1.classList.toggle('is-low', S.t <= 10 && !S.pick && S.bought);
+  }
+  function renderClock() { var d = new Date(); ui.clock.textContent = hhmm(d.getUTCHours() * 60 + d.getUTCMinutes()); }
   function setView(v) {
     S.view = v; ui.views.forEach(function (b) { b.setAttribute('aria-checked', b.getAttribute('data-view') === v); });
-    ui.tf.textContent = (v === 'M' ? '5m' : v === 'H' ? '1h' : '1D') + ' · instrument skrytý do výsledku'; draw();
+    ui.tf.textContent = v === 'M' ? '5m' : v === 'H' ? '1h' : '1D'; draw();
   }
-  function setInd(k, on) { S.ind[k] = on; var cb = ui.ind.querySelector('[data-ind="' + k + '"]'); if (cb) cb.checked = on; draw(); }
+  function setInd(k, on) {
+    S.ind[k] = on; var cb = ui.ind.querySelector('[data-ind="' + k + '"]'); if (cb) cb.checked = on;
+    if (k === 'ema') ui.legend.hidden = !on; draw();
+  }
+  function setStatus(kind, text) {
+    if (!kind) { ui.status.hidden = true; return; }
+    ui.status.className = 'app__status is-' + kind; ui.status.textContent = text; ui.status.hidden = false;
+  }
   var toastT;
   function toast(t) { ui.toast.textContent = t; ui.toast.classList.add('is-on'); clearTimeout(toastT); toastT = setTimeout(function () { ui.toast.classList.remove('is-on'); }, 3000); }
   function overlay(title, text, btn, fn) {
     ui.overTitle.textContent = title; ui.overText.textContent = text; ui.overBtn.textContent = btn; ui.over.hidden = false;
     ui.overBtn.onclick = function () { ui.over.hidden = true; fn(); }; ui.overBtn.focus({ preventScroll: true });
   }
-  function lockControls(locked) { ui.up.disabled = ui.down.disabled = locked; ui.reveal.disabled = locked || !!S.revealed; ui.lineBtn.disabled = locked; }
+  function lockControls(locked) {
+    ui.up.disabled = ui.down.disabled = locked; ui.reveal.disabled = locked || !!S.revealed; ui.fab.disabled = !!S.playing;
+    ui.up.classList.toggle('is-ready', !locked); ui.down.classList.toggle('is-ready', !locked);
+  }
+
+  /* ---------- FAB menu + drawers ---------- */
+  function closePanels(keep) {
+    if (keep !== 'menu') { ui.menu.hidden = true; ui.fab.setAttribute('aria-expanded', 'false'); }
+    if (keep !== 'ind') ui.ind.hidden = true;
+    if (keep !== 'draw') ui.drw.hidden = true;
+  }
+  function toggleMenu(open) {
+    open = open == null ? ui.menu.hidden : open; closePanels(open ? 'menu' : null);
+    ui.menu.hidden = !open; ui.fab.setAttribute('aria-expanded', String(open));
+  }
+  function openDrawer(which) { closePanels(which); (which === 'ind' ? ui.ind : ui.drw).hidden = false; }
+  function setTool(t) {
+    S.tool = t; stage.classList.toggle('is-drawing', !!t);
+    if (t && S.mode === 'play') toast(t === 'h' || t === 'v' ? 'Klikni do grafu tam, kam chceš čáru.' : 'Táhni v grafu myší nebo prstem.');
+  }
+  ui.fab.addEventListener('click', function (e) { e.stopPropagation(); toggleMenu(); });
+  ui.indBtn.addEventListener('click', function () { openDrawer('ind'); });
+  ui.drawBtn.addEventListener('click', function () { openDrawer('draw'); });
+  ui.actBtn.addEventListener('click', function () {
+    closePanels();
+    if (!S.bought) { ui.buy.hidden = false; ui.buyBtn.focus({ preventScroll: true }); }
+    else if (!S.pick) toast('Kolo běží. Klikni na BREAKOUT, nebo BREAKDOWN.');
+  });
+  $$('[data-close]', stage).forEach(function (b) { b.addEventListener('click', function () { closePanels(); }); });
+  ui.drw.addEventListener('click', function (e) { var b = e.target.closest('[data-draw]'); if (!b) return; closePanels(); setTool(b.getAttribute('data-draw')); });
+  ui.ind.addEventListener('change', function (e) { var k = e.target.getAttribute('data-ind'); if (k) setInd(k, e.target.checked); });
+  ui.legendX.addEventListener('click', function () { setInd('ema', false); });
+  document.addEventListener('click', function (e) {
+    if (S.mode !== 'play') return;
+    if ([ui.menu, ui.ind, ui.drw, ui.fab].some(function (el) { return el.contains(e.target); })) return;
+    closePanels();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closePanels(); setTool(null); S.preview = null; draw(); } });
+
+  // drawing on the chart
+  var drag = null;
+  cv.addEventListener('pointerdown', function (e) {
+    if (!S.tool || S.mode !== 'play') return;
+    var pt = toData(e); if (!pt) return;
+    if (S.tool === 'h') { S.shapes.push({ t: 'h', p: pt.p, view: S.view }); setTool(null); draw(); return; }
+    if (S.tool === 'v') { S.shapes.push({ t: 'v', i: pt.i, view: S.view }); setTool(null); draw(); return; }
+    drag = { t: S.tool, i0: pt.i, p0: pt.p, i1: pt.i, p1: pt.p, view: S.view }; S.preview = drag;
+    try { cv.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+    e.preventDefault();
+  });
+  cv.addEventListener('pointermove', function (e) { if (!drag) return; var pt = toData(e); if (!pt) return; drag.i1 = pt.i; drag.p1 = pt.p; draw(); });
+  cv.addEventListener('pointerup', function () {
+    if (!drag) return;
+    if (Math.abs(drag.i1 - drag.i0) > 1.5) S.shapes.push(drag);
+    drag = null; S.preview = null; setTool(null); draw();
+  });
 
   /* ---------- round flow ---------- */
   function startTimer() {
     clearInterval(S.timerId); S.t = cfg.game.roundSeconds; renderTimer();
     S.timerId = setInterval(function () {
-      if (!S.bought || S.pick || !ui.over.hidden || S.mode !== 'play') return;
       var r = game.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) return;
-      S.t--; renderTimer();
-      if (S.t <= 0) { toast('Čas vypršel. Nový graf, nová šance.'); startRound(); }
+      S.t2 = S.t2 > 0 ? S.t2 - 1 : 180;
+      if (S.bought && !S.pick && ui.over.hidden && S.mode === 'play') { S.t--; if (S.t <= 0) { toast('Čas vypršel. Nový graf, nová šance.'); startRound(); return; } }
+      renderTimer();
     }, 1000);
   }
   function startRound(want) {
-    S.sc = newScenario(want); S.shown = 0; S.revealed = 0; S.pick = null; S.playing = false; S.hitShown = false; S.bought = false;
-    S.lines = []; S.drawAnim = null; S.drawing = false; ui.lineBtn.setAttribute('aria-pressed', 'false'); stage.classList.remove('is-drawing');
-    ui.win.hidden = true; ui.up.classList.remove('is-chosen'); ui.down.classList.remove('is-chosen');
-    ui.revealN.textContent = '1'; ui.buyCost.textContent = cfg.game.entry;
-    ui.sentDn.textContent = S.sc.sent + ' %'; ui.sentUp.textContent = (100 - S.sc.sent) + ' %'; ui.sentBar.style.width = S.sc.sent + '%';
+    S.round++; S.sc = newScenario(want); S.shown = 0; S.revealed = 0; S.pick = null; S.playing = false; S.hitShown = false; S.bought = false;
+    S.shapes = []; S.preview = null; drag = null; setTool(null); closePanels();
+    ui.win.hidden = true; ui.up.classList.remove('is-chosen', 'is-lost'); ui.down.classList.remove('is-chosen', 'is-lost');
+    ui.revealN.textContent = '1×'; ui.buyCost.textContent = cfg.game.entry; ui.date.hidden = true; setStatus(null);
+    ui.sentDn.textContent = S.sc.sent + '%'; ui.sentUp.textContent = (100 - S.sc.sent) + '%'; ui.sentBar.style.width = S.sc.sent + '%';
     stage.classList.add('is-locked'); ui.buy.hidden = false; lockControls(true);
     game.classList.add('is-open'); idleRewards();
     setView(S.view); startTimer();
@@ -246,29 +341,43 @@
     S.bought = true; S.coins -= cfg.game.entry; renderCoins(true);
     ui.buy.hidden = true; stage.classList.remove('is-locked'); lockControls(false); startTimer();
   }
+  function wait(ms) { return new Promise(function (res) { setTimeout(res, reduced ? 0 : ms); }); }
   function choose(side) {
     if (!S.bought || S.pick || S.playing || !ui.over.hidden) return Promise.resolve();
-    S.pick = side; S.playing = true; renderTimer(); lockControls(true); closeInd();
+    var round = S.round, entry = cfg.game.entry;
+    S.pick = side; S.playing = true; lockControls(true); closePanels(); setTool(null); renderTimer();
     (side === 'up' ? ui.up : ui.down).classList.add('is-chosen');
-    if (S.view !== 'M') setView('M');
-    var target = S.sc.hit + 1, tail = Math.min(4, FUT - target);
-    return new Promise(function (resolve) {
-      (function step() {
-        S.shown++; if (S.shown >= target) S.hitShown = true; draw();
-        if (S.shown < target + tail) { if (reduced) step(); else setTimeout(step, S.shown >= target ? 110 : 40); }
-        else { finish(); resolve(); }
-      })();
+    (side === 'up' ? ui.down : ui.up).classList.add('is-lost');
+    if (S.view !== 'M') setView('M'); else draw();
+    setStatus('wait', 'Čeká na soupeře · ' + entry + ' coins');
+    var target = S.sc.hit + 1, tail = Math.min(5, FUT - target);
+    return wait(1100).then(function () {
+      if (round !== S.round) return;
+      setStatus('paired', 'Spárováno · ' + entry + ' coins');
+      return wait(800);
+    }).then(function () {
+      if (round !== S.round) return;
+      return new Promise(function (resolve) {
+        (function step() {
+          if (round !== S.round) return resolve();
+          S.shown++; if (S.shown >= target) S.hitShown = true; draw();
+          if (S.shown < target + tail) { if (reduced) step(); else setTimeout(step, S.shown >= target ? 110 : 45); }
+          else { finish(); resolve(); }
+        })();
+      });
     });
   }
   function finish() {
-    S.playing = false;
+    S.playing = false; ui.fab.disabled = false;
     var win = S.pick === S.sc.side, where = S.sc.side === 'up' ? 'horní' : 'dolní', per = cfg.game.candlesPerWin;
+    setStatus(win ? 'win' : 'loss', win ? 'Výhra · +' + per + ' svíčka' : 'Prohra · bez svíčky');
+    var d = S.sc.date; ui.date.textContent = d.getUTCDate() + '. ' + (d.getUTCMonth() + 1) + '. ' + d.getUTCFullYear() + ' v ' + hhmm(S.sc.startMin + (HIST + S.sc.hit) * 5); ui.date.hidden = false;
     if (win) { S.candles += per; renderCandles(true); ui.win.hidden = false; }
     ui.rwResult.className = 'rw-result ' + (win ? 'is-win' : 'is-loss');
     ui.rwTitle.textContent = win ? 'Trefa. Graf jsi přečetl.' : 'Tentokrát ne.';
     ui.rwDelta.textContent = win ? '+' + per + ' svíčka' : 'Bez svíčky';
-    ui.rwNote.textContent = 'Cena prorazila ' + where + ' hranici jako první.' + (win ? ' Svíčka je tvoje.' : ' Další graf je za rohem.');
-    renderRewards(win); ui.rwActions.hidden = false;
+    ui.rwNote.textContent = 'Cena prorazila ' + where + ' hranici jako první. Skutečný graf EUR/USD z ' + d.getUTCFullYear() + '.' + (win ? ' Svíčka je tvoje.' : '');
+    renderRewards(); ui.rwActions.hidden = false;
     if (S.mode === 'play') setTimeout(function () { ui.rwNext.focus({ preventScroll: true }); }, 450);
   }
 
@@ -281,7 +390,7 @@
     ui.rwTitle.textContent = 'Hraj o skutečné odměny';
     ui.rwDelta.textContent = '+' + cfg.game.candlesPerWin + ' svíčka za trefu';
     ui.rwNote.textContent = 'Vstup do kola ' + cfg.game.entry + ' coins. Svíčky tě dovedou ke slevám v shopu.';
-    ui.rwActions.hidden = true; renderRewards(false);
+    ui.rwActions.hidden = true; renderRewards();
   }
   function renderRewards() {
     var prods = cfg.products.slice(), feat = prods.filter(function (p) { return p.featured; })[0] || prods[0], cur = cfg.currency;
@@ -303,94 +412,85 @@
   }
 
   /* ---------- free-play controls ---------- */
-  function closeInd() { ui.ind.hidden = true; ui.indBtn.setAttribute('aria-expanded', 'false'); }
-  function toggleInd() { var open = ui.ind.hidden; ui.ind.hidden = !open; ui.indBtn.setAttribute('aria-expanded', String(open)); }
-  function toggleLine(on) {
-    S.drawing = on == null ? !S.drawing : on; ui.lineBtn.setAttribute('aria-pressed', String(S.drawing)); stage.classList.toggle('is-drawing', S.drawing);
-    if (S.drawing && S.mode === 'play') toast('Klikni do grafu tam, kam chceš čáru.');
-  }
-  ui.indBtn.addEventListener('click', function (e) { e.stopPropagation(); toggleInd(); });
-  document.addEventListener('click', function (e) { if (!ui.ind.hidden && !ui.ind.contains(e.target) && !ui.indBtn.contains(e.target)) closeInd(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (!ui.ind.hidden) { closeInd(); ui.indBtn.focus(); } if (S.drawing) toggleLine(false); } });
-  ui.ind.addEventListener('change', function (e) { var k = e.target.getAttribute('data-ind'); if (k) setInd(k, e.target.checked); });
-  ui.lineBtn.addEventListener('click', function () { toggleLine(); });
-  cv.addEventListener('click', function (e) {
-    if (!S.drawing || S.mode !== 'play') return;
-    var p = priceAt(e.clientY); if (p == null) return;
-    S.lines.push(p); if (S.lines.length > 4) S.lines.shift(); toggleLine(false); draw();
-  });
   ui.views.forEach(function (b, i) {
     b.addEventListener('click', function () { if (!S.playing) setView(b.getAttribute('data-view')); });
     b.addEventListener('keydown', function (e) { var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); var n = ui.views[(i + d + ui.views.length) % ui.views.length]; n.focus(); n.click(); });
   });
-  ui.reveal.addEventListener('click', function () {
+  function reveal() {
     if (S.revealed || S.pick || !S.bought) return;
     if (S.sc.hit === 0) { toast('Tahle svíčka by prozradila výsledek. Odhalení to nikdy neudělá.'); return; }
-    S.revealed = 1; S.shown = 1; ui.reveal.disabled = true; ui.revealN.textContent = '0';
+    S.revealed = 1; S.shown = 1; ui.reveal.disabled = true; ui.revealN.textContent = '0×';
     if (S.view !== 'M') setView('M'); else draw();
-    toast('Jedna pětiminutová svíčka navíc. Výsledek pořád neznáš.');
-  });
+    if (S.mode === 'play') toast('Jedna pětiminutová svíčka navíc. Výsledek pořád neznáš.');
+  }
+  ui.reveal.addEventListener('click', reveal);
   ui.buyBtn.addEventListener('click', buy);
   ui.up.addEventListener('click', function () { choose('up'); });
   ui.down.addEventListener('click', function () { choose('down'); });
   ui.rwNext.addEventListener('click', function () { startRound(); ui.buyBtn.focus({ preventScroll: true }); });
   ui.win.addEventListener('click', function () { ui.win.hidden = true; });
 
-  /* ---------- tutorial (auto-play with a fake cursor) ---------- */
-  var T = { run: 0 };
+  /* ---------- tutorial (auto-play with a fake cursor, cards like the in-game tutorial) ---------- */
+  var T = { run: 0 }, NSTEPS = 6;
   function sleep(ms, id) { return new Promise(function (res, rej) { setTimeout(function () { if (T.run !== id) rej('stop'); else res(); }, reduced ? Math.min(ms, 200) : ms); }); }
   function cursorTo(target, id, dur) {
     var g = game.getBoundingClientRect(), x, y;
-    if (target && target.getBoundingClientRect) { var r = target.getBoundingClientRect(); x = r.left + r.width * 0.55 - g.left; y = r.top + r.height * 0.6 - g.top; }
+    if (target && target.getBoundingClientRect) { var r = target.getBoundingClientRect(); x = r.left + r.width * 0.5 - g.left; y = r.top + r.height * 0.55 - g.top; }
     else { x = target.x; y = target.y; }
     ui.cursor.style.transitionDuration = (reduced ? 0 : (dur || 700)) + 'ms';
     ui.cursor.style.transform = 'translate(' + x + 'px,' + y + 'px)';
     return sleep((dur || 700) + 80, id);
   }
   function tap(id) { ui.cursor.classList.remove('tap'); void ui.cursor.offsetWidth; ui.cursor.classList.add('tap'); return sleep(260, id); }
-  function caption(i, text) {
+  function caption(i, title, text) {
     ui.steps.forEach(function (li, j) { li.classList.toggle('is-on', j === i); li.classList.toggle('is-done', j < i); });
-    ui.cap.textContent = text; ui.cap.classList.add('is-on');
+    ui.capT.textContent = title; ui.capN.textContent = (i + 1) + '/' + NSTEPS; ui.capX.textContent = text;
+    ui.cap.classList.remove('is-on'); void ui.cap.offsetWidth; ui.cap.classList.add('is-on');
   }
-  function stagePoint(fx, price) { var c = cv.getBoundingClientRect(), g = game.getBoundingClientRect(); return { x: c.left - g.left + c.width * fx, y: c.top - g.top + yOf(price) }; }
+  function click(el, id, dur) { return cursorTo(el, id, dur).then(function () { return tap(id); }); }
 
   function tutorial() {
     var id = ++T.run; S.mode = 'tutorial'; game.classList.add('is-tutorial'); ui.cursor.classList.add('is-on');
     function loop() {
       S.coins = cfg.game.startCoins; S.candles = 0; renderCoins(); renderCandles();
-      S.view = 'M'; setInd('ema', false); setInd('sma', false); setInd('bb', false); closeInd();
+      S.view = 'M'; setInd('ema', false); setInd('sma', false); setInd('bb', false); closePanels();
       startRound('up');
-      var g = game.getBoundingClientRect();
-      ui.cursor.style.transitionDuration = '0ms'; ui.cursor.style.transform = 'translate(' + (g.width * 0.5) + 'px,' + (g.height * 0.9) + 'px)';
+      var g = game.getBoundingClientRect(), z = S.sc.zone;
+      ui.cursor.style.transitionDuration = '0ms'; ui.cursor.style.transform = 'translate(' + (g.width * 0.45) + 'px,' + (g.height * 0.85) + 'px)';
       return sleep(500, id)
-        .then(function () { caption(0, 'Kup si graf. Vstup stojí ' + cfg.game.entry + ' coins.'); return cursorTo(ui.buyBtn, id); })
-        .then(function () { return tap(id); }).then(function () { buy(); return sleep(900, id); })
-        .then(function () { caption(1, 'Prohlédni si celou příležitost: denní, hodinový a minutový pohled.'); return cursorTo(ui.views[0], id); })
-        .then(function () { return tap(id); }).then(function () { setView('D'); return sleep(1300, id); })
-        .then(function () { return cursorTo(ui.views[1], id, 450); }).then(function () { return tap(id); }).then(function () { setView('H'); return sleep(1300, id); })
-        .then(function () { return cursorTo(ui.views[2], id, 450); }).then(function () { return tap(id); }).then(function () { setView('M'); return sleep(800, id); })
-        .then(function () { caption(2, 'Zapni si indikátor. Třeba EMA 100.'); return cursorTo(ui.indBtn, id); })
-        .then(function () { return tap(id); }).then(function () { toggleInd(); return sleep(500, id); })
-        .then(function () { return cursorTo(ui.emaRow, id, 500); }).then(function () { return tap(id); })
-        .then(function () { setInd('ema', true); return sleep(900, id); }).then(function () { closeInd(); return sleep(300, id); })
-        .then(function () { caption(3, 'Nakresli si čáru tam, kde cena naráží na odpor.'); return cursorTo(ui.lineBtn, id); })
-        .then(function () { return tap(id); }).then(function () { toggleLine(true); return sleep(300, id); })
-        .then(function () {
-          S.lines = [S.sc.res]; S.drawAnim = { idx: 0, p: 0 };
-          return cursorTo(stagePoint(0.04, S.sc.res), id, 600);
-        })
+        .then(function () { caption(0, 'Kup si graf', 'Každé kolo je skutečný historický graf. Vstup stojí ' + cfg.game.entry + ' coins, denně máš ' + cfg.game.startCoins + ' zdarma.'); return click(ui.buyBtn, id); })
+        .then(function () { buy(); return sleep(900, id); })
+        .then(function () { caption(1, 'Prohlédni si celou příležitost', 'Denní, hodinový a minutový pohled. Stejný trh, tři úhly.'); return click(ui.views[0], id); })
+        .then(function () { setView('D'); return sleep(1300, id); })
+        .then(function () { return click(ui.views[1], id, 450); }).then(function () { setView('H'); return sleep(1300, id); })
+        .then(function () { return click(ui.views[2], id, 450); }).then(function () { setView('M'); return sleep(700, id); })
+        .then(function () { caption(2, 'Zapni si indikátor', 'Zelené tlačítko otevře nástroje. Přidáme EMA 100.'); return click(ui.fab, id); })
+        .then(function () { toggleMenu(true); return sleep(450, id); })
+        .then(function () { return click(ui.indBtn, id, 450); }).then(function () { openDrawer('ind'); return sleep(500, id); })
+        .then(function () { return click(ui.emaRow.querySelector('.sw'), id, 500); })
+        .then(function () { setInd('ema', true); return sleep(900, id); }).then(function () { closePanels(); return sleep(300, id); })
+        .then(function () { caption(3, 'Označ zónu odporu', 'Obdélníkem zakresli místo, kde cena opakovaně narazila. Může se stát magnetem pro další pohyb.'); return click(ui.fab, id); })
+        .then(function () { toggleMenu(true); return sleep(400, id); })
+        .then(function () { return click(ui.drawBtn, id, 450); }).then(function () { openDrawer('draw'); return sleep(450, id); })
+        .then(function () { return click(ui.rectRow, id, 500); }).then(function () { closePanels(); setTool('rect'); return sleep(300, id); })
+        .then(function () { return cursorTo(ptOf(z.i0, z.p1), id, 600); })
         .then(function () { return tap(id); })
         .then(function () {
-          var b = stagePoint(0.72, S.sc.res), t0 = performance.now();
-          ui.cursor.style.transitionDuration = (reduced ? 0 : 900) + 'ms'; ui.cursor.style.transform = 'translate(' + b.x + 'px,' + b.y + 'px)';
+          var sh = { t: 'rect', i0: z.i0, p0: z.p1, i1: z.i0, p1: z.p1, view: 'M' }, t0 = performance.now(), b = ptOf(z.i1, z.p0);
+          S.preview = sh;
+          ui.cursor.style.transitionDuration = (reduced ? 0 : 1000) + 'ms'; ui.cursor.style.transform = 'translate(' + b.x + 'px,' + b.y + 'px)';
           return new Promise(function (res) {
-            (function f(now) { var p = Math.min(1, (now - t0) / 900); if (S.drawAnim) S.drawAnim.p = reduced ? 1 : p * 0.72 + 0.28 * p * p; draw(); if (p < 1 && T.run === id && !reduced) requestAnimationFrame(f); else res(); })(performance.now());
+            (function f(now) {
+              var p = reduced ? 1 : Math.min(1, (now - t0) / 1000), e = 1 - Math.pow(1 - p, 2);
+              sh.i1 = z.i0 + (z.i1 - z.i0) * e; sh.p1 = z.p1 + (z.p0 - z.p1) * e; draw();
+              if (p < 1 && T.run === id) requestAnimationFrame(f); else { S.preview = null; S.shapes.push(sh); setTool(null); draw(); res(); }
+            })(performance.now());
           });
         })
-        .then(function () { S.drawAnim = null; toggleLine(false); draw(); return sleep(700, id); })
-        .then(function () { caption(4, 'Zadej úroveň. Cena tlačí na horní hranici, tipneš breakout.'); return cursorTo(ui.up, id); })
-        .then(function () { return tap(id); }).then(function () { return choose('up'); }).then(function () { return sleep(500, id); })
-        .then(function () { caption(5, 'Výhra! Za každé vyhrané kolo dostaneš svíčku.'); return sleep(4200, id); })
+        .then(function () { return sleep(800, id); })
+        .then(function () { caption(4, 'Vyber úroveň', 'Cena se drží nad EMA a míří k zóně odporu. Klikni na BREAKOUT.'); return click(ui.up, id, 800); })
+        .then(function () { return choose('up'); }).then(function () { return sleep(400, id); })
+        .then(function () { caption(5, 'Výhra!', 'Trefa. Za každé vyhrané kolo dostaneš svíčku, svíčky se mění na slevu na odměny.'); return sleep(4600, id); })
         .then(function () { ui.win.hidden = true; ui.cap.classList.remove('is-on'); return sleep(600, id); })
         .then(loop);
     }
@@ -407,15 +507,16 @@
   ui.tPlay.addEventListener('click', freePlay);
   ui.tReplay.addEventListener('click', function () { stopTutorial(); tutorial(); });
   // a real click anywhere in the game takes over from the tutorial
-  game.addEventListener('pointerdown', function (e) { if (S.mode === 'tutorial' && e.isTrusted) { e.preventDefault(); freePlay(); } }, true);
+  game.addEventListener('pointerdown', function (e) { if (S.mode === 'tutorial' && e.isTrusted) { e.preventDefault(); e.stopPropagation(); freePlay(); } }, true);
+  game.addEventListener('click', function (e) { if (S.mode === 'tutorial' && e.isTrusted) { e.preventDefault(); e.stopPropagation(); } }, true);
 
   if ('ResizeObserver' in window) new ResizeObserver(resize).observe(cv); else window.addEventListener('resize', resize);
 
   var ready = window.CoC && window.CoC.config ? window.CoC.config : Promise.resolve(null);
   ready.then(function (c) {
-    cfg = c || { currency: 'Kč', candleValue: 50, maxDiscountPct: 80, game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 90 }, products: [{ name: 'iPhone', price: 24990, icon: 'phone', featured: true }] };
+    cfg = c || { currency: 'Kč', candleValue: 50, maxDiscountPct: 80, game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 90 }, products: [{ name: 'iPhone', price: 34990, icon: 'phone', featured: true }] };
     cfg.game.candlesPerWin = cfg.game.candlesPerWin || 1;
-    S.coins = cfg.game.startCoins; renderCoins(); renderCandles();
+    S.coins = cfg.game.startCoins; renderCoins(); renderCandles(); renderClock(); setInterval(renderClock, 30000);
     startRound('up'); resize();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
     if (reduced || !('IntersectionObserver' in window)) { S.mode = 'play'; return; }

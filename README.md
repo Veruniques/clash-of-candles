@@ -7,11 +7,11 @@ index.html
 assets/
   css/styles.css
   js/main.js          config, nav, intro hero, scroll přechod, ranky (obtížnost), odměny (TOP 3 + mlha), contesty, žebříček, statistiky, formulář
-  js/game.js          hra: automatický tutoriál s kurzorem + volné hraní (koupě grafu, pohledy D/H/M, indikátory, kreslení čáry, svíčky, panel odměn)
+  js/game.js          hra ve skutečném UI (světlý graf, G1/G2, FAB menu Indikátory/Kreslení/Akce, štítky BREAKOUT/BREAKDOWN, stavy Čeká/Spárováno/Výhra): tutoriál s kurzorem + volné hraní
   data/rewards.json   PLACEHOLDER ekonomika a produkty — panel odměn, TOP 3 i „mlha“ se kreslí odsud
   js/vendor/gsap.min.js
   fonts/              Archivo (variabilní, self-hosted, OFL)
-  img/                panáčci, ilustrace produktů (img/products), logo, OG obrázek
+  img/                panáčci, play-real.webp (záběr ze skutečné hry), záložní ilustrace produktů (img/products), logo, OG obrázek
 ```
 
 Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://localhost:8000`.
@@ -34,7 +34,7 @@ Ekonomika na webu: **coins** = palivo (vstup do kola), **svíčky** = výhry, kt
 ## Před spuštěním doplnit / potvrdit
 
 - [ ] **Endpoint formuláře.** `index.html` → `<form id="signup" data-endpoint="">`. Formulář posílá `POST` JSON `{ email, adult, source, ts }`. Dokud je prázdný, e-maily se nikam neodesílají (jen `console.warn` a localStorage v prohlížeči hráče).
-- [ ] **Ceny a hodnota svíčky v `rewards.json`** jsou placeholder (iPhone 24 990 Kč, 1 svíčka = 50 Kč slevy, max. 80 %, TOP 3 a „mlha“). Milníky v sekci Svíčky (13/56/112/400) z nich vychází — při změně upravit v `index.html`.
+- [ ] **Produkty v `rewards.json`** — skutečné produkty a ceny dle apple.com/cz (iPhone 18 Pro 34 990 Kč, AirPods Max 13 990 Kč, Apple Watch Series 12 10 990 Kč, AirPods Pro 3 6 490 Kč). **Fotky jsou zatím odkazované přímo z Apple CDN** — před spuštěním nahradit licencovanými fotkami shopu/partnera (přepsat `image`). Hodnota svíčky (50 Kč) a max. sleva 80 % jsou placeholder; milníky v sekci Svíčky (104/176/224/560) z nich vychází — při změně upravit v `index.html`.
 - [ ] **Ranky / obtížnost** je návrh — Knot → Legenda, vstup 10–500 coins, výhra 1–40 svíček, omezení nástrojů. `assets/js/main.js`, pole `RANKS`.
 - [ ] **Výhody registrace** (early access, startovní bonus, founder badge) — nechat jen potvrzené.
 - [ ] **Mock data** — žebříček, statistiky a Academy kvíz jsou ilustrační (`main.js`, `index.html`).
