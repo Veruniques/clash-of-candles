@@ -29,7 +29,7 @@ Texty podle dokumentu „Clash of Candles — kompletní texty webu“ (16 sekc�
 Nikde se nezmiňuje SKIP Trading ani provozovatel. `prefers-reduced-motion` vypne intro i scroll efekty.
 
 ### Panel výher je dynamický
-`#game[data-rewards]` ukazuje na `assets/data/rewards.json`. Až bude API shopu, stačí tam dát URL endpointu se stejnou strukturou (`products[]` s `name`, `tagline`, `price`, `icon` nebo `image`, `featured`; `maxDiscountPct`, `coinValue`, `game.entry/win/startCoins/lives/roundSeconds`). Produkt s `image` zobrazí fotku místo ikony.
+`#game[data-rewards]` ukazuje na `assets/data/rewards.json`. Až bude API shopu, stačí tam dát URL endpointu se stejnou strukturou (`products[]` s `name`, `tagline`, `price`, `icon` nebo `image`, `featured`; `maxDiscountPct`, `coinValue`, `game.entry/win/startCoins/lives/roundSeconds`). Produkt s `image` zobrazí obrázek místo ikony — teď jsou tam vlastní ilustrace v `assets/img/products/`, stačí je nahradit fotkami ze shopu (s licencí). Panel odměn je vidět hned, ceny se počítají jako `price − price × maxDiscountPct`.
 
 ## Před spuštěním doplnit / potvrdit
 

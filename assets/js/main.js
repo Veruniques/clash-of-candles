@@ -260,7 +260,8 @@
     box.innerHTML = cfg.products.map(function (p) {
       return '<article class="product glass' + (p.featured ? ' is-featured' : '') + '">' + window.CoC.icon(p) +
         '<h3 class="h3">' + p.name + '</h3><p>' + (p.tagline || '') + '</p>' +
-        '<p class="disc">Sleva až ' + cfg.maxDiscountPct + ' % v coins</p></article>';
+        '<p class="price"><s>' + window.CoC.fmt(p.price) + ' ' + cfg.currency + '</s> <b>od ' + window.CoC.fmt(p.price * (1 - cfg.maxDiscountPct / 100)) + ' ' + cfg.currency + '</b></p>' +
+        '<p class="disc">Sleva až ' + cfg.maxDiscountPct + '&nbsp;% v coins</p></article>';
     }).join('');
   });
 

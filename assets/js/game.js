@@ -18,7 +18,7 @@
     up: $('#pUp'), down: $('#pDown'), toast: $('#gToast'),
     over: $('#gOver'), overTitle: $('#gOverTitle'), overText: $('#gOverText'), overBtn: $('#gOverBtn'),
     rwResult: $('#rwResult'), rwTitle: $('#rwTitle'), rwDelta: $('#rwDelta'), rwNote: $('#rwNote'),
-    rwBalance: $('#rwBalance'), rwFeatured: $('#rwFeatured'), rwList: $('#rwList'), rwNext: $('#rwNext')
+    rwBalance: $('#rwBalance'), rwFeatured: $('#rwFeatured'), rwList: $('#rwList'), rwNext: $('#rwNext'), rwActions: $('.rw-actions')
   };
 
   var C = {
@@ -238,7 +238,8 @@
   }
   function startRound() {
     S.sc = newScenario(); S.shown = 0; S.revealed = 0; S.pick = null; S.playing = false; S.hitShown = false;
-    game.classList.remove('is-open');
+    game.classList.add('is-open');
+    idleRewards();
     ui.up.disabled = ui.down.disabled = false; ui.up.classList.remove('is-chosen'); ui.down.classList.remove('is-chosen');
     ui.reveal.disabled = false; ui.revealN.textContent = '1';
     ui.sentDn.textContent = S.sc.sent + ' %'; ui.sentUp.textContent = (100 - S.sc.sent) + ' %'; ui.sentBar.style.width = S.sc.sent + '%';
@@ -273,7 +274,7 @@
       ? 'Cena prorazila ' + where + ' hranici jako první. Vstup ' + cfg.game.entry + ', výhra ' + cfg.game.win + ' coins.'
       : 'Cena prorazila ' + where + ' hranici jako první. Zbývá ti ' + S.lives + ' z ' + cfg.game.lives + ' životů.';
     renderRewards(win);
-    game.classList.add('is-open');
+    ui.rwActions.hidden = false;
     setTimeout(function () { ui.rwNext.focus({ preventScroll: true }); }, 450);
     if (S.lives <= 0) {
       setTimeout(function () {
@@ -285,22 +286,33 @@
   /* ---------- rewards drawer ---------- */
   function discount(p) { return p.price * cfg.maxDiscountPct / 100; }
   function coinsFor(p) { return discount(p) / (cfg.coinValue || 1); }
+  function withCoins(p) { return p.price - discount(p); }
+  function idleRewards() {
+    ui.rwResult.className = 'rw-result is-idle';
+    ui.rwTitle.textContent = 'Hraj o skutečné odměny';
+    ui.rwDelta.textContent = '+' + fmt(cfg.game.win) + ' coins za trefu';
+    ui.rwNote.textContent = 'Vstup do kola ' + cfg.game.entry + ' coins. Každá výhra ti ukrojí z ceny produktu.';
+    ui.rwActions.hidden = true;
+    renderRewards(false);
+  }
   function renderRewards(win) {
     var prods = cfg.products.slice(), feat = prods.filter(function (p) { return p.featured; })[0] || prods[0];
     var need = coinsFor(feat), pct = Math.min(1, S.coins / need), left = Math.max(0, need - S.coins);
-    var gained = win ? cfg.game.win * (cfg.coinValue || 1) : 0;
+    var gained = win ? cfg.game.win * (cfg.coinValue || 1) : 0, cur = cfg.currency;
     ui.rwFeatured.innerHTML =
       '<div class="rw-featured__top">' + window.CoC.icon(feat) +
-      '<div><p class="rw-featured__name">' + feat.name + '</p><p class="rw-featured__tag">' + (feat.tagline || '') + '</p></div></div>' +
-      '<div class="rw-featured__meta"><span>Sleva až <b>' + fmt(discount(feat)) + ' ' + cfg.currency + '</b></span><span>' + (pct * 100).toLocaleString('cs-CZ', { maximumFractionDigits: pct < 0.1 ? 1 : 0 }) + '&nbsp;%</span></div>' +
-      '<div class="rw-prog" role="progressbar" aria-label="Postup ke slevě na ' + feat.name + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct * 100) + '"><i></i></div>' +
+      '<div><p class="rw-featured__name">' + feat.name + '</p>' +
+      '<p class="rw-price"><s>' + fmt(feat.price) + ' ' + cur + '</s> <b>od ' + fmt(withCoins(feat)) + ' ' + cur + '</b></p>' +
+      '<p class="rw-featured__tag">se slevou až ' + fmt(discount(feat)) + ' ' + cur + ' za coins</p></div></div>' +
+      '<div class="rw-prog" role="progressbar" aria-label="Postup k maximální slevě na ' + feat.name + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct * 100) + '"><i></i></div>' +
       '<div class="rw-featured__meta"><span>' + (left > 0 ? 'Zbývá ' + fmt(left) + ' coins' : 'Maximální sleva odemčena') + '</span>' +
-      (gained ? '<span>Tahle výhra: −' + fmt(gained) + ' ' + cfg.currency + '</span>' : '') + '</div>';
+      '<span>' + (gained ? 'Tahle výhra: −' + fmt(gained) + ' ' + cur : (pct * 100).toLocaleString('cs-CZ', { maximumFractionDigits: pct < 0.1 ? 1 : 0 }) + '&nbsp;%') + '</span></div>';
     var bar = ui.rwFeatured.querySelector('.rw-prog i');
     requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = Math.max(pct * 100, 2.5) + '%'; }); });
     ui.rwList.innerHTML = prods.filter(function (p) { return p !== feat; }).map(function (p) {
       var q = Math.min(1, S.coins / coinsFor(p));
-      return '<li>' + window.CoC.icon(p) + '<div><b>' + p.name + '</b><small>sleva až ' + fmt(discount(p)) + ' ' + cfg.currency + '</small></div><span class="pct">' + Math.round(q * 100) + ' %</span></li>';
+      return '<li>' + window.CoC.icon(p) + '<div><b>' + p.name + '</b><small><s>' + fmt(p.price) + ' ' + cur + '</s> od ' + fmt(withCoins(p)) + ' ' + cur + '</small>' +
+        '<span class="rw-mini"><i style="width:' + Math.max(q * 100, 3).toFixed(1) + '%"></i></span></div><span class="pct">' + Math.round(q * 100) + '&nbsp;%</span></li>';
     }).join('');
   }
 

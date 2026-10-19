@@ -1,5 +1,5 @@
 {
-  "_note": "PLACEHOLDER. Ceny, kurz coins a slevy jsou ilustrační. Až bude shop/API, stačí tento soubor generovat ze serveru nebo změnit URL v data-rewards na #demo.",
+  "_note": "PLACEHOLDER. Ceny, kurz coins a slevy jsou ilustrační. 'image' = vlastní ilustrace; nahraďte fotkami produktů ze shopu (s licencí). Až bude shop/API, stačí tento soubor generovat ze serveru nebo změnit URL v data-rewards na #game.",
   "currency": "Kč",
   "coinValue": 1,
   "maxDiscountPct": 80,
@@ -17,7 +17,7 @@
       "tagline": "Využij coins jako slevu na nový telefon.",
       "price": 24990,
       "icon": "phone",
-      "image": "",
+      "image": "assets/img/products/phone.svg",
       "featured": true
     },
     {
@@ -26,7 +26,7 @@
       "tagline": "Získej něco navíc za svůj herní výkon.",
       "price": 6990,
       "icon": "headphones",
-      "image": ""
+      "image": "assets/img/products/headphones.svg"
     },
     {
       "id": "gear",
@@ -34,7 +34,7 @@
       "tagline": "Vylepši svou herní výbavu.",
       "price": 3490,
       "icon": "gamepad",
-      "image": ""
+      "image": "assets/img/products/controller.svg"
     },
     {
       "id": "merch",
@@ -42,7 +42,7 @@
       "tagline": "Ukaž, že patříš do arény.",
       "price": 790,
       "icon": "tee",
-      "image": ""
+      "image": "assets/img/products/tee.svg"
     }
   ]
 }

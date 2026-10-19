@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <defs>
+    <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2C4D5B"/><stop offset="1" stop-color="#0A1C24"/></linearGradient>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <radialGradient id="stick" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#5B7784"/><stop offset="1" stop-color="#0B1A21"/></radialGradient>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000" flood-opacity=".45"/></filter>
+  </defs>
+  <g filter="url(#sh)" transform="translate(16 14) scale(.86) rotate(-8 120 120)">
+    <path d="M62 82 H178 C206 82 222 104 226 132 L232 170 C236 196 210 206 194 188 L172 162 H68 L46 188 C30 206 4 196 8 170 L14 132 C18 104 34 82 62 82Z" fill="url(#b)"/>
+    <path d="M62 82 H178 C206 82 222 104 226 132 L232 170 C236 196 210 206 194 188 L172 162 H68 L46 188 C30 206 4 196 8 170 L14 132 C18 104 34 82 62 82Z" fill="url(#g)"/>
+    <path d="M48 116 h10 v-10 h10 v10 h10 v10 h-10 v10 h-10 v-10 h-10z" fill="#9FB9C2"/>
+    <circle cx="176" cy="108" r="7" fill="#2EE29A"/><circle cx="192" cy="122" r="7" fill="#FF4767"/>
+    <circle cx="160" cy="122" r="7" fill="#7EF0F8"/><circle cx="176" cy="136" r="7" fill="#FFC233"/>
+    <circle cx="94" cy="146" r="13" fill="url(#stick)" stroke="#7E9CA7" stroke-width="2"/>
+    <circle cx="146" cy="146" r="13" fill="url(#stick)" stroke="#7E9CA7" stroke-width="2"/>
+    <rect x="108" y="100" width="24" height="6" rx="3" fill="#7EF0F8" opacity=".8"/>
+  </g>
+</svg>
