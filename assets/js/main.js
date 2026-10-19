@@ -216,28 +216,30 @@
   navState(); if (!reduced) scrollFx();
 
   /* ---------------- ranks: earned, not chosen. Everyone starts at the bottom (placeholder economy: edit here) ---------------- */
+  // tiers as in the game: F → E → D → C → B → A → S → G.O.A.T., each with +/++ steps
   var RANKS = [
-    { name: 'Knot',    entry: 10,  candles: 1,  tools: 'Všechny nástroje', need: 0 },
-    { name: 'Jiskra',  entry: 25,  candles: 2,  tools: 'Bez obdélníků', need: 20 },
-    { name: 'Plamen',  entry: 50,  candles: 4,  tools: 'Bez vertikál', need: 60 },
-    { name: 'Žár',     entry: 100, candles: 8,  tools: 'Jen EMA a horizontály', need: 150 },
-    { name: 'Výheň',   entry: 200, candles: 16, tools: 'Jen horizontály', need: 350 },
-    { name: 'Legenda', entry: 500, candles: 40, tools: 'Čistý graf', need: 800 }
+    { name: 'F',       steps: ['F'],              col: '#2EEA9C', entry: 10,   candles: 1,   tools: 'Všech 20 indikátorů' },
+    { name: 'E',       steps: ['E', 'E+', 'E++'], col: '#2EEA9C', entry: 20,   candles: 2,   tools: '16 indikátorů' },
+    { name: 'D',       steps: ['D', 'D+', 'D++'], col: '#B6F23A', entry: 40,   candles: 4,   tools: '12 indikátorů' },
+    { name: 'C',       steps: ['C', 'C+', 'C++'], col: '#2EE0EE', entry: 80,   candles: 8,   tools: '8 indikátorů' },
+    { name: 'B',       steps: ['B', 'B+', 'B++'], col: '#2F8CFF', entry: 150,  candles: 15,  tools: '5 indikátorů' },
+    { name: 'A',       steps: ['A', 'A+', 'A++'], col: '#9C1FC4', entry: 300,  candles: 30,  tools: '3 indikátory', light: true },
+    { name: 'S',       steps: ['S', 'S+', 'S++'], col: '#F2C21F', entry: 500,  candles: 50,  tools: 'Jen kreslení' },
+    { name: 'G.O.A.T.', steps: ['G.O.A.T.'],      col: '#F2801F', entry: 1000, candles: 100, tools: 'Čistý graf', light: true }
   ];
   var fmt = window.CoC.fmt;
   (function () {
     var list = $('#rankList'), sum = $('#rankSummary'); if (!list) return;
-    var me = 0, wins = 7; // demo player: fresh on Knot
+    var me = 0, pct = 35; // demo player: fresh on F
     list.innerHTML = RANKS.map(function (r, i) {
       var st = i === me ? 'is-me' : i > me ? 'is-locked' : 'is-done';
+      var badges = r.steps.map(function (x) { return '<b class="rb' + (r.light ? ' rb--light' : '') + '" style="--rc:' + r.col + '">' + x + '</b>'; }).join('');
       return '<li class="rk ' + st + '">' +
-        '<span class="rk__lv">' + (i + 1) + '</span>' +
-        '<span class="rk__name">' + r.name + (i === me ? ' <em>tady začínáš</em>' : '') + '</span>' +
-        '<span class="rk__tools">' + (i > me ? '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>' + fmt(r.need) + ' výher · ' : '') + r.tools + '</span>' +
-        '<span class="rk__cost"><i class="coin-ico"></i>' + r.entry + '</span><span class="rk__win"><i class="candle-ico"></i>+' + r.candles + '</span></li>';
+        '<span class="rk__badges">' + badges + (i === me ? ' <em>tady začínáš</em>' : '') + '</span>' +
+        '<span class="rk__tools">' + (i > me ? '<svg aria-hidden="true" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg>' : '') + r.tools + '</span>' +
+        '<span class="rk__cost"><i class="coin-ico"></i>' + fmt(r.entry) + '</span><span class="rk__win"><i class="candle-ico"></i>+' + r.candles + '</span></li>';
     }).reverse().join('');
-    var next = RANKS[me + 1], pct = Math.round(wins / next.need * 100);
-    sum.innerHTML = '<p>Do ranku <b>' + next.name + '</b>: ' + wins + ' / ' + next.need + ' výher</p>' +
+    sum.innerHTML = '<p>Postup do ranku <b>E</b></p>' +
       '<div class="rankwin__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><i style="width:' + pct + '%"></i></div>';
   })();
 
@@ -301,7 +303,7 @@
   (function () {
     var lb = $('#leaderboard');
     if (lb) {
-      var rows = [['Graf_Hunter', 'Legenda', 412], ['MiraBreakout', 'Výheň', 377], ['SvíčkaZJeseníku', 'Výheň', 341], ['TyTi', 'Žár', 298], ['Ty', 'Plamen', 211, true], ['NightOwl', 'Plamen', 204]];
+      var rows = [['Graf_Hunter', 'S+', 412], ['MiraBreakout', 'A++', 377], ['SvíčkaZJeseníku', 'A+', 341], ['TyTi', 'B++', 298], ['Ty', 'C', 211, true], ['NightOwl', 'C', 204]];
       lb.innerHTML = rows.map(function (r, i) {
         var pos = r[3] ? 27 : i + 1;
         return '<li class="' + (r[3] ? 'me' : '') + (i < 3 ? ' top' + (i + 1) : '') + '"><span class="lb__pos">' + pos + '</span><span class="lb__av">' + r[0].charAt(0) + '</span>' +

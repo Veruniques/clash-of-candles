@@ -1058,3 +1058,11 @@ main { background: var(--noise), var(--night); }
 #gInd .drawer__t { position: sticky; top: -14px; background: #fff; z-index: 1; padding-top: 2px; padding-bottom: 8px; margin-bottom: 0; }
 .drawer__row.is-off { cursor: default; } .drawer__row.is-off .sw { opacity: .5; }
 .drawer__row i { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #E6ECF0; }
+.rk { grid-template-columns: 1fr auto; }
+.rk__badges { grid-column: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.rk__tools { grid-column: 1; }
+.rb { display: inline-grid; place-items: center; min-width: 22px; height: 20px; padding: 0 5px; border-radius: 4px; background: var(--rc); color: #0B1F14; font-size: 10.5px; font-weight: 800; letter-spacing: .02em; }
+.rb--light { color: #fff; }
+.rk__badges em { font-style: normal; margin-left: 4px; padding: 1px 6px; border-radius: 3px; background: #13232C; color: #fff; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+.rk.is-locked { opacity: .6; }
+.rk.is-locked .rb { filter: saturate(.5); }
