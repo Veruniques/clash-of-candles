@@ -1365,3 +1365,5 @@ main .rankwin p { color: inherit; }
 .candlewall__row span { background: linear-gradient(90deg, #DCE7EB, #8FAAB4); opacity: .6; box-shadow: inset 0 0 0 1px rgba(11,44,58,.15); }
 .candlewall__row span.lit { opacity: 1; box-shadow: inset 0 0 0 1px #D9A441, 0 0 20px -4px rgba(255,170,40,.7); }
 .cw-ms em { font-weight: 700; color: #0B2C3A; }
+.rwx__art { display: block; }
+.rwx__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
