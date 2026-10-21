@@ -228,8 +228,8 @@
 
   /* ---------- HUD ---------- */
   function bump(el) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
-  function renderCoins(b) { ui.coins.textContent = fmt(S.coins); if (b) bump(ui.coins); }
-  function renderCandles(b) { ui.candles.textContent = fmt(S.candles); if (b) bump(ui.candles); }
+  function renderCoins(b) { if (!ui.coins) return; ui.coins.textContent = fmt(S.coins); if (b) bump(ui.coins); }
+  function renderCandles(b) { if (!ui.candles) return; ui.candles.textContent = fmt(S.candles); if (b) bump(ui.candles); }
   function mmss(s) { s = Math.max(0, s); var m = Math.floor(s / 60), r = s % 60; return m + ':' + (r < 10 ? '0' : '') + r; }
   function renderTimer() {
     ui.timer.textContent = S.pick ? (S.pick === 'up' ? '↑' : '↓') : mmss(S.t);
@@ -338,7 +338,7 @@
     ui.revealN.textContent = '1×'; ui.buyCost.textContent = cfg.game.entry; ui.date.hidden = true; setStatus(null);
     ui.sentDn.textContent = S.sc.sent + '%'; ui.sentUp.textContent = (100 - S.sc.sent) + '%'; ui.sentBar.style.width = S.sc.sent + '%';
     stage.classList.add('is-locked'); ui.buy.hidden = false; lockControls(true);
-    game.classList.add('is-open'); idleRewards();
+    ui.rwNext.hidden = true; idleRewards();
     setView(S.view); startTimer();
   }
   function buy() {
@@ -382,15 +382,8 @@
     setStatus(win ? 'win' : 'loss', win ? 'Win +' + per + ' srdíčko' : 'Loss');
     var d = S.sc.date; ui.date.textContent = d.getUTCDate() + '. ' + (d.getUTCMonth() + 1) + '. ' + d.getUTCFullYear() + ' v ' + hhmm(S.sc.startMin + (HIST + S.sc.hit) * 5); ui.date.hidden = false;
     if (win) { S.candles += per; renderCandles(true); ui.win.hidden = false; }
-    ui.rwResult.className = 'rw-result ' + (win ? 'is-win' : 'is-loss');
-    ui.rwTitle.textContent = win ? 'Trefa. Graf jsi přečetl.' : 'Tentokrát ne.';
-    ui.rwDelta.textContent = win ? '+' + per + ' srdíčko' : 'Bez srdíčka';
-    ui.rwNote.textContent = 'Cena prorazila ' + where + ' hranici jako první. Skutečný graf EUR/USD z ' + d.getUTCFullYear() + '.' + (win ? ' Srdíčko je tvoje.' : '');
-    var round = S.round;
-    if (win) setTimeout(function () { flyCandle().then(function () { if (round === S.round) renderRewards(true); }); }, 650);
-    else renderRewards();
-    ui.rwActions.hidden = false;
-    if (S.mode === 'play') setTimeout(function () { ui.rwNext.focus({ preventScroll: true }); }, 450);
+    if (!win && S.mode === 'play') toast('Cena prorazila ' + where + ' hranici jako první. Tentokrát ne.');
+    if (S.mode === 'play') { ui.rwNext.hidden = false; setTimeout(function () { ui.rwNext.focus({ preventScroll: true }); }, 450); }
   }
 
   /* ---------- rewards panel ---------- */
@@ -398,6 +391,7 @@
   function candlesFor(p) { return Math.ceil(discount(p) / (cfg.candleValue || 50)); }
   function withDisc(p) { return p.price - discount(p); }
   function idleRewards() {
+    if (!ui.rwResult) return;
     ui.rwResult.className = 'rw-result is-idle';
     ui.rwTitle.textContent = 'Hraj o skutečné odměny';
     ui.rwDelta.textContent = '+' + cfg.game.candlesPerWin + ' srdíčko za trefu';
@@ -411,6 +405,7 @@
     return prods.filter(function (p) { return p.id === RW.target; })[0] || prods.filter(function (p) { return p.featured; })[0] || prods[0];
   }
   function renderRewards(fromWin) {
+    if (!ui.rwFeatured) return;
     var prods = cfg.products, feat = targetProduct(), cur = cfg.currency, idx = prods.indexOf(feat);
     RW.target = feat.id;
     var need = candlesFor(feat), pct = Math.min(1, S.candles / need), left = Math.max(0, need - S.candles);
@@ -445,7 +440,7 @@
     }).join('');
   }
   // "what if" slider: drag how many candles you'd spend, see the price drop
-  ui.rwFeatured.addEventListener('input', function (e) {
+  if (ui.rwFeatured) ui.rwFeatured.addEventListener('input', function (e) {
     if (e.target.id !== 'rwSim') return;
     var feat = targetProduct(), v = +e.target.value, cv = cfg.candleValue || 50, d = Math.min(v * cv, discount(feat));
     RW.sim = v; e.target.style.setProperty('--v', (v / +e.target.max * 100).toFixed(1) + '%');
@@ -453,23 +448,23 @@
     $('#rwPay').textContent = fmt(feat.price - d) + ' ' + cfg.currency;
   });
   function setTarget(id) { RW.target = id; RW.prevPct = 0; RW.sim = null; renderRewards(); }
-  ui.rwFeatured.addEventListener('click', function (e) {
+  if (ui.rwFeatured) ui.rwFeatured.addEventListener('click', function (e) {
     var b = e.target.closest('[data-step]'); if (!b) return;
     var prods = cfg.products, i = prods.indexOf(targetProduct());
     setTarget(prods[(i + +b.getAttribute('data-step') + prods.length) % prods.length].id);
   });
-  ui.rwList.addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) setTarget(b.getAttribute('data-id')); });
+  if (ui.rwList) ui.rwList.addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) setTarget(b.getAttribute('data-id')); });
   // 3D tilt of the reward
-  ui.rwFeatured.addEventListener('pointermove', function (e) {
+  if (ui.rwFeatured) ui.rwFeatured.addEventListener('pointermove', function (e) {
     var st = e.target.closest('[data-tilt]'); if (!st || reduced) return;
     var r = st.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
     st.style.setProperty('--ry', (x * 16).toFixed(1) + 'deg'); st.style.setProperty('--rx', (-y * 12).toFixed(1) + 'deg');
     st.style.setProperty('--gx', ((x + 0.5) * 100).toFixed(0) + '%'); st.style.setProperty('--gy', ((y + 0.5) * 100).toFixed(0) + '%');
   });
-  ui.rwFeatured.addEventListener('pointerleave', function () { var st = ui.rwFeatured.querySelector('[data-tilt]'); if (st) { st.style.setProperty('--rx', '0deg'); st.style.setProperty('--ry', '0deg'); } });
+  if (ui.rwFeatured) ui.rwFeatured.addEventListener('pointerleave', function () { var st = ui.rwFeatured.querySelector('[data-tilt]'); if (st) { st.style.setProperty('--rx', '0deg'); st.style.setProperty('--ry', '0deg'); } });
   // a won candle flies from the win popup into the progress bar
   function flyCandle() {
-    var from = ui.win.querySelector('.heart-ico--xl'), to = ui.rwFeatured.querySelector('.rw-prog');
+    var from = ui.win.querySelector('.heart-ico--xl'), to = ui.rwFeatured && ui.rwFeatured.querySelector('.rw-prog');
     if (!from || !to || reduced || !to.getClientRects().length) return Promise.resolve();
     var g = game.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
     var el = document.createElement('i'); el.className = 'heart-ico heart-ico--xl flycandle'; game.appendChild(el);
@@ -499,6 +494,7 @@
   ui.up.addEventListener('click', function () { choose('up'); });
   ui.down.addEventListener('click', function () { choose('down'); });
   ui.rwNext.addEventListener('click', function () { startRound(); ui.buyBtn.focus({ preventScroll: true }); });
+  ui.tPlay.addEventListener('click', function () { ui.rwNext.hidden = true; });
   ui.win.addEventListener('click', function () { ui.win.hidden = true; });
 
   /* ---------- tutorial (auto-play with a fake cursor, cards like the in-game tutorial) ---------- */

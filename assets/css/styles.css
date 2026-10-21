@@ -1535,3 +1535,18 @@ main .rankwin p { color: inherit; }
 .lb--mini .lb__name { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .lb--mini .lb__share { padding: 5px 10px; font-size: 11px; }
 @media (max-width: 1000px) { .trio { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; } }
+
+/* v8 — PLAY tile like the game, Play + Coins in one section, no rewards column next to the game */
+.playtile { width: 88%; aspect-ratio: 1 / .92; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8%;
+  border-radius: 18%; background: #EEF3F8; color: #1C1C1E;
+  box-shadow: 0 0 0 1px rgba(11,44,58,.08), 0 1px 0 #fff inset, 0 18px 30px -14px rgba(4,60,80,.45); }
+.playtile svg { width: 34%; height: auto; fill: none; stroke: currentColor; stroke-width: 2.7; stroke-linecap: round; stroke-linejoin: round; }
+.playtile b { font-weight: 800; font-size: clamp(11px, 1.55vw, 21px); letter-spacing: .02em; line-height: 1; }
+@media (prefers-reduced-motion: no-preference) { .flow__node--play .playtile { animation: hoverS 3.6s ease-in-out -1.2s infinite alternate; } }
+.game, .game.is-open { --rw: 0px; grid-template-columns: minmax(0, 1fr); }
+.tctl #rwNext[hidden] { display: none; }
+.fuel { margin-top: clamp(64px, 8vw, 110px); }
+.fuel__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px 40px; flex-wrap: wrap; margin-bottom: 28px; }
+.fuel__head .h2 { margin: 0; max-width: none; }
+.fuel__head .lede { margin: 0; max-width: 44ch; }
+.fuel .coins3 { margin-top: 0; }

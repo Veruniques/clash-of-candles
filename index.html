@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610211930">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610212030">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -118,7 +118,7 @@
           <div class="flow" id="jak" role="img" aria-label="Za coins si koupíš vstup do kola, za vyhrané kolo dostaneš srdíčko, za srdíčka a doplatek si vybereš odměnu.">
             <div class="flow__node flow__node--coin"><img src="assets/img/coin-hex.webp?v=1" alt="" width="640" height="640"><b class="flow__badge">10</b></div>
             <span class="flow__arrow" aria-hidden="true"><i></i></span>
-            <div class="flow__node flow__node--play"><span class="playbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span></div>
+            <div class="flow__node flow__node--play"><span class="playtile"><svg viewBox="-1 -1 30 30" aria-hidden="true"><path d="M2 26V11.5L10 18.5L26 2V26M10 18.5V26M18 10.25V26"/></svg><b>PLAY</b></span></div>
             <span class="flow__arrow" aria-hidden="true"><i></i></span>
             <div class="flow__node flow__node--heart"><img src="assets/img/heart.svg?v=1" alt="" width="120" height="108"><b class="flow__badge flow__badge--heart">+1</b></div>
             <span class="flow__arrow" aria-hidden="true"><i></i></span>
@@ -159,7 +159,7 @@
             <li data-step="5"><b>6</b><span>Výhra</span></li>
           </ol>
 
-          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610211930">
+          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610212030">
             <div class="game__main app">
               <div class="app__bar">
                 <div class="app__views">
@@ -273,30 +273,10 @@
               </div>
             </div>
 
-            <aside class="rewards" id="rewards" aria-labelledby="rwTitle" aria-live="polite">
-              <div class="rewards__in">
-                <div class="rw-result" id="rwResult">
-                  <p class="rw-result__title" id="rwTitle">Výsledek</p>
-                  <p class="rw-result__delta" id="rwDelta"></p>
-                  <p class="rw-result__note" id="rwNote"></p>
-                </div>
-                <div class="rw-wallet" aria-label="Tvoje peněženka">
-                  <span title="Coins — palivo do her"><i class="coin-ico" aria-hidden="true"></i><b id="gCoins">100</b> coins</span>
-                  <span title="Srdíčka — vyhráváš je"><i class="heart-ico" aria-hidden="true"></i><b id="gCandles">0</b> srdíček</span>
-                </div>
-                <div class="rw-featured" id="rwFeatured"></div>
-                <p class="rw-sub">Vyber si cíl</p>
-                <ul class="rw-list" id="rwList"></ul>
-                <div class="rw-actions">
-                  <button type="button" class="btn btn--primary" id="rwNext">Další graf</button>
-                  <a class="btn btn--glass" href="#registrace">Registruj se</a>
-                </div>
-                <p class="rw-fine">Ilustrační ukázka. Odměny a jejich podmínky se budou řídit aktuální nabídkou shopu.</p>
-              </div>
-            </aside>
           </div>
 
           <div class="tctl">
+            <button type="button" class="btn btn--primary" id="rwNext" hidden>Další graf</button>
             <button type="button" class="btn btn--primary" id="tPlay">Zkus to sám</button>
             <button type="button" class="btn btn--glass" id="tReplay">Přehrát ukázku znovu</button>
           </div>
@@ -364,17 +344,12 @@
           </div>
         </div>
       </div>
-    </section>
-
-
-    <!-- ============ 6. COINS ============ -->
-    <section class="section" id="coins" aria-labelledby="coins-h">
-      <div class="wrap">
-        <div class="sechead">
-          <h2 id="coins-h" class="h2">Coins. To je tvoje palivo.</h2>
+      <div class="wrap fuel" id="coins">
+        <div class="fuel__head">
+          <h3 class="h2 h2--md">Coins. To je tvoje palivo.</h3>
           <p class="lede">Za coins si kupuješ vstup do her. Srdíčka pak vyhráváš ty.</p>
         </div>
-        <div class="coins3">
+          <div class="coins3">
           <article class="coinCard">
             <div class="coin3d coin3d--stack" aria-hidden="true"><span>+</span></div>
             <h3 class="h3">Kupuj balíčky a uč se</h3>
@@ -393,6 +368,8 @@
         </div>
       </div>
     </section>
+
+
 
     <!-- ============ CONTESTY · ACADEMY · RANK (jedna sekce) ============ -->
     <section class="section" id="contesty" aria-labelledby="trio-h">
@@ -528,8 +505,8 @@
   </footer>
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
-  <script src="assets/js/main.js?v=202610211930" defer></script>
-  <script src="assets/js/logo3d.js?v=202610211930" defer></script>
-  <script src="assets/js/game.js?v=202610211930" defer></script>
+  <script src="assets/js/main.js?v=202610212030" defer></script>
+  <script src="assets/js/logo3d.js?v=202610212030" defer></script>
+  <script src="assets/js/game.js?v=202610212030" defer></script>
 </body>
 </html>
