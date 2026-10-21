@@ -1,10 +1,7 @@
-/* Clash of Candles — 3D arena mark in the hero. Tiny WebGL extruder, no dependencies. */
+/* Clash of Candles — 3D mark (nav, hero arena, footer). Tiny WebGL extruder, no dependencies.
+   <canvas class="mark3d" data-mark3d="dark|light" data-amp="0.6" data-follow> — a following <img class="mark3d-fallback"> shows if WebGL is missing. */
 (function () {
   'use strict';
-  var cv = document.getElementById('mark3d');
-  if (!cv) return;
-  var gl = cv.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true });
-  if (!gl) { cv.classList.add('is-off'); return; }
 
   // logo outline (566 × 745, same geometry as logo-mark.svg) + precomputed cap triangles
   var HALVES = [
@@ -15,8 +12,8 @@
   ];
   var S = 1 / 745, CX = 283, CY = 372.5, D = 0.16; // unit height, depth 16 % of height
 
-  var pos = [], nrm = [];
-  function push(x, y, z, nx, ny, nz) { pos.push(x, y, z); nrm.push(nx, ny, nz); }
+  var POS = [], NRM = [];
+  function push(x, y, z, nx, ny, nz) { POS.push(x, y, z); NRM.push(nx, ny, nz); }
   HALVES.forEach(function (h) {
     var n = h.p.length / 2, v = [], area = 0, i;
     for (i = 0; i < n; i++) v.push([(h.p[2 * i] - CX) * S, (CY - h.p[2 * i + 1]) * S]);
@@ -30,40 +27,22 @@
       [[p, f], [q, f], [q, -f], [p, f], [q, -f], [p, -f]].forEach(function (c) { push(c[0][0], c[0][1], c[1], nx, ny, 0); });
     }
   });
-  var COUNT = pos.length / 3;
+  var COUNT = POS.length / 3, EYE = 2.45;
 
-  function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
-  var prog = gl.createProgram();
-  gl.attachShader(prog, sh(gl.VERTEX_SHADER,
-    'attribute vec3 aP;attribute vec3 aN;uniform mat4 uM;uniform mat4 uPV;varying vec3 vN;varying vec3 vW;' +
-    'void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=mat3(uM)*aN;gl_Position=uPV*w;}'));
-  gl.attachShader(prog, sh(gl.FRAGMENT_SHADER,
-    'precision mediump float;varying vec3 vN;varying vec3 vW;uniform vec3 uEye;uniform float uA;' +
-    'void main(){vec3 n=normalize(vN);vec3 v=normalize(uEye-vW);' +
-    'vec3 base=vec3(.047,.18,.24);vec3 cyan=vec3(.49,.94,.97);' +
+  var VS = 'attribute vec3 aP;attribute vec3 aN;uniform mat4 uM;uniform mat4 uPV;varying vec3 vN;varying vec3 vW;' +
+    'void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=mat3(uM)*aN;gl_Position=uPV*w;}';
+  var FS = 'precision mediump float;varying vec3 vN;varying vec3 vW;uniform vec3 uEye;uniform vec3 uBase;uniform float uLight;' +
+    'void main(){vec3 n=normalize(vN);vec3 v=normalize(uEye-vW);vec3 cyan=vec3(.49,.94,.97);' +
     'vec3 k=normalize(vec3(.45,.65,.75));vec3 r=normalize(vec3(-.8,.25,-.45));' +
     'float dk=max(dot(n,k),0.);float dr=max(dot(n,r),0.);' +
-    'float sk=pow(max(dot(n,normalize(k+v)),0.),48.);' +
-    'float fr=pow(1.-max(dot(n,v),0.),3.);' +
+    'float sk=pow(max(dot(n,normalize(k+v)),0.),48.);float fr=pow(1.-max(dot(n,v),0.),3.);' +
     'vec3 amb=mix(vec3(.02,.06,.08),cyan*.35,n.y*.5+.5);' +
-    'vec3 c=base*(.5+.75*dk)+amb*.22+cyan*(dr*.5+fr*.35)+vec3(1.)*sk*.6;' +
-    'gl_FragColor=vec4(c*uA,uA);}'));
-  gl.linkProgram(prog); gl.useProgram(prog);
+    'vec3 c=uBase*(mix(.5,.62,uLight)+mix(.75,.4,uLight)*dk)+amb*.22+cyan*(dr*.5+fr*.35)*(1.-uLight*.6)+vec3(1.)*sk*.6;' +
+    'gl_FragColor=vec4(min(c,vec3(1.)),1.);}';
+  var BASE = { dark: [0.047, 0.18, 0.24], light: [0.95, 0.99, 1.0] };
 
-  function buf(data, loc) {
-    var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
-    var a = gl.getAttribLocation(prog, loc); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 3, gl.FLOAT, false, 0, 0);
-  }
-  buf(pos, 'aP'); buf(nrm, 'aN');
-  var uM = gl.getUniformLocation(prog, 'uM'), uPV = gl.getUniformLocation(prog, 'uPV'),
-      uEye = gl.getUniformLocation(prog, 'uEye'), uA = gl.getUniformLocation(prog, 'uA');
-  gl.enable(gl.DEPTH_TEST); gl.clearColor(0, 0, 0, 0);
-
-  var EYE = 2.45;
   function persp(aspect) {
     var f = 1 / Math.tan(15 * Math.PI / 180), nr = 0.1, fa = 10;
-    // perspective × translate(0,0,-EYE)
     return [f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (fa + nr) / (nr - fa), -1, 0, 0, 2 * fa * nr / (nr - fa) - EYE * (fa + nr) / (nr - fa), EYE];
   }
   function rot(rx, ry) {
@@ -71,38 +50,69 @@
     return [cy, sx * sy, -cx * sy, 0, 0, cx, sx, 0, sy, -sx * cy, cx * cy, 0, 0, 0, 0, 1];
   }
 
-  var w = 0, h = 0;
-  function size() {
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = Math.round(cv.clientWidth * dpr); h = Math.round(cv.clientHeight * dpr);
-    if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
-    gl.viewport(0, 0, w, h);
-  }
-  if (window.ResizeObserver) new ResizeObserver(size).observe(cv); else window.addEventListener('resize', size);
-  size();
-
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mx = 0, tmx = 0;
   window.addEventListener('pointermove', function (e) { tmx = (e.clientX / window.innerWidth - 0.5) * 2; }, { passive: true });
 
-  function draw(t) {
-    if (!w || !h) return;
-    mx += (tmx - mx) * 0.05;
-    var ry = reduced ? 0.42 : Math.sin(t * 0.00045) * 0.6 + mx * 0.25;
-    var rx = reduced ? -0.08 : -0.08 + Math.sin(t * 0.00031) * 0.06;
+  var marks = [];
+  function init(cv, i) {
+    var gl = cv.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true });
+    if (!gl) return;
+    function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+    var prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    gl.useProgram(prog);
+    [['aP', POS], ['aN', NRM]].forEach(function (d) {
+      var b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(d[1]), gl.STATIC_DRAW);
+      var a = gl.getAttribLocation(prog, d[0]); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 3, gl.FLOAT, false, 0, 0);
+    });
+    var tone = cv.getAttribute('data-mark3d') === 'light' ? 'light' : 'dark';
+    gl.uniform3fv(gl.getUniformLocation(prog, 'uBase'), BASE[tone]);
+    gl.uniform1f(gl.getUniformLocation(prog, 'uLight'), tone === 'light' ? 1 : 0);
+    gl.uniform3f(gl.getUniformLocation(prog, 'uEye'), 0, 0, EYE);
+    gl.enable(gl.DEPTH_TEST); gl.clearColor(0, 0, 0, 0);
+
+    var m = { cv: cv, gl: gl, uM: gl.getUniformLocation(prog, 'uM'), uPV: gl.getUniformLocation(prog, 'uPV'),
+      amp: parseFloat(cv.getAttribute('data-amp')) || 0.6, follow: cv.hasAttribute('data-follow'),
+      phase: i * 1.7, w: 0, h: 0, visible: true };
+    m.size = function () {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      m.w = Math.round(cv.clientWidth * dpr); m.h = Math.round(cv.clientHeight * dpr);
+      if (cv.width !== m.w || cv.height !== m.h) { cv.width = m.w; cv.height = m.h; }
+      gl.viewport(0, 0, m.w, m.h);
+      if (reduced) draw(m, 0);
+    };
+    if (window.ResizeObserver) new ResizeObserver(m.size).observe(cv); else window.addEventListener('resize', m.size);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { m.visible = es[0].isIntersecting; if (m.visible) start(); }).observe(cv);
+    cv.classList.add('is-on');
+    m.size();
+    marks.push(m);
+  }
+
+  function draw(m, t) {
+    if (!m.w || !m.h) return;
+    var s = t * 0.00045 + m.phase;
+    var ry = reduced ? 0.42 : Math.sin(s) * m.amp + (m.follow ? mx * 0.25 : 0);
+    var rx = reduced ? -0.08 : -0.08 + Math.sin(s * 0.69) * 0.06;
+    var gl = m.gl;
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.uniformMatrix4fv(uM, false, rot(rx, ry));
-    gl.uniformMatrix4fv(uPV, false, persp(w / h));
-    gl.uniform3f(uEye, 0, 0, EYE);
-    gl.uniform1f(uA, 1);
+    gl.uniformMatrix4fv(m.uM, false, rot(rx, ry));
+    gl.uniformMatrix4fv(m.uPV, false, persp(m.w / m.h));
     gl.drawArrays(gl.TRIANGLES, 0, COUNT);
   }
 
-  var visible = true, running = false;
-  function loop(t) { if (!visible) { running = false; return; } draw(t); requestAnimationFrame(loop); }
-  function start() { if (!running && !reduced) { running = true; requestAnimationFrame(loop); } }
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); }).observe(cv);
+  var running = false;
+  function loop(t) {
+    mx += (tmx - mx) * 0.05;
+    var any = false;
+    marks.forEach(function (m) { if (m.visible) { any = true; draw(m, t); } });
+    if (any) requestAnimationFrame(loop); else running = false;
   }
-  if (reduced) draw(0); else start();
+  function start() { if (!running && !reduced && marks.length) { running = true; requestAnimationFrame(loop); } }
+
+  Array.prototype.forEach.call(document.querySelectorAll('canvas[data-mark3d]'), init);
+  start();
 })();
