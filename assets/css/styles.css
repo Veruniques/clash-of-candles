@@ -1419,7 +1419,7 @@ main .rankwin p { color: inherit; }
 .win__text { color: #3F6573; }
 /* logo mark next to the wordmark */
 .nav__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav__brand .nav__mark { width: auto; height: 38px; }
-@media (max-width: 420px) { .nav__brand .nav__mark { height: 32px; } .nav__brand { gap: 8px; } }
+.nav__brand .nav__mark { width: auto; height: 44px; }
+@media (max-width: 420px) { .nav__brand .nav__mark { height: 37px; } .nav__brand { gap: 8px; } }
 .foot__brand { display: inline-flex; align-items: center; gap: 12px; }
-.foot__brand .foot__mark { width: auto; height: 46px; }
+.foot__brand .foot__mark { width: auto; height: 53px; }
