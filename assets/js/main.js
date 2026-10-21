@@ -143,7 +143,7 @@
     if (reduced || !g) { root.classList.remove('js-anim'); introDone = true; return; }
     root.classList.add('anim-started');
     var green = $('#fGreen'), red = $('#fRed'), title = $('#heroTitle'), impact = $('#impact'),
-        scene = $('#scene'), shadow = $('.duo__shadow');
+        scene = $('#scene'), shadow = $('.duo__shadow'), mark = $('#mark3d');
     var copy = ['#heroQ', '#heroSub', '#heroCta'].map(function (s) { return $(s); });
 
     g.set(green, { x: '-80vw', rotation: -14 });
@@ -151,6 +151,7 @@
     g.set(title, { y: -window.innerHeight * 1.1, opacity: 1 });
     g.set(copy, { opacity: 0, y: 24 });
     g.set(shadow, { opacity: 0, scaleX: 0.4 });
+    if (mark) g.set(mark, { opacity: 0, scale: 0.55, y: 60 });
     root.classList.remove('js-anim');
 
     var shake = function (amp) {
@@ -164,6 +165,7 @@
         g.fromTo(impact, { opacity: 1, scale: 0.2 }, { opacity: 0, scale: 1.7, duration: 0.5, ease: 'power2.out' });
         Dust.sparks(impact); shake(12);
       }, 0.78)
+      .to(mark, { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'back.out(1.6)' }, 0.8)
       .to(red, { x: '2.2%', rotation: 3, duration: 0.09, ease: 'power2.out' }, 0.78)
       .to(red, { x: 0, rotation: 0, duration: 0.7, ease: 'elastic.out(1, 0.45)' }, 0.87)
       .to(green, { x: '-0.8%', duration: 0.08, ease: 'power2.out' }, 0.78)
@@ -185,7 +187,7 @@
   if (document.readyState === 'complete') heroIntro(); else window.addEventListener('load', heroIntro);
 
   /* ---------------- scroll hand-off: fighters leave, the game panel arrives ---------------- */
-  var exitG = $('#exitGreen'), exitR = $('#exitRed'), titleWrap = $('#titleWrap'), heroCopy = $('#heroCopy'),
+  var exitG = $('#exitGreen'), exitR = $('#exitRed'), titleWrap = $('#titleWrap'), heroCopy = $('#heroCopy'), mark3d = $('#mark3d'),
       cue = $('#scrollCue'), playInner = $('#playInner'), shadowEl = $('.duo__shadow');
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function scrollFx() {
@@ -195,6 +197,7 @@
     exitR.style.transform = 'translate3d(' + (e * 75) + 'vw,' + (-e * 4) + 'vh,0) rotate(' + (e * 22) + 'deg)';
     titleWrap.style.transform = 'translate3d(0,' + (-e * 22) + 'vh,0) scale(' + (1 + e * 0.12) + ')';
     titleWrap.style.opacity = String(1 - clamp(p * 1.4));
+    if (mark3d && introDone) { mark3d.style.transform = 'translate3d(0,' + (e * 10) + 'vh,0) scale(' + (1 - e * 0.35) + ')'; mark3d.style.opacity = String(1 - clamp(p * 1.6)); }
     heroCopy.style.opacity = String(1 - clamp(p * 2.2));
     heroCopy.style.transform = 'translate3d(0,' + (-p * 40) + 'px,0)';
     if (introDone) shadowEl.style.opacity = String(1 - clamp(p * 2));

@@ -191,6 +191,13 @@ p { margin: 0 0 1em; }
     linear-gradient(90deg, transparent 20%, rgba(255,255,255,.7) 50%, transparent 80%) top / 100% 1px no-repeat,
     linear-gradient(180deg, rgba(20,170,190,.16), rgba(20,170,190,0) 60%);
 }
+/* 3D arena mark (assets/js/logo3d.js) — sits behind the fighters, they clash inside its ring */
+.mark3d { position: absolute; z-index: 1; pointer-events: none; will-change: transform, opacity;
+  width: calc(var(--dh) * 1.08); height: calc(var(--dh) * 1.08);
+  left: calc(50% - var(--dh) * 0.54); top: calc(var(--dt) + var(--dh) * 0.46 - var(--dh) * 0.54);
+  filter: drop-shadow(0 24px 30px rgba(4,32,45,.28)); }
+.mark3d.is-off { display: none; }
+.js-anim .mark3d { opacity: 0; }
 .duo { position: absolute; left: 0; top: var(--dt); width: var(--w); height: var(--dh); z-index: 2; }
 .duo__shadow { position: absolute; left: 16%; right: 12%; bottom: -2%; height: 10%;
   background: radial-gradient(50% 50% at 50% 50%, rgba(3,50,66,.45), rgba(3,50,66,0) 70%); filter: blur(5px); }
@@ -648,7 +655,7 @@ main { background: var(--noise), var(--night); }
   .hero { position: relative; }
   .play { margin-top: 0; }
   .js-anim #fGreen, .js-anim #fRed { transform: none; }
-  .js-anim .hero__title, .js-anim #heroQ, .js-anim #heroSub, .js-anim #heroCta, .js-anim .duo__shadow { opacity: 1; }
+  .js-anim .hero__title, .js-anim #heroQ, .js-anim #heroSub, .js-anim #heroCta, .js-anim .duo__shadow, .js-anim .mark3d { opacity: 1; }
   .game, .rewards__in, .rewards { transition: none; }
 }
 

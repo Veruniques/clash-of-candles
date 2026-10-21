@@ -7,6 +7,7 @@ index.html
 assets/
   css/styles.css
   js/main.js          config, nav, intro hero, scroll přechod, ranky (obtížnost), odměny (TOP 3 + mlha), contesty, žebříček, statistiky, formulář
+  js/logo3d.js        3D značka v hero (vlastní mini WebGL, bez knihoven) — stojí za panáčky, ti se mlátí uvnitř „arény“
   js/game.js          hra ve skutečném UI (světlý graf, G1/G2, FAB menu Indikátory/Kreslení/Akce, štítky BREAKOUT/BREAKDOWN, stavy Čeká/Spárováno/Výhra): tutoriál s kurzorem + volné hraní
   data/rewards.json   PLACEHOLDER ekonomika a produkty — panel odměn, TOP 3 i „mlha“ se kreslí odsud
   js/vendor/gsap.min.js
