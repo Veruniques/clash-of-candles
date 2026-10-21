@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Clash of Candles — Přečti graf líp než soupeř</title>
-  <meta name="description" content="Souboj hráčů na skutečných historických grafech. Každých 90 sekund nové kolo, výhry se mění ve svíčky a svíčky ve skutečné odměny. Hraj zdarma.">
+  <meta name="description" content="Souboj hráčů na skutečných historických grafech. Každých 90 sekund nové kolo, výhry se mění v srdíčka a srdíčka ve skutečné odměny. Hraj zdarma.">
   <meta name="theme-color" content="#7EF0F8">
   <link rel="icon" href="assets/img/favicon.svg?v=3" type="image/svg+xml">
   <meta property="og:type" content="website">
@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610211845">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610211930">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -61,7 +61,7 @@
       <img src="assets/img/wordmark.svg" alt="Clash of Candles" width="132" height="41">
     </a>
     <nav class="nav__links" aria-label="Hlavní navigace">
-      <a href="#tutorial">Jak se hraje</a>
+      <a href="#jak">Jak se hraje</a>
       <a href="#odmeny">Odměny</a>
       <a href="#play">Play</a>
       <a href="#contesty">Contesty</a>
@@ -102,7 +102,7 @@
         <p class="hero__sub" id="heroSub">Souboj hráčů na skutečných historických datech. Každých 90 sekund nové kolo, každá výhra tě posune blíž ke skutečným odměnám. A hrát můžeš zdarma.</p>
         <div class="hero__cta" id="heroCta">
           <a class="btn btn--primary btn--lg" href="#registrace">Registruj se</a>
-          <a class="btn btn--ghost btn--lg" href="#tutorial">Jak se hraje</a>
+          <a class="btn btn--ghost btn--lg" href="#jak">Jak se hraje</a>
         </div>
       </div>
       <div class="scroll-cue" id="scrollCue" aria-hidden="true"><span></span></div>
@@ -111,11 +111,41 @@
 
   <main id="obsah">
 
-    <!-- ============ 1. TUTORIÁL (hratelná hra s automatickou ukázkou) ============ -->
-    <section class="play" id="tutorial" aria-labelledby="demo-h">
+    <section class="play" aria-labelledby="prizes-h">
       <div class="play__inner" id="playInner">
         <div class="wrap">
-          <header class="play__head">
+          <!-- ============ 1. JAK TO FUNGUJE (jen symboly) + MARKETPLACE ============ -->
+          <div class="flow" id="jak" role="img" aria-label="Za coins si koupíš vstup do kola, za vyhrané kolo dostaneš srdíčko, za srdíčka a doplatek si vybereš odměnu.">
+            <div class="flow__node flow__node--coin"><img src="assets/img/coin-hex.webp?v=1" alt="" width="640" height="640"><b class="flow__badge">10</b></div>
+            <span class="flow__arrow" aria-hidden="true"><i></i></span>
+            <div class="flow__node flow__node--play"><span class="playbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.6-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span></div>
+            <span class="flow__arrow" aria-hidden="true"><i></i></span>
+            <div class="flow__node flow__node--heart"><img src="assets/img/heart.svg?v=1" alt="" width="120" height="108"><b class="flow__badge flow__badge--heart">+1</b></div>
+            <span class="flow__arrow" aria-hidden="true"><i></i></span>
+            <div class="flow__node flow__node--prize">
+              <span class="flow__fan"><img src="assets/img/products/headphones.svg" alt="" width="240" height="240"><img src="assets/img/products/controller.svg" alt="" width="240" height="240"><img src="assets/img/products/phone.svg" alt="" width="240" height="240"></span>
+              <b class="flow__pay"><i class="heart-ico" aria-hidden="true"></i>+<span>Kč</span></b>
+            </div>
+          </div>
+
+          <div class="market-wrap" id="odmeny">
+            <div class="sechead sechead--center">
+              <h2 id="prizes-h" class="h2">Vyber si, co chceš.</h2>
+              <p class="lede">Žádné stupně vítězů. Srdíčka utratíš za cokoli z nabídky a zbytek doplatíš.</p>
+            </div>
+            <div class="market" id="market"></div>
+            <div class="fog">
+              <div class="fog__track" id="fogTrack" aria-hidden="true"></div>
+              <div class="fog__veil">
+                <p class="fog__title">Další odměny odhalíme brzy.</p>
+                <p class="fog__text">Zaregistruj se a sleduj novinky. Kdo je na seznamu, uvidí je první.</p>
+                <a class="btn btn--primary" href="#registrace">Registruj se</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ 2. TUTORIÁL (hratelná hra s automatickou ukázkou) ============ -->
+          <header class="play__head" id="tutorial">
             <h2 id="demo-h" class="h2">Jedno kolo za 30 sekund.</h2>
             <p class="lede">Tohle je skutečné rozhraní hry. Koupíš graf, prohlédneš si celou příležitost, nakreslíš si zónu a klikneš na breakout, nebo breakdown. Pak to zkus sám.</p>
           </header>
@@ -129,7 +159,7 @@
             <li data-step="5"><b>6</b><span>Výhra</span></li>
           </ol>
 
-          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610201838">
+          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610211930">
             <div class="game__main app">
               <div class="app__bar">
                 <div class="app__views">
@@ -227,8 +257,8 @@
                   <div class="win__card">
                     <div class="win__burst" aria-hidden="true"></div>
                     <p class="win__title">Výhra!</p>
-                    <div class="win__prize"><i class="candle-ico candle-ico--xl" aria-hidden="true"></i><span>+1 svíčka</span></div>
-                    <p class="win__text">Svíčky sbíráš za každé vyhrané kolo. Mění se na slevu na skutečné odměny.</p>
+                    <div class="win__prize"><i class="heart-ico heart-ico--xl" aria-hidden="true"></i><span>+1 srdíčko</span></div>
+                    <p class="win__text">Srdíčka sbíráš za každé vyhrané kolo. Mění se na slevu na skutečné odměny.</p>
                   </div>
                 </div>
                 <div class="over" id="gOver" hidden>
@@ -252,7 +282,7 @@
                 </div>
                 <div class="rw-wallet" aria-label="Tvoje peněženka">
                   <span title="Coins — palivo do her"><i class="coin-ico" aria-hidden="true"></i><b id="gCoins">100</b> coins</span>
-                  <span title="Svíčky — vyhráváš je"><i class="candle-ico" aria-hidden="true"></i><b id="gCandles">0</b> svíček</span>
+                  <span title="Srdíčka — vyhráváš je"><i class="heart-ico" aria-hidden="true"></i><b id="gCandles">0</b> srdíček</span>
                 </div>
                 <div class="rw-featured" id="rwFeatured"></div>
                 <p class="rw-sub">Vyber si cíl</p>
@@ -275,24 +305,6 @@
       </div>
     </section>
 
-    <!-- ============ 2. SHOP / CENY ============ -->
-    <section class="section prizes" id="odmeny" aria-labelledby="prizes-h">
-      <div class="wrap">
-        <div class="sechead">
-          <h2 id="prizes-h" class="h2">Hraje se o hodnotné věci.</h2>
-          <p class="lede">Tři hlavní ceny na startu. Další odměny zatím drží mlha.</p>
-        </div>
-        <div class="podium" id="podium"></div>
-        <div class="fog">
-          <div class="fog__track" id="fogTrack" aria-hidden="true"></div>
-          <div class="fog__veil">
-            <p class="fog__title">Další odměny odhalíme brzy.</p>
-            <p class="fog__text">Zaregistruj se a sleduj novinky. Kdo je na seznamu, uvidí je první.</p>
-            <a class="btn btn--primary" href="#registrace">Registruj se</a>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- ============ 3. PILÍŘE ============ -->
     <section class="section section--tight" aria-labelledby="feat-h">
@@ -338,7 +350,7 @@
           <ul class="pts">
             <li><b>3 minuty a znáš výsledek</b><span>Žádné čekání do zítřka. Kolo se vyhodnotí dřív, než dopiješ kafe.</span></li>
             <li><b>Nástroje pro technickou analýzu</b><span>Čáry, horizontály, obdélníky a 20 indikátorů od EMA po Ichimoku. Denní, hodinový i minutový pohled.</span></li>
-            <li><b>Rank si nevybíráš. Vybojuješ si ho.</b><span>Všichni začínají úplně dole. Výš se dostaneš jen hraním a tím, že jsi dobrý. Vyšší rank znamená dražší vstup, víc svíček za výhru, míň nástrojů a tvrdší graf.</span></li>
+            <li><b>Rank si nevybíráš. Vybojuješ si ho.</b><span>Všichni začínají úplně dole. Výš se dostaneš jen hraním a tím, že jsi dobrý. Vyšší rank znamená dražší vstup, víc srdíček za výhru, míň nástrojů a tvrdší graf.</span></li>
           </ul>
         </div>
         <div class="playshot" aria-label="Ukázka obrazovky Play a žebříčku ranků">
@@ -354,35 +366,13 @@
       </div>
     </section>
 
-    <!-- ============ 5. SVÍČKY ============ -->
-    <section class="section dark" id="svicky" aria-labelledby="candles-h">
-      <div class="wrap split">
-        <div class="candlewall" aria-hidden="true">
-          <div class="candlewall__row" id="candleRow"></div>
-          <div class="candlewall__track">
-            <div class="cw-ms" style="--p:19%"><i class="candle-ico"></i><span></span><em>104 svíček<br>AirPods Pro 3</em></div>
-            <div class="cw-ms" style="--p:40%"><i class="candle-ico"></i><span></span><em>176 svíček<br>Apple Watch</em></div>
-            <div class="cw-ms" style="--p:64%"><i class="candle-ico"></i><span></span><em>224 svíček<br>AirPods Max</em></div>
-            <div class="cw-ms cw-ms--top" style="--p:96%"><i class="candle-ico"></i><span></span><em>560 svíček<br>iPhone 18 Pro</em></div>
-            <div class="candlewall__fill"></div>
-          </div>
-        </div>
-        <div>
-          <h2 id="candles-h" class="h2">Svíčky. To je ono.</h2>
-          <ul class="pts">
-            <li><b>Vyhrávej kola a získávej svíčky</b><span>Každé vyhrané kolo ti zapálí jednu. Žádná náhoda, jen tvoje rozhodnutí.</span></li>
-            <li><b>Svíčky tě dovedou k odměnám</b><span>Čím víc jich máš, tím blíž jsi ke skutečným cenám ze shopu.</span></li>
-          </ul>
-        </div>
-      </div>
-    </section>
 
     <!-- ============ 6. COINS ============ -->
     <section class="section" id="coins" aria-labelledby="coins-h">
       <div class="wrap">
         <div class="sechead">
           <h2 id="coins-h" class="h2">Coins. To je tvoje palivo.</h2>
-          <p class="lede">Za coins si kupuješ vstup do her. Svíčky pak vyhráváš ty.</p>
+          <p class="lede">Za coins si kupuješ vstup do her. Srdíčka pak vyhráváš ty.</p>
         </div>
         <div class="coins3">
           <article class="coinCard">
@@ -398,83 +388,47 @@
           <article class="coinCard">
             <div class="coin3d coin3d--skill" aria-hidden="true"><span>1.</span></div>
             <h3 class="h3">Dovednost je na 1. místě</h3>
-            <p>Coins koupíš, výhru ne. O svíčkách rozhoduje jen to, jak čteš graf.</p>
+            <p>Coins koupíš, výhru ne. O srdíčkách rozhoduje jen to, jak čteš graf.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- ============ 7. CONTESTY ============ -->
-    <section class="section dark" id="contesty" aria-labelledby="contest-h">
+    <!-- ============ CONTESTY · ACADEMY · RANK (jedna sekce) ============ -->
+    <section class="section" id="contesty" aria-labelledby="trio-h">
       <div class="wrap">
         <div class="sechead">
-          <h2 id="contest-h" class="h2">Contesty. Tady se láme chleba.</h2>
-          <p class="lede">Soutěže tě otestují a čekají v nich zajímavé odměny. Potřebuješ dovednost a vytrvalost. Obojí se dá trénovat.</p>
+          <h2 id="trio-h" class="h2">Soutěž. Uč se. Stoupej.</h2>
         </div>
-        <div class="contests">
-          <article class="contest glass">
-            <span class="chip">Denní</span>
-            <p class="contest__name">Denní souboj</p>
-            <p class="contest__meta">Končí za <b data-countdown="day">--:--:--</b></p>
-            <p class="contest__pool"><i class="candle-ico"></i>Odměna pro nejlepší</p>
+        <div class="trio">
+          <article class="trio__card glass">
+            <span class="chip"><svg aria-hidden="true"><use href="#i-trophy"/></svg>Contesty</span>
+            <h3 class="h3">Tady se láme chleba.</h3>
+            <p>Denní, týdenní a měsíční. Stejný vstup pro všechny ranky.</p>
+            <ul class="ct">
+              <li><span>Denní souboj</span><b data-countdown="day">--:--:--</b></li>
+              <li class="ct--hot"><span>Týdenní liga</span><b data-countdown="week">--:--:--</b></li>
+              <li><span>Měsíční šampionát</span><b data-countdown="month">--:--:--</b></li>
+            </ul>
           </article>
-          <article class="contest glass contest--hot">
-            <span class="chip">Týdenní</span>
-            <p class="contest__name">Týdenní liga</p>
-            <p class="contest__meta">Končí za <b data-countdown="week">--:--:--</b></p>
-            <p class="contest__pool"><i class="candle-ico"></i>Větší bank, tvrdší konkurence</p>
+          <article class="trio__card glass" id="academy">
+            <span class="chip"><svg aria-hidden="true"><use href="#i-history"/></svg>Academy</span>
+            <h3 class="h3">Nejdřív se nauč, pak vyhraj.</h3>
+            <p>Krátké lekce a kvízy na skutečných grafech. Šest úrovní od základů.</p>
+            <div class="trio__demo" aria-hidden="true">
+              <div class="ac-path"><span class="done">1</span><span class="done">2</span><span class="now">3</span><span>4</span><span>5</span><span>6</span></div>
+              <p class="ac-q">Kde je nejbližší odpor?</p>
+              <div class="ac-opts"><span>1.0820</span><span class="ok">1.0910</span><span>1.0760</span></div>
+            </div>
           </article>
-          <article class="contest glass">
-            <span class="chip">Měsíční</span>
-            <p class="contest__name">Měsíční šampionát</p>
-            <p class="contest__meta">Končí za <b data-countdown="month">--:--:--</b></p>
-            <p class="contest__pool"><i class="candle-ico"></i>Hlavní odměny měsíce</p>
+          <article class="trio__card glass" id="rank">
+            <span class="chip"><svg aria-hidden="true"><use href="#i-split"/></svg>Rank</span>
+            <h3 class="h3">Od F po G.O.A.T.</h3>
+            <p>Rank se nekupuje. Stoupáš jen hraním, a čím líp hraješ, tím rychleji.</p>
+            <ol class="lb lb--mini" id="leaderboard" aria-label="Ukázka týdenního žebříčku"></ol>
           </article>
         </div>
         <div class="center"><a class="btn btn--primary" href="#registrace">Chci soutěžit</a></div>
-      </div>
-    </section>
-
-    <!-- ============ 8. ACADEMY ============ -->
-    <section class="section" id="academy" aria-labelledby="academy-h">
-      <div class="wrap split">
-        <div>
-          <h2 id="academy-h" class="h2">Academy. Nejdřív se nauč, pak vyhraj.</h2>
-          <p class="lede">Graf se dá číst jako mapa. Naše vlastní akademie tě naučí, kde hledat podporu, odpor a pasti, do kterých padá většina hráčů.</p>
-          <ul class="pts">
-            <li><b>Uč se a otestuj své dovednosti</b><span>Krátké lekce, kvízy a simulace na skutečných grafech. Šest úrovní od úplných základů.</span></li>
-            <li><b>Lepší úsudek v každém kole</b><span>Co se naučíš ráno, použiješ odpoledne v aréně. A uvidíš to na svých výsledcích.</span></li>
-          </ul>
-        </div>
-        <div class="academy glass" aria-hidden="true">
-          <div class="ac-path">
-            <span class="done">1</span><span class="done">2</span><span class="now">3</span><span>4</span><span>5</span><span>6</span>
-          </div>
-          <div class="ac-lesson">
-            <p class="ac-kicker">Lekce 3 · Podpora a odpor</p>
-            <p class="ac-q">Kde je nejbližší odpor?</p>
-            <div class="ac-chart"><svg viewBox="0 0 300 120" preserveAspectRatio="none"><path d="M0 92 L30 80 L55 86 L80 60 L105 66 L130 40 L150 48 L170 34 L195 44 L220 30 L245 38 L270 28 L300 34" fill="none" stroke="#2EE29A" stroke-width="3"/><path d="M0 30 H300" stroke="#FF4767" stroke-width="2" stroke-dasharray="6 6"/><path d="M0 68 H300" stroke="#7EF0F8" stroke-width="2" stroke-dasharray="6 6" opacity=".5"/></svg></div>
-            <div class="ac-opts"><span>A · 1.0820</span><span class="ok">B · 1.0910</span><span>C · 1.0760</span></div>
-          </div>
-          <div class="ac-score"><span>Skóre testu</span><b>86 %</b><em>Odemčeno: další úroveň</em></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 9. RANK + LEADERBOARD ============ -->
-    <section class="section dark" id="rank" aria-labelledby="rank-h">
-      <div class="wrap split">
-        <div class="board glass" aria-label="Ukázka žebříčku">
-          <div class="board__head"><span>Týdenní žebříček</span><span class="board__tabs"><b>Týden</b><i>Měsíc</i><i>Celkově</i></span></div>
-          <ol class="lb" id="leaderboard"></ol>
-        </div>
-        <div>
-          <h2 id="rank-h" class="h2">Rank a žebříčky.</h2>
-          <ul class="pts">
-            <li><b>Začínáš na F, končíš jako G.O.A.T.</b><span>Rank se nekupuje. Od F přes E, D, C, B, A a S až po G.O.A.T. Každý stupeň má ještě + a ++. Kdo hraje dobře, stoupá rychleji.</span></li>
-            <li><b>Sdílej své výsledky s ostatními</b><span>Pochlub se sérií, pozvi kamaráda a dokaž mu to na grafu.</span></li>
-          </ul>
-        </div>
       </div>
     </section>
 
@@ -495,7 +449,7 @@
               <div><dt>Odehraná kola</dt><dd>248</dd></div>
               <div><dt>Nejdelší série</dt><dd>9</dd></div>
               <div><dt>Průměrný čas</dt><dd>1:12</dd></div>
-              <div><dt>Svíčky</dt><dd>159</dd></div>
+              <div><dt>Srdíčka</dt><dd>159</dd></div>
             </dl>
           </div>
           <p class="stats__label">Úspěšnost podle hodiny dne</p>
@@ -543,8 +497,8 @@
         <div class="faq">
           <details><summary>Musím umět obchodovat, abych mohl hrát?</summary><p>Ne. Začít můžeš i bez zkušeností. Academy a herní nástroje tě naučí číst graf od základů.</p></details>
           <details><summary>Je Clash of Candles zdarma?</summary><p>Ano. Každý den se ti peněženka dobije na 100 coins a základní kolo stojí 10. Balíčky coins si můžeš dokoupit, ale nemusíš.</p></details>
-          <details><summary>Jaký je rozdíl mezi coins a svíčkami?</summary><p>Coins jsou palivo: platíš jimi vstup do her. Svíčky vyhráváš za vyhraná kola a vedou tě k odměnám v shopu.</p></details>
-          <details><summary>Mohu získat skutečné produkty?</summary><p>Ano, podle aktuální nabídky shopu. Svíčky uplatníš jako slevu na vybrané produkty, zbytek ceny případně doplatíš.</p></details>
+          <details><summary>Jaký je rozdíl mezi coins a srdíčky?</summary><p>Coins jsou palivo: platíš jimi vstup do her. Srdíčka vyhráváš za vyhraná kola a vedou tě k odměnám v shopu.</p></details>
+          <details><summary>Mohu získat skutečné produkty?</summary><p>Ano, podle aktuální nabídky shopu. Srdíčka uplatníš jako slevu na cokoli z nabídky, zbytek ceny doplatíš. Odměny nejsou jen pro první místa.</p></details>
           <details><summary>Jak se určuje výsledek kola?</summary><p>Rozhoduje skutečný historický vývoj ceny. Vyhrává strana, jejíž hranici cena prorazí jako první.</p></details>
           <details><summary>Co se stane, když udělám deset chyb?</summary><p>Po deseti chybných rozhodnutích aktuální hra končí. Návrat se řídí pravidly hry.</p></details>
           <details><summary>Kdy bude hra dostupná?</summary><p>Brzy. Zaregistruj se a o startu se dozvíš mezi prvními.</p></details>
@@ -558,7 +512,7 @@
         <img class="final__duo" src="assets/img/candles-duo.webp?v=202610201838" alt="" width="1600" height="1215" loading="lazy">
         <p class="final__kick">Ready to play?</p>
         <h2 id="final-h" class="h2">Přečti graf líp než soupeř.</h2>
-        <p class="lede">Hraj zdarma, sbírej svíčky a poměř se s ostatními. Aréna se otevírá brzy.</p>
+        <p class="lede">Hraj zdarma, sbírej srdíčka a poměř se s ostatními. Aréna se otevírá brzy.</p>
         <a class="btn btn--primary btn--lg" href="#registrace">Registruj se</a>
         <p class="claim claim--final">Analyzuj. Rozhodni. Soutěž.</p>
       </div>
@@ -568,14 +522,14 @@
   <footer class="foot">
     <div class="wrap foot__grid">
       <span class="foot__brand"><canvas class="mark3d mark3d--foot" data-mark3d="light" data-amp="0.75" aria-hidden="true"></canvas><img class="foot__mark mark3d-fallback" src="assets/img/logo-mark-light.svg?v=3" alt="" width="42" height="55"><img src="assets/img/wordmark-light.svg" alt="Clash of Candles" width="160" height="50"></span>
-      <p class="foot__legal">Clash of Candles je dovednostní hra založená na historických tržních datech, nikoli platforma pro nákup a prodej finančních instrumentů. Nejde o investiční službu ani investiční poradenství. Coins a svíčky jsou herní měny, nikoli hotovost. Hra je určena hráčům od 18 let.</p>
+      <p class="foot__legal">Clash of Candles je dovednostní hra založená na historických tržních datech, nikoli platforma pro nákup a prodej finančních instrumentů. Nejde o investiční službu ani investiční poradenství. Coins a srdíčka jsou herní měny, nikoli hotovost. Hra je určena hráčům od 18 let.</p>
       <p class="foot__meta">Obchodní podmínky, zásady ochrany osobních údajů a údaje o provozovateli zveřejníme před spuštěním. © 2026 Clash of Candles</p>
     </div>
   </footer>
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
-  <script src="assets/js/main.js?v=202610211845" defer></script>
-  <script src="assets/js/logo3d.js?v=202610211845" defer></script>
-  <script src="assets/js/game.js?v=202610201838" defer></script>
+  <script src="assets/js/main.js?v=202610211930" defer></script>
+  <script src="assets/js/logo3d.js?v=202610211930" defer></script>
+  <script src="assets/js/game.js?v=202610211930" defer></script>
 </body>
 </html>

@@ -14,9 +14,9 @@
     currency: 'Kč', candleValue: 50, maxDiscountPct: 80,
     game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 90 },
     products: [
-      { id: 'iphone', name: 'iPhone 18 Pro', price: 34990, icon: 'phone', image: 'assets/img/products/phone.svg', featured: true, podium: 1 },
-      { id: 'airpods-max', name: 'AirPods Max', price: 13990, icon: 'headphones', image: 'assets/img/products/headphones.svg', podium: 2 },
-      { id: 'watch', name: 'Apple Watch Series 12', price: 10990, icon: 'clock', podium: 3 },
+      { id: 'iphone', name: 'iPhone 18 Pro', price: 34990, icon: 'phone', image: 'assets/img/products/phone.svg', featured: true, market: true },
+      { id: 'airpods-max', name: 'AirPods Max', price: 13990, icon: 'headphones', image: 'assets/img/products/headphones.svg', market: true },
+      { id: 'watch', name: 'Apple Watch Series 12', price: 10990, icon: 'clock', market: true },
       { id: 'airpods-pro', name: 'AirPods Pro 3', price: 6490, icon: 'headphones' }
     ],
     teasers: ['MacBook Air', 'iPad Air', 'Herní konzole', 'Voucher na výlet']
@@ -234,7 +234,7 @@
       var row = '<li class="rkp' + (i === me ? ' is-me' : '') + (i >= open ? ' is-locked' : '') + '">' +
         '<b class="rkp-badge' + (dark ? ' is-light' : '') + (goat ? ' is-goat' : '') + '" style="--rc:' + c + '">' + r[0] + '</b>' +
         '<span class="rkp-val"><i class="coin-ico" aria-hidden="true"></i>' + fmt(r[1]) + '</span>' +
-        '<span class="rkp-val"><i class="candle-ico" aria-hidden="true"></i>+' + r[2] + '</span></li>';
+        '<span class="rkp-val"><i class="heart-ico" aria-hidden="true"></i>+' + r[2] + '</span></li>';
       if (i === open - 1) row += '<li class="rkp-lock">Postupuj hrou ' + lock + '</li>';
       return row;
     }).join('');
@@ -264,16 +264,6 @@
     paint(); window.addEventListener('resize', paint); if (document.fonts) document.fonts.ready.then(paint);
   })();
 
-  /* ---------------- svíčky: a row that lights up when seen ---------------- */
-  (function () {
-    var row = $('#candleRow'); if (!row) return;
-    row.innerHTML = new Array(12).join('<span></span>') + '<span></span>';
-    var spans = row.children;
-    function light() { Array.prototype.forEach.call(spans, function (s, i) { setTimeout(function () { s.classList.add('lit'); }, reduced ? 0 : 140 * i); }); }
-    if (!('IntersectionObserver' in window)) return light();
-    var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); light(); } }, { threshold: 0.5 });
-    io.observe(row);
-  })();
 
   /* ---------------- contests: live countdowns ---------------- */
   (function () {
@@ -300,11 +290,11 @@
   (function () {
     var lb = $('#leaderboard');
     if (lb) {
-      var rows = [['Graf_Hunter', 'S+', 412], ['MiraBreakout', 'A++', 377], ['SvíčkaZJeseníku', 'A+', 341], ['TyTi', 'B++', 298], ['Ty', 'C', 211, true], ['NightOwl', 'C', 204]];
+      var rows = [['Graf_Hunter', 'S+', 412], ['MiraBreakout', 'A++', 377], ['SrdcařZJeseníku', 'A+', 341], ['Ty', 'C', 211, true]];
       lb.innerHTML = rows.map(function (r, i) {
         var pos = r[3] ? 27 : i + 1;
         return '<li class="' + (r[3] ? 'me' : '') + (i < 3 ? ' top' + (i + 1) : '') + '"><span class="lb__pos">' + pos + '</span><span class="lb__av">' + r[0].charAt(0) + '</span>' +
-          '<span class="lb__name">' + r[0] + '<small>' + r[1] + '</small></span><span class="lb__pts"><i class="candle-ico"></i>' + r[2] + '</span>' +
+          '<span class="lb__name">' + r[0] + '<small>' + r[1] + '</small></span><span class="lb__pts"><i class="heart-ico"></i>' + r[2] + '</span>' +
           (r[3] ? '<button type="button" class="lb__share" tabindex="-1" aria-hidden="true">Sdílet</button>' : '') + '</li>';
       }).join('');
     }
@@ -316,20 +306,20 @@
     }
   })();
 
-  /* ---------------- prizes: TOP 3 podium + fog slider (from config) ---------------- */
+  /* ---------------- marketplace: 3 equal picks (no podium) + fog slider (from config) ---------------- */
   window.CoC.config.then(function (cfg) {
-    var pod = $('#podium');
-    if (pod) {
-      var top = cfg.products.filter(function (p) { return p.podium; }).sort(function (a, b) { return a.podium - b.podium; }).slice(0, 3);
-      var order = [top[1], top[0], top[2]].filter(Boolean);
-      pod.innerHTML = order.map(function (p) {
+    var mk = $('#market');
+    if (mk) {
+      var picks = cfg.products.filter(function (p) { return p.market; });
+      if (!picks.length) picks = cfg.products;
+      mk.innerHTML = picks.slice(0, 3).map(function (p) {
         var disc = p.price * cfg.maxDiscountPct / 100, need = Math.ceil(disc / (cfg.candleValue || 50));
-        return '<article class="pod pod--' + p.podium + '">' +
-          '<div class="pod__art">' + (p.image ? window.CoC.img(p.image, p.name) : window.CoC.icon(p)) + '</div>' +
-          '<div class="pod__info"><h3 class="pod__name">' + p.name + '</h3>' +
-          '<p class="pod__price"><s>' + fmt(p.price) + ' ' + cfg.currency + '</s> <b>od ' + fmt(p.price - disc) + ' ' + cfg.currency + '</b></p>' +
-          '<p class="pod__need"><i class="candle-ico"></i>' + fmt(need) + ' svíček na max. slevu</p></div>' +
-          '<div class="pod__step"><span>' + p.podium + '</span></div></article>';
+        return '<article class="mk">' +
+          '<div class="mk__art">' + (p.image ? window.CoC.img(p.image, p.name) : window.CoC.icon(p)) + '</div>' +
+          '<h3 class="mk__name">' + p.name + '</h3>' +
+          '<p class="mk__was">' + fmt(p.price) + ' ' + cfg.currency + '</p>' +
+          '<p class="mk__pay"><span class="mk__hearts"><i class="heart-ico" aria-hidden="true"></i>' + fmt(need) + '<span class="sr"> srdíček</span></span>' +
+          '<em>+</em><b>' + fmt(p.price - disc) + ' ' + cfg.currency + '</b></p></article>';
       }).join('');
     }
     var track = $('#fogTrack');

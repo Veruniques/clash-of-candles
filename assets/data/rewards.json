@@ -1,5 +1,5 @@
 {
-  "_note": "PLACEHOLDER ceny a hodnota svíčky (candleValue = Kč slevy za 1 svíčku). Produkty a ceny podle apple.com/cz (10/2026). Obrázky jsou zatím odkazované přímo z Apple CDN — před spuštěním nahraďte licencovanými fotkami shopu/partnera (stačí přepsat 'image'). 'podium' = pořadí TOP 3, 'teasers' = odměny v mlze.",
+  "_note": "PLACEHOLDER ceny a hodnota srdíčka (candleValue = Kč slevy za 1 srdíčko; název klíče zůstal z dřívějška). Produkty a ceny podle apple.com/cz (10/2026). Obrázky jsou zatím odkazované přímo z Apple CDN — před spuštěním nahraďte licencovanými fotkami shopu/partnera (stačí přepsat 'image'). 'market': true = 3 odměny v galerii (bez pořadí), 'teasers' = odměny v mlze.",
   "currency": "Kč",
   "maxDiscountPct": 80,
   "game": {
@@ -12,12 +12,12 @@
     {
       "id": "iphone",
       "name": "iPhone 18 Pro",
-      "tagline": "Nejnovější iPhone. Svíčky z něj ukrojí až 80 %.",
+      "tagline": "Nejnovější iPhone. Srdíčka z něj ukrojí až 80 %.",
       "price": 34990,
       "icon": "phone",
       "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-compare-iphone-18-pro-202609?wid=600&hei=600&fmt=png-alpha",
       "featured": true,
-      "podium": 1
+      "market": true
     },
     {
       "id": "airpods-max",
@@ -26,7 +26,7 @@
       "price": 13990,
       "icon": "headphones",
       "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-max-select-202409-midnight?wid=600&hei=600&fmt=png-alpha",
-      "podium": 2
+      "market": true
     },
     {
       "id": "watch",
@@ -35,7 +35,7 @@
       "price": 10990,
       "icon": "clock",
       "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/watch-compare-series-12-202609?wid=600&hei=600&fmt=png-alpha",
-      "podium": 3
+      "market": true
     },
     {
       "id": "airpods-pro",

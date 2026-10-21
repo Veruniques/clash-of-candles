@@ -1,7 +1,7 @@
 /* Clash of Candles — demo game in the real game UI: auto-playing tutorial + free play.
    Simulated chart (random walk) so it works offline and nobody can look the answer up.
    Economy + products come from window.CoC.config (assets/data/rewards.json):
-   coins pay the entry ("fuel"), each win lights one svíčka, svíčky lead to rewards. */
+   coins pay the entry ("fuel"), each win earns one srdíčko (heart), hearts lead to rewards. */
 (function () {
   'use strict';
   var $ = function (s, c) { return (c || document).querySelector(s); };
@@ -379,13 +379,13 @@
   function finish() {
     S.playing = false; ui.fab.disabled = false;
     var win = S.pick === S.sc.side, where = S.sc.side === 'up' ? 'horní' : 'dolní', per = cfg.game.candlesPerWin;
-    setStatus(win ? 'win' : 'loss', win ? 'Win +' + per + ' svíčka' : 'Loss');
+    setStatus(win ? 'win' : 'loss', win ? 'Win +' + per + ' srdíčko' : 'Loss');
     var d = S.sc.date; ui.date.textContent = d.getUTCDate() + '. ' + (d.getUTCMonth() + 1) + '. ' + d.getUTCFullYear() + ' v ' + hhmm(S.sc.startMin + (HIST + S.sc.hit) * 5); ui.date.hidden = false;
     if (win) { S.candles += per; renderCandles(true); ui.win.hidden = false; }
     ui.rwResult.className = 'rw-result ' + (win ? 'is-win' : 'is-loss');
     ui.rwTitle.textContent = win ? 'Trefa. Graf jsi přečetl.' : 'Tentokrát ne.';
-    ui.rwDelta.textContent = win ? '+' + per + ' svíčka' : 'Bez svíčky';
-    ui.rwNote.textContent = 'Cena prorazila ' + where + ' hranici jako první. Skutečný graf EUR/USD z ' + d.getUTCFullYear() + '.' + (win ? ' Svíčka je tvoje.' : '');
+    ui.rwDelta.textContent = win ? '+' + per + ' srdíčko' : 'Bez srdíčka';
+    ui.rwNote.textContent = 'Cena prorazila ' + where + ' hranici jako první. Skutečný graf EUR/USD z ' + d.getUTCFullYear() + '.' + (win ? ' Srdíčko je tvoje.' : '');
     var round = S.round;
     if (win) setTimeout(function () { flyCandle().then(function () { if (round === S.round) renderRewards(true); }); }, 650);
     else renderRewards();
@@ -400,8 +400,8 @@
   function idleRewards() {
     ui.rwResult.className = 'rw-result is-idle';
     ui.rwTitle.textContent = 'Hraj o skutečné odměny';
-    ui.rwDelta.textContent = '+' + cfg.game.candlesPerWin + ' svíčka za trefu';
-    ui.rwNote.textContent = 'Vstup do kola ' + cfg.game.entry + ' coins. Svíčky tě dovedou ke slevám v shopu.';
+    ui.rwDelta.textContent = '+' + cfg.game.candlesPerWin + ' srdíčko za trefu';
+    ui.rwNote.textContent = 'Vstup do kola ' + cfg.game.entry + ' coins. Srdíčka tě dovedou ke slevám v shopu.';
     ui.rwActions.hidden = true; renderRewards();
   }
   // the reward you're playing for: pick it, see your progress, watch the candle land in it
@@ -427,12 +427,12 @@
       '<div class="rwx__head"><p class="rw-featured__name">' + feat.name + '</p><p class="rwx__full"><s>' + fmt(feat.price) + ' ' + cur + '</s></p></div>' +
       '<div class="rwx__calc">' +
         '<p class="rwx__pay"><span>Zaplatíš</span><b id="rwPay">' + fmt(feat.price - Math.min(sim * (cfg.candleValue || 50), discount(feat))) + ' ' + cur + '</b></p>' +
-        '<label class="rwx__slider"><span class="sr">Kolik svíček použiješ</span><input type="range" min="0" max="' + need + '" step="1" value="' + sim + '" id="rwSim" style="--v:' + (sim / need * 100).toFixed(1) + '%"></label>' +
-        '<p class="rwx__simtxt"><span><i class="candle-ico"></i><b id="rwSimN">' + fmt(sim) + '</b> svíček</span><span>sleva <b id="rwSimD">' + fmt(Math.min(sim * (cfg.candleValue || 50), discount(feat))) + ' ' + cur + '</b></span></p>' +
+        '<label class="rwx__slider"><span class="sr">Kolik srdíček použiješ</span><input type="range" min="0" max="' + need + '" step="1" value="' + sim + '" id="rwSim" style="--v:' + (sim / need * 100).toFixed(1) + '%"></label>' +
+        '<p class="rwx__simtxt"><span><i class="heart-ico"></i><b id="rwSimN">' + fmt(sim) + '</b> srdíček</span><span>sleva <b id="rwSimD">' + fmt(Math.min(sim * (cfg.candleValue || 50), discount(feat))) + ' ' + cur + '</b></span></p>' +
       '</div>' +
-      '<div class="rwx__mine"><p><span>Tvoje svíčky</span><span class="rwx__count"><b>' + fmt(S.candles) + '</b> / ' + fmt(need) + '</span></p>' +
+      '<div class="rwx__mine"><p><span>Tvoje srdíčka</span><span class="rwx__count"><b>' + fmt(S.candles) + '</b> / ' + fmt(need) + '</span></p>' +
         '<div class="rw-prog" role="progressbar" aria-label="Postup k odměně ' + feat.name + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct * 100) + '"><i></i><span class="rw-prog__glint"></span></div>' +
-        '<p class="rwx__left">' + (left > 0 ? 'Do maximální slevy zbývá <b>' + fmt(left) + '</b> svíček' : 'Maximální sleva odemčena') + '</p></div>';
+        '<p class="rwx__left">' + (left > 0 ? 'Do maximální slevy zbývá <b>' + fmt(left) + '</b> srdíček' : 'Maximální sleva odemčena') + '</p></div>';
     var bar = ui.rwFeatured.querySelector('.rw-prog i'), from = RW.prevPct;
     bar.style.width = Math.max(from * 100, 2.5) + '%';
     requestAnimationFrame(function () { requestAnimationFrame(function () { bar.style.width = Math.max(pct * 100, 2.5) + '%'; }); });
@@ -440,8 +440,8 @@
     RW.prevPct = pct;
     ui.rwList.innerHTML = prods.map(function (p) {
       var n = candlesFor(p), on = p === feat;
-      return '<li><button type="button" class="rwx__pick' + (on ? ' is-on' : '') + '" data-id="' + p.id + '" aria-pressed="' + on + '" aria-label="' + p.name + ', ' + fmt(n) + ' svíček na maximální slevu">' +
-        window.CoC.icon(p) + '<span class="rwx__pn">' + p.name.replace(/ (Series \d+|\d+ Pro|Pro \d+|Max)$/, '<br>$1') + '</span><span class="pct"><i class="candle-ico"></i>' + fmt(n) + '</span></button></li>';
+      return '<li><button type="button" class="rwx__pick' + (on ? ' is-on' : '') + '" data-id="' + p.id + '" aria-pressed="' + on + '" aria-label="' + p.name + ', ' + fmt(n) + ' srdíček na maximální slevu">' +
+        window.CoC.icon(p) + '<span class="rwx__pn">' + p.name.replace(/ (Series \d+|\d+ Pro|Pro \d+|Max)$/, '<br>$1') + '</span><span class="pct"><i class="heart-ico"></i>' + fmt(n) + '</span></button></li>';
     }).join('');
   }
   // "what if" slider: drag how many candles you'd spend, see the price drop
@@ -469,10 +469,10 @@
   ui.rwFeatured.addEventListener('pointerleave', function () { var st = ui.rwFeatured.querySelector('[data-tilt]'); if (st) { st.style.setProperty('--rx', '0deg'); st.style.setProperty('--ry', '0deg'); } });
   // a won candle flies from the win popup into the progress bar
   function flyCandle() {
-    var from = ui.win.querySelector('.candle-ico--xl'), to = ui.rwFeatured.querySelector('.rw-prog');
+    var from = ui.win.querySelector('.heart-ico--xl'), to = ui.rwFeatured.querySelector('.rw-prog');
     if (!from || !to || reduced || !to.getClientRects().length) return Promise.resolve();
     var g = game.getBoundingClientRect(), a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
-    var el = document.createElement('i'); el.className = 'candle-ico candle-ico--xl flycandle'; game.appendChild(el);
+    var el = document.createElement('i'); el.className = 'heart-ico heart-ico--xl flycandle'; game.appendChild(el);
     var x0 = a.left - g.left, y0 = a.top - g.top, x1 = b.left - g.left + b.width * Math.max(RW.prevPct, 0.03), y1 = b.top - g.top - 30;
     var anim = el.animate([
       { transform: 'translate(' + x0 + 'px,' + y0 + 'px) scale(1)', opacity: 1 },
@@ -561,7 +561,7 @@
         .then(function () { return sleep(800, id); })
         .then(function () { caption(4, 'Vyber úroveň', 'Cena se drží nad EMA a míří k zóně odporu. Klikni na BREAKOUT.'); return click(ui.up, id, 800); })
         .then(function () { return choose('up'); }).then(function () { return sleep(400, id); })
-        .then(function () { caption(5, 'Výhra!', 'Trefa. Za každé vyhrané kolo dostaneš svíčku, svíčky se mění na slevu na odměny.'); return sleep(4600, id); })
+        .then(function () { caption(5, 'Výhra!', 'Trefa. Za každé vyhrané kolo dostaneš srdíčko, srdíčka se mění na slevu na odměny.'); return sleep(4600, id); })
         .then(function () { ui.win.hidden = true; ui.cap.classList.remove('is-on'); return sleep(600, id); })
         .then(loop);
     }
