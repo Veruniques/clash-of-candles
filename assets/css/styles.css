@@ -172,14 +172,14 @@ p { margin: 0 0 1em; }
 @keyframes float { to { transform: translate(18px, -26px); } }
 
 .hero__scene {
-  --w: min(960px, 92vw, calc((100svh - var(--navh) - 270px) / 1.13));
+  --w: min(960px, 92vw, calc((100svh - var(--navh) - 270px) / 1.054));
   --tw: min(94vw, calc(var(--w) * 1.36));
   --th: calc(var(--tw) * 0.312);
   --dh: calc(var(--w) * 0.759);
-  --dt: calc(var(--th) * 1.0);
+  --dt: calc(var(--th) * 0.82);
   position: relative; flex: none; width: var(--w); height: calc(var(--dt) + var(--dh) * 0.93);
 }
-@media (max-width: 700px) { .hero__scene { --w: min(94vw, calc((100svh - var(--navh) - 360px) / 1.13)); } }
+@media (max-width: 700px) { .hero__scene { --w: min(94vw, calc((100svh - var(--navh) - 360px) / 1.054)); } }
 .hero__titlewrap { position: absolute; top: 0; left: calc(50% - var(--tw) / 2); width: var(--tw); z-index: 1; will-change: transform, opacity; }
 .hero__title { margin: 0; }
 .hero__title img { width: 100%; filter: drop-shadow(0 20px 30px rgba(4,32,45,.2)); }
@@ -659,7 +659,7 @@ main { background: var(--noise), var(--night); }
 
 /* wide screens: hero copy in two columns so the fighters get the height */
 @media (min-width: 1000px) {
-  .hero__scene { --w: min(1000px, 92vw, calc((100svh - var(--navh) - 175px) / 1.13)); }
+  .hero__scene { --w: min(1000px, 92vw, calc((100svh - var(--navh) - 175px) / 1.054)); }
   .hero__copy {
     display: grid; grid-template-columns: auto minmax(0, 520px); column-gap: 48px; align-items: center;
     text-align: left; max-width: 1180px; margin-top: clamp(4px, 1.4svh, 16px);
