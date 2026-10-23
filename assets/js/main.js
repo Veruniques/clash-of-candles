@@ -294,12 +294,14 @@
   (function () {
     var lb = $('#leaderboard');
     if (lb) {
-      var rows = [['Graf_Hunter', 'S+', 412], ['MiraBreakout', 'A++', 377], ['SrdcařZJeseníku', 'A+', 341], ['Ty', 'C', 211, true]];
+      // weekly board in the game's Ranks look: position, player, rank badge, hearts (no share)
+      var rows = [['OndraB', 'S+', 412], ['Kačka_EMA', 'A++', 377], ['Medvěd77', 'A+', 341], ['GrafBijec', 'A', 318], ['Ty', 'C', 211, 27]];
       lb.innerHTML = rows.map(function (r, i) {
-        var pos = r[3] ? 27 : i + 1;
-        return '<li class="' + (r[3] ? 'me' : '') + (i < 3 ? ' top' + (i + 1) : '') + '"><span class="lb__pos">' + pos + '</span><span class="lb__av">' + r[0].charAt(0) + '</span>' +
-          '<span class="lb__name">' + r[0] + '<small>' + r[1] + '</small></span><span class="lb__pts"><i class="heart-ico"></i>' + r[2] + '</span>' +
-          (r[3] ? '<button type="button" class="lb__share" tabindex="-1" aria-hidden="true">Sdílet</button>' : '') + '</li>';
+        var t = r[1].charAt(0), c = TIER[t === 'G' ? 'G' : t] || '#20E39B', light = /[BAG]/.test(t);
+        return '<li class="rkp lbg__row' + (r[3] ? ' is-me' : '') + '"><span class="lbg__pos' + (i < 3 && !r[3] ? ' top' + (i + 1) : '') + '">' + (r[3] || i + 1) + '</span>' +
+          '<span class="lbg__name">' + r[0] + '</span>' +
+          '<b class="rkp-badge' + (light ? ' is-light' : '') + '" style="--rc:' + c + '">' + r[1] + '</b>' +
+          '<span class="rkp-val"><i class="heart-ico" aria-hidden="true"></i>' + r[2] + '</span></li>';
       }).join('');
     }
     var heat = $('#heat');

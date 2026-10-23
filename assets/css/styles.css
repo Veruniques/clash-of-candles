@@ -1699,3 +1699,72 @@ main .rankwin p { color: inherit; }
 /* v13 — nav wordmark hidden while the hero is on screen */
 .nav__brand .nav__word { transition: filter .3s, opacity .35s ease, transform .35s ease; }
 .nav.in-hero .nav__word { opacity: 0; transform: translateX(-10px); pointer-events: none; }
+
+/* v14 — panel order (title → symbols → text → rewards → coins), game-UI demo panels, compact footer */
+.earn__title { margin: clamp(8px, 2vw, 20px) 0 clamp(24px, 3vw, 36px); max-width: 22ch; font-size: clamp(32px, 3.7vw, 54px); }
+.earn__body { max-width: 640px; margin: 0 0 clamp(36px, 4vw, 52px); }
+.earn__body .lede { margin: 0 0 10px; }
+.earn__body .btn { margin-top: 12px; }
+.earn__body .fine { margin: 14px 0 0; text-align: left; }
+.flow { margin-bottom: clamp(24px, 3vw, 36px); }
+.market-wrap { margin-bottom: clamp(48px, 6vw, 72px); }
+.play__inner .fuel { margin: 0 0 clamp(72px, 9vw, 120px); }
+.howto { margin: clamp(40px, 5vw, 64px) 0 0; }
+
+/* game panels inside the cards (same look as the in-game Ranks screen) */
+.gpanel { margin-top: auto; border-radius: 18px; overflow: hidden; background: #F2F6F9; color: #13232C; border: 1px solid #fff;
+  box-shadow: 0 22px 40px -26px rgba(4,32,45,.55); font-family: inherit; }
+.gpanel__top { position: relative; display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: #FAFCFD; box-shadow: 0 6px 14px -10px rgba(19,35,44,.25); }
+.gpanel__top .rkp-back { position: static; font-size: 24px; line-height: 1; color: #22C77E; }
+.gpanel__top .rkp-title { margin: 0; font-size: 15px; font-weight: 800; color: #13232C; }
+.gpanel__tab { margin-left: auto; padding: 3px 9px; border-radius: 6px; background: #2EEA9C; color: #0B2C1E; font-size: 11px; font-weight: 800; }
+.gpanel__body { list-style: none; margin: 0; padding: 10px 10px 12px; display: grid; gap: 6px; }
+.gp-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 8px; background: #fff;
+  border: 1.5px solid transparent; box-shadow: 0 1px 2px rgba(19,35,44,.05); font-size: 13px; font-weight: 700; color: #13232C; }
+.gp-row.is-hot { border-color: #22D98C; }
+.gp-timer { padding: 3px 8px; border-radius: 6px; background: #2EEA9C; color: #0B2C1E; font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.gp-row:not(.is-hot) .gp-timer { background: #E3E9ED; color: #13232C; }
+
+/* leaderboard = Ranks screen rows */
+.lbg-cols, .lbg__row { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto 58px; gap: 8px; align-items: center; }
+.lbg-cols { padding: 9px 20px 4px; font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #7C8B94; }
+.lbg-cols span:last-child { text-align: right; }
+.lbg { list-style: none; margin: 0; padding: 4px 10px 12px; display: grid; gap: 5px; }
+.lbg__row { padding: 8px 10px; }
+.lbg__row.is-me { margin-top: 6px; }
+.lbg__pos { font-weight: 800; font-size: 13px; color: #7C8B94; font-variant-numeric: tabular-nums; }
+.lbg__pos.top1 { color: #C99400; } .lbg__pos.top2 { color: #5E7F8C; } .lbg__pos.top3 { color: #A35A2A; }
+.lbg__name { font-size: 13px; font-weight: 700; color: #13232C; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lbg .rkp-badge { min-width: 30px; height: 22px; font-size: 10.5px; }
+.lbg .rkp-val { color: #13232C; }
+
+/* academy + stats inside game panels */
+.gpanel .ac-path { margin-bottom: 4px; }
+.gpanel .ac-path span { color: #13232C; }
+.gpanel .ac-path span::before { background: #fff; border-color: #D5DEE4; }
+.gpanel .ac-path .done::before { background: #2EEA9C; border-color: #2EEA9C; }
+.gpanel .ac-path .now::before { background: #3D7BFF; border-color: #3D7BFF; box-shadow: none; } .gpanel .ac-path .now { color: #fff; }
+.gpanel .ac-path span + span::after { background: #D5DEE4; }
+.gpanel .ac-q { margin: 2px 0 4px; font-size: 14.5px; color: #13232C; }
+.gpanel .ac-opts { margin: 0; gap: 6px; }
+.gpanel .ac-opts span { padding: 8px 4px; border-radius: 8px; background: #E3E9ED; border: 1.5px solid transparent; color: #13232C; font-size: 12px; }
+.gpanel .ac-opts .ok { background: #DDFBEF; border-color: #22D98C; color: #0A6A40; }
+.gpanel .stats-mini { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; }
+.gpanel .ring { background: radial-gradient(closest-side, #fff 78%, transparent 79% 100%), conic-gradient(#2EEA9C calc(var(--p) * 1%), #E3E9ED 0); box-shadow: none; }
+.gpanel .ring b { color: #13232C; } .gpanel .ring span { color: #7C8B94; }
+.gpanel .stats__kpi div { background: #fff; border: 0; box-shadow: 0 1px 2px rgba(19,35,44,.05); }
+.gpanel .stats__kpi dt { color: #7C8B94; } .gpanel .stats__kpi dd { color: #13232C; }
+.gpanel .heat i { background: rgba(46,234,156,calc(var(--v) * 1)); }
+
+/* footer: brand + links left, legal right, low height */
+.foot { padding: 26px 0 22px; }
+.foot__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 10px 48px; align-items: start; }
+.foot__left { display: grid; gap: 8px; }
+.foot__brand .foot__mark { height: 40px; } .foot__grid .foot__brand img:not(.foot__mark) { width: 120px; margin: 0; }
+.mark3d--foot { width: 54px; height: 54px; margin: -6px -10px; }
+.foot__legal { grid-column: 2; grid-row: 1; text-align: right; justify-self: end; max-width: 64ch; font-size: 13px; line-height: 1.55; }
+.foot__meta { grid-column: 1 / -1; font-size: 12.5px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,.08); }
+@media (max-width: 800px) { .foot__grid { grid-template-columns: 1fr; } .foot__legal { grid-column: 1; grid-row: auto; text-align: left; justify-self: start; } }
+.lbg-cols, .lbg__row { grid-template-columns: 20px minmax(0, 1fr) 36px 50px; gap: 6px; }
+.lbg-cols { padding-inline: 18px; }
+.lbg .rkp-badge { min-width: 0; width: 100%; padding: 0 4px; }
