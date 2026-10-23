@@ -1831,3 +1831,14 @@ main .rankwin p { color: inherit; }
 /* v20 — more air around the footer tagline */
 .foot__left { gap: 0; }
 .foot__tag { margin: 18px 0 16px; }
+
+/* v21 — two columns: text left, CTA / line right; demo buttons on the right */
+@media (min-width: 860px) {
+  .earn__body { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 40px; align-items: end; }
+  .earn__body .btn { margin: 0; justify-self: end; }
+  .fuel__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 40px; align-items: end; }
+  .fuel__head .h2 { margin: 0; }
+  .fuel__head .lede { justify-self: end; margin: 0; }
+  .tctl { justify-content: flex-end; }
+}
+.earn__text .fine { margin: 14px 0 0; }
