@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610231130">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610231200">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -113,12 +113,39 @@
 
   <main id="obsah">
 
-    <section class="play" aria-labelledby="jak-h">
+    <section class="play" aria-label="Jak to funguje a odměny">
       <div class="play__inner" id="playInner">
         <div class="wrap">
+          <!-- ============ 2. SYMBOLY + ODMĚNY (bez textu) ============ -->
+          <div class="flow" role="img" aria-label="Za coins si koupíš vstup do kola, za vyhrané kolo dostaneš srdíčko, za srdíčka a doplatek si vybereš odměnu.">
+            <div class="flow__node flow__node--coin"><img src="assets/img/coin-hex.webp?v=1" alt="" width="640" height="640"><b class="flow__badge">10</b></div>
+            <span class="flow__arrow" aria-hidden="true"><i></i></span>
+            <div class="flow__node flow__node--play"><span class="playtile"><svg viewBox="-1 -1 30 30" aria-hidden="true"><path d="M2 26V11.5L10 18.5L26 2V26M10 18.5V26M18 10.25V26"/></svg><b>PLAY</b></span></div>
+            <span class="flow__arrow" aria-hidden="true"><i></i></span>
+            <div class="flow__node flow__node--heart"><img src="assets/img/heart.svg?v=1" alt="" width="120" height="108"><b class="flow__badge flow__badge--heart">+1</b></div>
+            <span class="flow__arrow" aria-hidden="true"><i></i></span>
+            <div class="flow__node flow__node--prize">
+              <span class="flow__fan"><img src="assets/img/products/headphones.svg" alt="" width="240" height="240"><img src="assets/img/products/controller.svg" alt="" width="240" height="240"><img src="assets/img/products/phone.svg" alt="" width="240" height="240"></span>
+              <b class="flow__pay"><i class="heart-ico" aria-hidden="true"></i>+<span>Kč</span></b>
+            </div>
+          </div>
+
+          <div class="market-wrap" id="odmeny">
+            <div class="market" id="market">
+              <article class="mk mk--fog" aria-label="Další odměny, zatím skryté">
+                <div class="fogv" aria-hidden="true"><div class="fogv__track" id="fogTrack"></div></div>
+                <div class="fogv__veil">
+                  <p class="fog__title">Další odměny zatím tajíme.</p>
+                  <p class="fog__text">Kdo je na seznamu, uvidí je dřív než ostatní. Tak buď na seznamu.</p>
+                  <a class="btn btn--primary btn--sm" href="#registrace">Registruj se</a>
+                </div>
+              </article>
+            </div>
+          </div>
+
           <!-- ============ 3. JAK SE HRAJE ============ -->
           <div class="howto" id="jak">
-            <div class="sechead sechead--center">
+            <div class="sechead">
               <h2 id="jak-h" class="h2">Graf před tebou. Rozhodnutí na tobě.</h2>
               <p class="lede">Clash of Candles tě postaví před historické tržní situace. Tvým úkolem je přečíst graf, vyhodnotit situaci a rozhodnout, jestli se trh vydá nahoru, nebo dolů.</p>
             </div>
@@ -145,7 +172,7 @@
             <li data-step="5"><b>6</b><span>Výhra</span></li>
           </ol>
 
-          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610231130">
+          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610231200">
             <div class="game__main app">
               <div class="app__bar">
                 <div class="app__views">
@@ -266,7 +293,18 @@
             <button type="button" class="btn btn--primary" id="tPlay">Zkus to sám</button>
             <button type="button" class="btn btn--glass" id="tReplay">Přehrát znovu</button>
           </div>
-          <p class="fine fine--center">Ukázka běží na simulovaném grafu. Ve hře rozhoduje skutečná historie, ne my.</p>
+          <p class="fine">Ukázka běží na simulovaném grafu. Ve hře rozhoduje skutečná historie, ne my.</p>
+
+          <!-- ============ 5. ODMĚNY — text hned pod grafem ============ -->
+          <div class="earn">
+            <h2 id="prizes-h" class="h2">Hraj chytře. Sbírej srdíčka. Vyber si odměnu.</h2>
+            <div class="earn__body">
+              <p class="lede">Za hraní můžeš získávat srdíčka, která využiješ na herním marketu. Vyber si odměnu, která tě zajímá, a použij nasbíraná srdíčka na její pořízení.</p>
+              <p class="lede">Na vybrané produkty můžeš využít srdíčka a doplatit zbývající část ceny.</p>
+              <a class="btn btn--primary" href="#odmeny">Prozkoumat odměny</a>
+              <p class="fine"><em>Konkrétní podmínky uplatnění srdíček a doplatků budou uvedeny u jednotlivých odměn.</em></p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -314,43 +352,6 @@
             <h3 class="h3">Výhru si nekoupíš</h3>
             <p>Coins ano, srdíčka ne. Ta dostaneš jen za to, že čteš graf líp.</p>
           </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 5. ODMĚNY ============ -->
-    <section class="section" id="odmeny" aria-labelledby="prizes-h">
-      <div class="wrap">
-        <div class="sechead sechead--center flow-head">
-          <h2 id="prizes-h" class="h2">Hraj chytře. Sbírej srdíčka. Vyber si odměnu.</h2>
-          <p class="lede">Za hraní můžeš získávat srdíčka, která využiješ na herním marketu. Vyber si odměnu, která tě zajímá, a použij nasbíraná srdíčka na její pořízení.</p>
-          <p class="lede">Na vybrané produkty můžeš využít srdíčka a doplatit zbývající část ceny.</p>
-          <a class="btn btn--primary" href="#market">Prozkoumat odměny</a>
-        </div>
-        <div class="flow" role="img" aria-label="Za coins si koupíš vstup do kola, za vyhrané kolo dostaneš srdíčko, za srdíčka a doplatek si vybereš odměnu.">
-          <div class="flow__node flow__node--coin"><img src="assets/img/coin-hex.webp?v=1" alt="" width="640" height="640"><b class="flow__badge">10</b></div>
-          <span class="flow__arrow" aria-hidden="true"><i></i></span>
-          <div class="flow__node flow__node--play"><span class="playtile"><svg viewBox="-1 -1 30 30" aria-hidden="true"><path d="M2 26V11.5L10 18.5L26 2V26M10 18.5V26M18 10.25V26"/></svg><b>PLAY</b></span></div>
-          <span class="flow__arrow" aria-hidden="true"><i></i></span>
-          <div class="flow__node flow__node--heart"><img src="assets/img/heart.svg?v=1" alt="" width="120" height="108"><b class="flow__badge flow__badge--heart">+1</b></div>
-          <span class="flow__arrow" aria-hidden="true"><i></i></span>
-          <div class="flow__node flow__node--prize">
-            <span class="flow__fan"><img src="assets/img/products/headphones.svg" alt="" width="240" height="240"><img src="assets/img/products/controller.svg" alt="" width="240" height="240"><img src="assets/img/products/phone.svg" alt="" width="240" height="240"></span>
-            <b class="flow__pay"><i class="heart-ico" aria-hidden="true"></i>+<span>Kč</span></b>
-          </div>
-        </div>
-
-        <div class="market-wrap">
-          <div class="market" id="market"></div>
-          <p class="fine fine--center market__terms"><em>Konkrétní podmínky uplatnění srdíček a doplatků budou uvedeny u jednotlivých odměn.</em></p>
-          <div class="fog">
-            <div class="fog__track" id="fogTrack" aria-hidden="true"></div>
-            <div class="fog__veil">
-              <p class="fog__title">Další odměny zatím tajíme.</p>
-              <p class="fog__text">Kdo je na seznamu, uvidí je dřív než ostatní. Tak buď na seznamu.</p>
-              <a class="btn btn--primary" href="#registrace">Registruj se</a>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -465,8 +466,8 @@
   </footer>
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
-  <script src="assets/js/main.js?v=202610231130" defer></script>
-  <script src="assets/js/logo3d.js?v=202610231130" defer></script>
-  <script src="assets/js/game.js?v=202610231130" defer></script>
+  <script src="assets/js/main.js?v=202610231200" defer></script>
+  <script src="assets/js/logo3d.js?v=202610231200" defer></script>
+  <script src="assets/js/game.js?v=202610231200" defer></script>
 </body>
 </html>

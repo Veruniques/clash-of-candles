@@ -312,7 +312,7 @@
     if (mk) {
       var picks = cfg.products.filter(function (p) { return p.market; });
       if (!picks.length) picks = cfg.products;
-      mk.innerHTML = picks.slice(0, 3).map(function (p) {
+      mk.insertAdjacentHTML('afterbegin', picks.slice(0, 3).map(function (p) {
         var disc = p.price * cfg.maxDiscountPct / 100, need = Math.ceil(disc / (cfg.candleValue || 50));
         return '<article class="mk">' +
           '<div class="mk__art">' + (p.image ? window.CoC.img(p.image, p.name) : window.CoC.icon(p)) + '</div>' +
@@ -320,7 +320,8 @@
           '<p class="mk__was">' + fmt(p.price) + ' ' + cfg.currency + '</p>' +
           '<p class="mk__pay"><span class="mk__hearts"><i class="heart-ico" aria-hidden="true"></i>' + fmt(need) + '<span class="sr"> srdíček</span></span>' +
           '<em>+</em><b>' + fmt(p.price - disc) + ' ' + cfg.currency + '</b></p></article>';
-      }).join('');
+      }).join(''));
+      mk.scrollLeft = 0; // keep the first reward in view on mobile (the fog card was the snap target before)
     }
     var track = $('#fogTrack');
     if (track) {
@@ -329,6 +330,14 @@
         return '<div class="fogcard"><div class="fogcard__art">' + (t.image ? window.CoC.img(t.image, '') : '<span class="fogcard__q">?</span>') + '</div><p>' + t.name + '</p><span>??? Kč</span></div>';
       }).join('');
       track.innerHTML = items + items; // duplicated for a seamless loop
+      // rewards jump up one by one behind the fog
+      var n = (cfg.teasers || []).length, k = 0;
+      if (n && !reduced) setInterval(function () {
+        var it = track.children[0]; if (!it || !track.getClientRects().length) return;
+        var step = it.offsetHeight + parseFloat(getComputedStyle(track).rowGap || 0);
+        k++; track.style.transition = 'transform .65s cubic-bezier(.34,1.56,.64,1)'; track.style.transform = 'translateY(' + (-k * step) + 'px)';
+        if (k >= n) setTimeout(function () { track.style.transition = 'none'; k = 0; track.style.transform = 'translateY(0)'; }, 700);
+      }, 1700);
     }
   });
 

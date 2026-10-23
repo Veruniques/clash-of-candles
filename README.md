@@ -21,14 +21,17 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 ## Struktura stránky (texty podle copy decku, 10/2026)
 
 0. **Hero** — „Dvě příležitosti. Jedna minuta. Žádné výmluvy.“, CTA Vyzkoušet hru (→ ukázka).
-1. **Jak se hraje** (`#jak`, v panelu, který vyjede přes hero) — „Graf před tebou. Rozhodnutí na tobě.“ + kroky 01–04.
-2. **Tutoriál** (`#tutorial`) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`).
-3. **Čas a příležitosti** (`#play`) — dvě příležitosti, screenshot hry + ranky; pod tím Coins (`#coins`).
-4. **Odměny** (`#odmeny`) — „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“, symboly coin → play → srdíčko → odměny, 3 odměny bez pořadí (`market: true`), mlha.
-5. **Žebříček · Herní statistiky · Academy · Contesty** (`#rank`, `#statistika`, `#academy`, `#contesty`) — jedna sekce, čtyři karty.
-6. **FAQ** (`#faq`) — 7 otázek z copy decku, ve dvou sloupcích.
-7. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
-8. **Patička** — slogan, odkazy; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
+1. **Symboly + odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — coin → play → srdíčko → odměny, bez textu. Pod tím 4 sloupce: 3 odměny (`market: true`) + sloupec „Další odměny zatím tajíme.“, kde za mlhou vertikálně poskakují `teasers`.
+2. **Jak se hraje** (`#jak`) — „Graf před tebou. Rozhodnutí na tobě.“ + kroky 01–04.
+3. **Tutoriál** (`#tutorial`) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`).
+4. **Hraj chytře. Sbírej srdíčka. Vyber si odměnu.** — hned pod grafem, CTA Prozkoumat odměny (→ `#odmeny`).
+5. **Čas a příležitosti** (`#play`) — dvě příležitosti, screenshot hry + ranky; pod tím Coins (`#coins`).
+6. **Žebříček · Herní statistiky · Academy · Contesty** (`#rank`, `#statistika`, `#academy`, `#contesty`) — jedna sekce, čtyři karty.
+7. **FAQ** (`#faq`) — 7 otázek z copy decku, ve dvou sloupcích.
+8. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
+9. **Patička** — slogan, odkazy; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
+
+Nic se nezarovnává na střed — texty i layout jsou zarovnané doleva.
 
 V copy decku se odměnám říká „mince“ — na webu jsou to **srdíčka** (coins = vstup do kola).
 
