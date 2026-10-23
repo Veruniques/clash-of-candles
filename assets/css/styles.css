@@ -1777,3 +1777,11 @@ main .rankwin p { color: inherit; }
 .market-wrap { margin-bottom: clamp(88px, 9vw, 130px); }
 .play__inner .fuel { margin-bottom: clamp(120px, 12vw, 180px); }
 .howto { margin-top: clamp(88px, 9vw, 130px); }
+
+/* v16 — paragraphs at most 35 % of the content width on desktop */
+@media (min-width: 1000px) {
+  :root { --para: calc(min(var(--wrap), 100vw - 40px) * .35); }
+  .lede, .hero__sub, .earn__body .fine, .play__inner > .wrap > .fine, .fuel__head .lede, .final--reg .lede,
+  .sechead .lede, .play__head .lede, #play .lede, .howto .sechead .lede { max-width: var(--para); }
+  .earn__body { max-width: none; }
+}

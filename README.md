@@ -22,13 +22,13 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 0. **Hero** — „Graf před tebou. Rozhodnutí na tobě.“ + úvodní text, CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se naráz v momentě srážky, vždy pod titulkem.
 1. **Odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ → symboly coin → play → srdíčko → odměny → text + CTA → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → Coins (`#coins`).
 2. **Tutoriál** (`#tutorial`, odkaz „Jak se hraje“) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`). Pod grafem kroky 01–04 (`#jak`).
-3. **Čas a příležitosti** (`#play`) — dvě příležitosti, screenshot hry + ranky.
+3. **Ranky** (`#play`) — „Každý rank, jiná hra.“: vyšší rank = těžší čtení grafu, vyšší vstup i výhry; v contestech jsou si všichni rovni. Screenshot hry + obrazovka Ranks.
 4. **Žebříček · Academy · Herní statistiky · Contesty** (`#rank`, `#academy`, `#statistika`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
 5. **FAQ** (`#faq`) — 7 otázek z copy decku, ve dvou sloupcích.
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
 7. **Patička** (nízká) — vlevo logo, slogan, odkazy; vpravo právní text; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
 
-Nic se nezarovnává na střed — texty i layout jsou zarovnané doleva (právní text v patičce doprava).
+Odstavce mají na desktopu max. 35 % šířky obsahu. Nic se nezarovnává na střed — texty i layout jsou zarovnané doleva (právní text v patičce doprava).
 
 V copy decku se odměnám říká „mince“ — na webu jsou to **srdíčka** (coins = vstup do kola).
 
