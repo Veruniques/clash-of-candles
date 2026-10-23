@@ -31,13 +31,14 @@
 
   var VS = 'attribute vec3 aP;attribute vec3 aN;uniform mat4 uM;uniform mat4 uPV;varying vec3 vN;varying vec3 vW;' +
     'void main(){vec4 w=uM*vec4(aP,1.);vW=w.xyz;vN=mat3(uM)*aN;gl_Position=uPV*w;}';
-  var FS = 'precision mediump float;varying vec3 vN;varying vec3 vW;uniform vec3 uEye;uniform vec3 uBase;uniform float uLight;' +
+  var FS = 'precision mediump float;varying vec3 vN;varying vec3 vW;uniform vec3 uEye;uniform vec3 uBase;uniform float uLight;uniform float uShine;' +
     'void main(){vec3 n=normalize(vN);vec3 v=normalize(uEye-vW);vec3 cyan=vec3(.49,.94,.97);' +
     'vec3 k=normalize(vec3(.45,.65,.75));vec3 r=normalize(vec3(-.8,.25,-.45));' +
     'float dk=max(dot(n,k),0.);float dr=max(dot(n,r),0.);' +
     'float sk=pow(max(dot(n,normalize(k+v)),0.),48.);float fr=pow(1.-max(dot(n,v),0.),3.);' +
     'vec3 amb=mix(vec3(.02,.06,.08),cyan*.35,n.y*.5+.5);' +
     'vec3 c=uBase*(mix(.5,.62,uLight)+mix(.75,.4,uLight)*dk)+amb*.22+cyan*(dr*.5+fr*.35)*(1.-uLight*.6)+vec3(1.)*sk*.6;' +
+    'float band=exp(-pow((vW.x*.85+vW.y*.55-uShine)*7.,2.))*(.35+.65*max(n.z,0.));c+=vec3(1.)*band*mix(.85,.55,uLight);' +
     'gl_FragColor=vec4(min(c,vec3(1.)),1.);}';
   var BASE = { dark: [0.047, 0.18, 0.24], light: [0.95, 0.99, 1.0] };
 
@@ -76,7 +77,8 @@
     gl.enable(gl.DEPTH_TEST); gl.clearColor(0, 0, 0, 0);
 
     var m = { cv: cv, gl: gl, uM: gl.getUniformLocation(prog, 'uM'), uPV: gl.getUniformLocation(prog, 'uPV'),
-      amp: parseFloat(cv.getAttribute('data-amp')) || 0.6, follow: cv.hasAttribute('data-follow'),
+      amp: parseFloat(cv.getAttribute('data-amp')) || 0.6, follow: cv.hasAttribute('data-follow'), still: cv.hasAttribute('data-static'),
+      uShine: gl.getUniformLocation(prog, 'uShine'),
       phase: i * 1.7, w: 0, h: 0, visible: true };
     m.size = function () {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -95,8 +97,11 @@
   function draw(m, t) {
     if (!m.w || !m.h) return;
     var s = t * 0.00045 + m.phase;
-    var ry = reduced ? 0.42 : Math.sin(s) * m.amp + (m.follow ? mx * 0.25 : 0);
-    var rx = reduced ? -0.08 : -0.08 + Math.sin(s * 0.69) * 0.06;
+    var ry = (reduced || m.still) ? 0.42 : Math.sin(s) * m.amp + (m.follow ? mx * 0.25 : 0);
+    var rx = (reduced || m.still) ? -0.08 : -0.08 + Math.sin(s * 0.69) * 0.06;
+    // a glint sweeps across the mark every 3.6 s (off with reduced motion)
+    var ph = ((t + m.phase * 900) % 3600) / 900;
+    m.gl.uniform1f(m.uShine, reduced || ph > 1 ? -9 : -1.1 + ph * 2.2);
     var gl = m.gl;
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniformMatrix4fv(m.uM, false, rot(rx, ry));

@@ -1686,3 +1686,10 @@ main .rankwin p { color: inherit; }
 .fuel__head { display: block; margin-bottom: 22px; }
 .fuel__head .h2 { margin: 0 0 16px; }
 .fuel__head .lede { max-width: 60ch; }
+
+/* v12 — faint game chart behind the fighters (assets/js/herochart.js) */
+.hero__chart { position: absolute; left: 0; right: 0; top: calc(var(--navh) + 14svh); height: 46svh; width: 100%; z-index: 0; pointer-events: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%); }
+.hero__q { margin: 0; }
+.hero__q { margin: 0 0 12px; }
+@media (min-width: 1000px) { .hero__q { margin: 0; } }

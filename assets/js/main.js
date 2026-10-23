@@ -140,7 +140,7 @@
   var introDone = false;
   function heroIntro() {
     var g = window.gsap;
-    if (reduced || !g) { root.classList.remove('js-anim'); introDone = true; return; }
+    if (reduced || !g) { root.classList.remove('js-anim'); introDone = true; if (window.HeroChart) HeroChart.show(); return; }
     root.classList.add('anim-started');
     var green = $('#fGreen'), red = $('#fRed'), title = $('#heroTitle'), impact = $('#impact'),
         scene = $('#scene'), shadow = $('.duo__shadow');
@@ -163,6 +163,7 @@
       .add(function () {
         g.fromTo(impact, { opacity: 1, scale: 0.2 }, { opacity: 0, scale: 1.7, duration: 0.5, ease: 'power2.out' });
         Dust.sparks(impact); shake(12);
+        if (window.HeroChart) HeroChart.reveal(1500); // the chart appears when they collide
       }, 0.78)
       .to(red, { x: '2.2%', rotation: 3, duration: 0.09, ease: 'power2.out' }, 0.78)
       .to(red, { x: 0, rotation: 0, duration: 0.7, ease: 'elastic.out(1, 0.45)' }, 0.87)
@@ -185,7 +186,7 @@
   if (document.readyState === 'complete') heroIntro(); else window.addEventListener('load', heroIntro);
 
   /* ---------------- scroll hand-off: fighters leave, the game panel arrives ---------------- */
-  var exitG = $('#exitGreen'), exitR = $('#exitRed'), titleWrap = $('#titleWrap'), heroCopy = $('#heroCopy'),
+  var heroChartEl = $('#heroChart'), exitG = $('#exitGreen'), exitR = $('#exitRed'), titleWrap = $('#titleWrap'), heroCopy = $('#heroCopy'),
       cue = $('#scrollCue'), playInner = $('#playInner'), shadowEl = $('.duo__shadow');
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function scrollFx() {
@@ -195,6 +196,7 @@
     exitR.style.transform = 'translate3d(' + (e * 75) + 'vw,' + (-e * 4) + 'vh,0) rotate(' + (e * 22) + 'deg)';
     titleWrap.style.transform = 'translate3d(0,' + (-e * 22) + 'vh,0) scale(' + (1 + e * 0.12) + ')';
     titleWrap.style.opacity = String(1 - clamp(p * 1.4));
+    if (heroChartEl) heroChartEl.style.opacity = String(1 - clamp(p * 1.6));
     heroCopy.style.opacity = String(1 - clamp(p * 2.2));
     heroCopy.style.transform = 'translate3d(0,' + (-p * 40) + 'px,0)';
     if (introDone) shadowEl.style.opacity = String(1 - clamp(p * 2));

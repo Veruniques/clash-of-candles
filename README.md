@@ -7,7 +7,7 @@ index.html
 assets/
   css/styles.css
   js/main.js          config, nav, intro hero, scroll přechod, ranky (obtížnost), odměny (TOP 3 + mlha), contesty, žebříček, statistiky, formulář
-  js/logo3d.js        3D značka v navigaci a patičce (vlastní mini WebGL, bez knihoven; SVG jako záloha)
+  js/logo3d.js        3D značka v navigaci a patičce — stojí, jen po ní občas přejede odlesk (vlastní mini WebGL; SVG jako záloha)
   js/game.js          hra ve skutečném UI (světlý graf, G1/G2, FAB menu Indikátory/Kreslení/Akce, štítky BREAKOUT/BREAKDOWN, stavy Čeká/Spárováno/Výhra): tutoriál s kurzorem + volné hraní
   data/rewards.json   PLACEHOLDER ekonomika a produkty — panel odměn, TOP 3 i „mlha“ se kreslí odsud
   js/vendor/gsap.min.js
@@ -20,9 +20,9 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 
 ## Struktura stránky (texty podle copy decku, 10/2026)
 
-0. **Hero** — „Dvě příležitosti. Jedna minuta. Žádné výmluvy.“, CTA Vyzkoušet hru (→ ukázka).
+0. **Hero** — „Graf před tebou. Rozhodnutí na tobě.“ + úvodní text, CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se až při srážce.
 1. **Symboly + odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — coin → play → srdíčko → odměny, bez textu. Pod tím 4 sloupce: 3 odměny (`market: true`) + sloupec „Další odměny zatím tajíme.“, kde za mlhou vertikálně poskakují `teasers`.
-2. **Jak se hraje** (`#jak`) — „Graf před tebou. Rozhodnutí na tobě.“ + kroky 01–04.
+2. **Jak se hraje** (`#jak`) — kroky 01–04 (nadpis a úvod jsou v hero).
 3. **Tutoriál** (`#tutorial`) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`).
 4. **Hraj chytře. Sbírej srdíčka. Vyber si odměnu.** — hned pod grafem, CTA Prozkoumat odměny (→ `#odmeny`).
 5. **Čas a příležitosti** (`#play`) — dvě příležitosti, screenshot hry + ranky; pod tím Coins (`#coins`).

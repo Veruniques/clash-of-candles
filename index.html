@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Clash of Candles — Dvě příležitosti. Jedna minuta. Žádné výmluvy.</title>
-  <meta name="description" content="Čti historické grafy, hledej signály a rozhodni se, jestli trh zamíří nahoru, nebo dolů. Nejde o náhodu. Jde o to, co v grafu dokážeš přečíst.">
+  <title>Clash of Candles — Graf před tebou. Rozhodnutí na tobě.</title>
+  <meta name="description" content="Clash of Candles tě postaví před historické tržní situace. Tvým úkolem je přečíst graf, vyhodnotit situaci a rozhodnout, jestli se trh vydá nahoru, nebo dolů. Nejde o náhodu. Jde o to, co v grafu dokážeš přečíst.">
   <meta name="theme-color" content="#7EF0F8">
   <link rel="icon" href="assets/img/favicon.svg?v=3" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="cs_CZ">
-  <meta property="og:title" content="Clash of Candles — Dvě příležitosti. Jedna minuta. Žádné výmluvy.">
+  <meta property="og:title" content="Clash of Candles — Graf před tebou. Rozhodnutí na tobě.">
   <meta property="og:description" content="Čti graf. Vyhodnoť situaci. Hraj podle sebe.">
   <meta property="og:image" content="assets/img/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610231200">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610231215">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -57,7 +57,7 @@
 
   <header class="nav" id="nav">
     <a class="nav__brand" href="#top" aria-label="Clash of Candles — na začátek">
-      <canvas class="mark3d mark3d--nav" data-mark3d="dark" data-amp="0.75" aria-hidden="true"></canvas><img class="nav__mark mark3d-fallback" src="assets/img/logo-mark.svg?v=3" alt="" width="35" height="46">
+      <canvas class="mark3d mark3d--nav" data-mark3d="dark" data-static aria-hidden="true"></canvas><img class="nav__mark mark3d-fallback" src="assets/img/logo-mark.svg?v=3" alt="" width="35" height="46">
       <img src="assets/img/wordmark.svg" alt="Clash of Candles" width="132" height="41">
     </a>
     <nav class="nav__links" aria-label="Hlavní navigace">
@@ -74,6 +74,7 @@
     <section class="hero" aria-label="Clash of Candles">
       <div class="hero__light" aria-hidden="true"></div>
       <div class="hero__orbs" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <canvas class="hero__chart" id="heroChart" aria-hidden="true"></canvas>
       <div class="hero__scene" id="scene">
         <div class="hero__floor" aria-hidden="true"></div>
         <div class="hero__titlewrap" id="titleWrap">
@@ -97,14 +98,10 @@
       <canvas class="hero__dust" id="dust" aria-hidden="true"></canvas>
 
       <div class="hero__copy" id="heroCopy">
-        <p class="hero__q" id="heroQ">Dvě příležitosti. Jedna minuta. Žádné výmluvy.</p>
-        <div class="hero__sub" id="heroSub">
-          <p>Trh se hýbe. Čas běží. A ty máš rozhodnout, co přijde dál.</p>
-          <p>Čti historické grafy, hledej signály a rozhodni se, jestli trh zamíří nahoru, nebo dolů. Nejde o náhodu. Jde o to, co v grafu dokážeš přečíst.</p>
-        </div>
+        <h2 class="hero__q" id="heroQ">Graf před tebou. Rozhodnutí na tobě.</h2>
+        <p class="hero__sub" id="heroSub">Clash of Candles tě postaví před historické tržní situace. Tvým úkolem je přečíst graf, vyhodnotit situaci a rozhodnout, jestli se trh vydá nahoru, nebo dolů. Nejde o náhodu. Jde o to, co v grafu dokážeš přečíst.</p>
         <div class="hero__cta" id="heroCta">
           <a class="btn btn--primary btn--lg" href="#tutorial">Vyzkoušet hru</a>
-          <p class="hero__note">Každý graf je nová výzva. Každé rozhodnutí se počítá.</p>
         </div>
       </div>
       <div class="scroll-cue" id="scrollCue" aria-hidden="true"><span></span></div>
@@ -145,10 +142,6 @@
 
           <!-- ============ 3. JAK SE HRAJE ============ -->
           <div class="howto" id="jak">
-            <div class="sechead">
-              <h2 id="jak-h" class="h2">Graf před tebou. Rozhodnutí na tobě.</h2>
-              <p class="lede">Clash of Candles tě postaví před historické tržní situace. Tvým úkolem je přečíst graf, vyhodnotit situaci a rozhodnout, jestli se trh vydá nahoru, nebo dolů.</p>
-            </div>
             <div class="features__grid howto__grid">
               <article class="feat"><p class="feat__num">01</p><h3 class="h3">Přečti graf</h3><p>Sleduj pohyb ceny, hledej souvislosti a všímej si signálů. Každý detail může hrát roli.</p></article>
               <article class="feat"><p class="feat__num">02</p><h3 class="h3">Rozhodni se</h3><p>Máš dvě příležitosti s vlastním odpočtem. Jedna začíná na 60 sekundách, druhá už běží a zbývá jí 30.</p></article>
@@ -172,7 +165,7 @@
             <li data-step="5"><b>6</b><span>Výhra</span></li>
           </ol>
 
-          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610231200">
+          <div class="game" id="game" data-rewards="assets/data/rewards.json?v=202610231215">
             <div class="game__main app">
               <div class="app__bar">
                 <div class="app__views">
@@ -318,7 +311,6 @@
           <h2 id="play-h" class="h2">Dvě příležitosti. Dva odpočty. Je to na tobě.</h2>
           <p class="lede">Jedna příležitost začíná na 60 sekundách. Druhá už běží a zbývá jí jen 30. Sleduj graf, vyhodnoť situaci a rozhodni se, jestli využiješ jednu příležitost, obě, nebo žádnou.</p>
           <p class="lede">Čas se neptá, jestli jsi připravený.</p>
-          <p class="claimline">Dvě příležitosti. Jedna minuta. Žádné výmluvy.</p>
         </div>
         <div class="playshot" aria-label="Ukázka obrazovky Play a žebříčku ranků">
           <div class="playshot__screen playshot__screen--real">
@@ -457,7 +449,7 @@
 
   <footer class="foot">
     <div class="wrap foot__grid">
-      <span class="foot__brand"><canvas class="mark3d mark3d--foot" data-mark3d="light" data-amp="0.75" aria-hidden="true"></canvas><img class="foot__mark mark3d-fallback" src="assets/img/logo-mark-light.svg?v=3" alt="" width="42" height="55"><img src="assets/img/wordmark-light.svg" alt="Clash of Candles" width="160" height="50"></span>
+      <span class="foot__brand"><canvas class="mark3d mark3d--foot" data-mark3d="light" data-static aria-hidden="true"></canvas><img class="foot__mark mark3d-fallback" src="assets/img/logo-mark-light.svg?v=3" alt="" width="42" height="55"><img src="assets/img/wordmark-light.svg" alt="Clash of Candles" width="160" height="50"></span>
       <p class="foot__tag">Čti graf. Vyhodnoť situaci. Hraj podle sebe.</p>
       <nav class="foot__links" aria-label="Odkazy v patičce"><a href="#jak">Jak se hraje</a><a href="#odmeny">Odměny</a><a href="#academy">Academy</a><a href="#faq">FAQ</a><span title="Zveřejníme před spuštěním">Pravidla hry</span><span title="Zveřejníme před spuštěním">Ochrana osobních údajů</span></nav>
       <p class="foot__legal">Clash of Candles je dovednostní hra založená na historických tržních datech, nikoli platforma pro nákup a prodej finančních instrumentů. Nejde o investiční službu ani investiční poradenství. Coins a srdíčka jsou herní měny, nikoli hotovost. Hra je určena hráčům od 18 let.</p>
@@ -466,8 +458,9 @@
   </footer>
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
-  <script src="assets/js/main.js?v=202610231200" defer></script>
-  <script src="assets/js/logo3d.js?v=202610231200" defer></script>
-  <script src="assets/js/game.js?v=202610231200" defer></script>
+  <script src="assets/js/herochart.js?v=202610231215" defer></script>
+  <script src="assets/js/main.js?v=202610231215" defer></script>
+  <script src="assets/js/logo3d.js?v=202610231215" defer></script>
+  <script src="assets/js/game.js?v=202610231215" defer></script>
 </body>
 </html>
