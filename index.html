@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610231330">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610231340">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -57,7 +57,7 @@
 
   <header class="nav" id="nav">
     <a class="nav__brand" href="#top" aria-label="Clash of Candles — na začátek">
-      <img class="nav__mark" src="assets/img/logo-mark-gloss.svg?v=1" alt="" width="35" height="46">
+      <img class="nav__mark" src="assets/img/logo-mark.svg?v=3" alt="" width="35" height="46">
       <img class="nav__word" src="assets/img/wordmark.svg" alt="Clash of Candles" width="132" height="41">
     </a>
     <nav class="nav__links" aria-label="Hlavní navigace">
@@ -364,6 +364,21 @@
             </div>
             <a class="btn btn--glass btn--sm trio__cta" href="#registrace">Zobrazit žebříček</a>
           </article>
+          <article class="trio__card glass" id="academy">
+            <span class="chip"><svg aria-hidden="true"><use href="#i-history"/></svg>Academy</span>
+            <h3 class="h3">Nauč se číst grafy. Nejen na ně koukat.</h3>
+            <p>Chceš lépe rozumět tomu, co se na grafu děje? Prozkoumej vzdělávací obsah, seznam se se základními principy technické analýzy a postupně si buduj vlastní přehled.</p>
+            <p>Od prvních svíček až po složitější souvislosti. Začni tam, kde právě jsi.</p>
+            <div class="gpanel" aria-hidden="true">
+              <div class="gpanel__top"><span class="rkp-back">‹</span><p class="rkp-title">Academy</p><span class="gpanel__tab">Lekce 3</span></div>
+              <div class="gpanel__body">
+              <div class="ac-path"><span class="done">1</span><span class="done">2</span><span class="now">3</span><span>4</span><span>5</span><span>6</span></div>
+              <p class="ac-q">Kde je nejbližší odpor?</p>
+              <div class="ac-opts"><span>1.0820</span><span class="ok">1.0910</span><span>1.0760</span></div>
+              </div>
+            </div>
+            <a class="btn btn--glass btn--sm trio__cta" href="#registrace">Prozkoumat Academy</a>
+          </article>
           <article class="trio__card glass" id="statistika">
             <span class="chip"><svg aria-hidden="true"><use href="#i-clock"/></svg>Herní statistiky</span>
             <h3 class="h3">Méně dojmů. Více přehledu.</h3>
@@ -381,21 +396,6 @@
               <div class="heat" id="heat"></div>
               </div>
             </div>
-          </article>
-          <article class="trio__card glass" id="academy">
-            <span class="chip"><svg aria-hidden="true"><use href="#i-history"/></svg>Academy</span>
-            <h3 class="h3">Nauč se číst grafy. Nejen na ně koukat.</h3>
-            <p>Chceš lépe rozumět tomu, co se na grafu děje? Prozkoumej vzdělávací obsah, seznam se se základními principy technické analýzy a postupně si buduj vlastní přehled.</p>
-            <p>Od prvních svíček až po složitější souvislosti. Začni tam, kde právě jsi.</p>
-            <div class="gpanel" aria-hidden="true">
-              <div class="gpanel__top"><span class="rkp-back">‹</span><p class="rkp-title">Academy</p><span class="gpanel__tab">Lekce 3</span></div>
-              <div class="gpanel__body">
-              <div class="ac-path"><span class="done">1</span><span class="done">2</span><span class="now">3</span><span>4</span><span>5</span><span>6</span></div>
-              <p class="ac-q">Kde je nejbližší odpor?</p>
-              <div class="ac-opts"><span>1.0820</span><span class="ok">1.0910</span><span>1.0760</span></div>
-              </div>
-            </div>
-            <a class="btn btn--glass btn--sm trio__cta" href="#registrace">Prozkoumat Academy</a>
           </article>
           <article class="trio__card glass">
             <span class="chip"><svg aria-hidden="true"><use href="#i-trophy"/></svg>Contesty</span>
@@ -461,7 +461,7 @@
   <footer class="foot">
     <div class="wrap foot__grid">
       <div class="foot__left">
-        <span class="foot__brand"><img class="foot__mark" src="assets/img/logo-mark-gloss-light.svg?v=1" alt="" width="42" height="55"><img src="assets/img/wordmark-light.svg" alt="Clash of Candles" width="160" height="50"></span>
+        <span class="foot__brand"><img class="foot__mark" src="assets/img/logo-mark-light.svg?v=3" alt="" width="42" height="55"><img src="assets/img/wordmark-light.svg" alt="Clash of Candles" width="160" height="50"></span>
         <p class="foot__tag">Čti graf. Vyhodnoť situaci. Hraj podle sebe.</p>
         <nav class="foot__links" aria-label="Odkazy v patičce"><a href="#tutorial">Jak se hraje</a><a href="#odmeny">Odměny</a><a href="#academy">Academy</a><a href="#faq">FAQ</a><span title="Zveřejníme před spuštěním">Pravidla hry</span><span title="Zveřejníme před spuštěním">Ochrana osobních údajů</span></nav>
       </div>
@@ -472,7 +472,7 @@
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
   <script src="assets/js/herochart.js?v=202610231300" defer></script>
-  <script src="assets/js/main.js?v=202610231330" defer></script>
+  <script src="assets/js/main.js?v=202610231340" defer></script>
   <script src="assets/js/game.js?v=202610231300" defer></script>
 </body>
 </html>

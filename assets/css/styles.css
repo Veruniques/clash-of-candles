@@ -1768,3 +1768,12 @@ main .rankwin p { color: inherit; }
 .lbg-cols, .lbg__row { grid-template-columns: 20px minmax(0, 1fr) 36px 50px; gap: 6px; }
 .lbg-cols { padding-inline: 18px; }
 .lbg .rkp-badge { min-width: 0; width: 100%; padding: 0 4px; }
+
+/* v15 — more air between every section */
+#play.section, #contesty.section, #faq.section, #odmeny.section { padding-block: clamp(96px, 10vw, 150px); }
+.final--reg { padding-block: clamp(88px, 9vw, 140px); }
+.play__inner { padding-bottom: clamp(96px, 10vw, 150px); }
+.earn__body { margin-bottom: clamp(56px, 6vw, 80px); }
+.market-wrap { margin-bottom: clamp(88px, 9vw, 130px); }
+.play__inner .fuel { margin-bottom: clamp(120px, 12vw, 180px); }
+.howto { margin-top: clamp(88px, 9vw, 130px); }

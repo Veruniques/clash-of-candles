@@ -7,7 +7,6 @@ index.html
 assets/
   css/styles.css
   js/main.js          config, nav, intro hero, scroll přechod, ranky (obtížnost), odměny (TOP 3 + mlha), contesty, žebříček, statistiky, formulář
-  img/logo-mark-gloss*.svg  2D značka s pevným odleskem (navigace tmavá, patička světlá)
   js/game.js          hra ve skutečném UI (světlý graf, G1/G2, FAB menu Indikátory/Kreslení/Akce, štítky BREAKOUT/BREAKDOWN, stavy Čeká/Spárováno/Výhra): tutoriál s kurzorem + volné hraní
   data/rewards.json   PLACEHOLDER ekonomika a produkty — panel odměn, TOP 3 i „mlha“ se kreslí odsud
   js/vendor/gsap.min.js
@@ -24,7 +23,7 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 1. **Odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ → symboly coin → play → srdíčko → odměny → text + CTA → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → Coins (`#coins`).
 2. **Tutoriál** (`#tutorial`, odkaz „Jak se hraje“) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`). Pod grafem kroky 01–04 (`#jak`).
 3. **Čas a příležitosti** (`#play`) — dvě příležitosti, screenshot hry + ranky.
-4. **Žebříček · Herní statistiky · Academy · Contesty** (`#rank`, `#statistika`, `#academy`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
+4. **Žebříček · Academy · Herní statistiky · Contesty** (`#rank`, `#academy`, `#statistika`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
 5. **FAQ** (`#faq`) — 7 otázek z copy decku, ve dvou sloupcích.
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
 7. **Patička** (nízká) — vlevo logo, slogan, odkazy; vpravo právní text; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
