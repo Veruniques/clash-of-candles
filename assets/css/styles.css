@@ -1884,3 +1884,24 @@ main .rankwin p { color: inherit; }
 @media (max-width: 860px) { .earn__body { grid-template-columns: 1fr; } }
 .flow { margin-bottom: calc(var(--in) * 1.6); }
 .earn__body { margin-bottom: calc(var(--in) * 1.6); }
+
+/* v24 — even heights: cards share rows (chip · title · text · panel · CTA), CTAs full width, prices sit on one line */
+@supports (grid-template-rows: subgrid) {
+  .trio--4 { grid-template-rows: auto auto auto 1fr auto; row-gap: 0; }
+  .trio--4 .trio__card { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; align-content: start; }
+  .trio--4 .trio__card > .chip { margin-bottom: 14px; }
+  .trio--4 .trio__card > .h3 { margin: 0 0 10px; }
+  .trio--4 .trio__txt { margin-bottom: 18px; }
+  .trio--4 .gpanel { margin-top: 0; align-self: start; }
+}
+.trio__txt p { margin: 0 0 8px; color: #2F6474; font-size: 14px; line-height: 1.5; }
+.trio__txt p:last-child { margin-bottom: 0; }
+.trio__cta { align-self: stretch; justify-self: stretch; width: 100%; margin-top: 16px; }
+@media (max-width: 680px) { .trio--4 { grid-template-rows: none; } .trio--4 .trio__card { display: flex; grid-row: auto; } }
+
+.mk__was { margin-top: auto; }
+.mk__name { margin-bottom: 6px; }
+@supports (grid-template-rows: subgrid) { .trio--4 .gpanel { align-self: stretch; } }
+.fogv__veil { padding: 22px 14px 20px; }
+.fogv__veil .fog__title, .fogv__veil .fog__text { padding-inline: 6px; }
+.fogv__veil .btn { align-self: stretch; width: 100%; }
