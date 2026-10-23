@@ -50,6 +50,8 @@
     nav.classList.toggle('is-solid', y > 40);
     var fin = document.querySelector('.final'), fr = fin && fin.getBoundingClientRect();
     nav.classList.toggle('is-dark', y > (reduced ? vh * 0.9 : vh * 0.97) - 72 && !(fr && fr.top < 72 && fr.bottom > 0));
+    // the wordmark next to the logo waits until the hero is scrolled away (the hero already shows the big title)
+    nav.classList.toggle('in-hero', y <= (reduced ? vh * 0.9 : vh * 0.97) - 72);
   }
 
   /* ---------------- dust / sparks ---------------- */
