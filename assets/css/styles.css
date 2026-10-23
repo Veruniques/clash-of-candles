@@ -1605,3 +1605,40 @@ main .rankwin p { color: inherit; }
 }
 .flow-head { margin-bottom: clamp(28px, 4vw, 44px); }
 .flow-head .lede { max-width: 58ch; }
+
+/* v10 — copy deck layout: hero with two paragraphs, "Jak se hraje" steps, card CTAs, footer links */
+.hero__sub p { margin: 0 0 8px; } .hero__sub p:last-child { margin: 0; }
+.hero__q { max-width: 18ch; }
+.hero__note { margin: 0; font-size: 14px; font-weight: 600; color: #17485A; max-width: 30ch; }
+@media (min-width: 1000px) { .hero__q { max-width: 13ch; } .hero__cta { gap: 18px; flex-wrap: nowrap; } }
+@media (max-width: 999px) { .hero__note { flex-basis: 100%; max-width: none; text-align: center; } }
+
+.howto { margin: clamp(8px, 2vw, 20px) 0 clamp(64px, 8vw, 104px); }
+.howto .sechead .lede { max-width: 62ch; }
+.howto__grid { margin-top: 0; }
+.howto .feat__num { margin: 0 0 6px; font-stretch: 112%; font-weight: 800; font-size: clamp(30px, 3vw, 42px); color: #0B6A63; line-height: 1; }
+.howto .feat .h3 { margin: 0 0 8px; font-size: 19px; }
+.howto .feat p:last-child { font-size: 14.5px; line-height: 1.5; }
+
+#play .lede + .lede { margin-top: 12px; }
+.claimline { margin: 22px 0 0; display: inline-block; padding: 10px 16px; border-radius: 14px; background: var(--ink); color: #fff !important;
+  font-stretch: 112%; font-weight: 800; font-size: clamp(16px, 1.5vw, 19px); letter-spacing: -0.01em; }
+
+.flow-head .lede + .lede { margin-top: 8px; }
+.flow-head .btn { margin-top: 22px; }
+.market__terms { margin: 14px auto 0; max-width: 60ch; }
+
+.trio--4 .trio__card > p + p { margin-top: -2px; }
+.trio__cta { align-self: flex-start; margin-top: 12px; }
+.trio--4 .lb--mini, .trio--4 .trio__demo, .trio--4 .ct { margin-top: auto; }
+
+.foot__tag { margin: 0; color: #CFE6EC; font-weight: 700; font-size: 15px; }
+.foot__links { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; }
+.foot__links a { color: #CFE6EC; text-decoration: none; } .foot__links a:hover { color: #fff; text-decoration: underline; }
+.foot__links span { color: #5F8592; }
+#odmeny.section { padding-block: clamp(56px, 6vw, 88px); }
+#odmeny .market-wrap { margin-bottom: 0; }
+#contesty .sechead { margin: 0; }
+#play .h2, #odmeny .h2, .howto .h2 { font-size: clamp(32px, 3.7vw, 54px); }
+#play .h2 { max-width: 14ch; }
+.claimline { font-size: clamp(15px, 1.25vw, 17px); }

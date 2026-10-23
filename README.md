@@ -18,18 +18,19 @@ assets/
 Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://localhost:8000`.
 Žádné externí CDN ani Google Fonts. Assety mají `?v=` verzi — při změně CSS/JS ji zvedněte (jinak prohlížeče drží starou cache).
 
-## Struktura stránky (podle připomínek šéfa)
+## Struktura stránky (texty podle copy decku, 10/2026)
 
-0. **Hero** — animace beze změny; slogan, Registruj se.
-1. **Vyber si, co chceš.** (`#jak`, v panelu, který vyjede přes hero) — nadpis + jedna věta, pod tím jen symboly: coin → play → srdíčko → odměny (♥ + Kč). Žádné texty.
-2. **Marketplace** (`#odmeny`) — 3 odměny vedle sebe bez pořadí (`market: true` v `rewards.json`), cena = srdíčka + doplatek; pod tím další odměny v mlze.
-3. **Tutoriál** (`#tutorial`) — hra se sama přehraje s kurzorem, pak volné hraní. Bez panelu odměn vedle grafu; po kole se objeví „Další graf“.
-4. **Pilíře** — 90 s, 15 let dat, 2 výsledky, contesty.
-5. **Play** — „Tohle je tvoje útočiště“ + žebříček ranků.
-   **Coins** (`#coins`) — ve stejné sekci jako Play: palivo, balíčky, free to play (hex mince `img/coin-hex.webp`).
-7. **Contesty · Academy · Rank · Statistika** (`#contesty`, `#academy`, `#rank`, `#statistika`) — jedna sekce, čtyři karty (na mobilu posuvné do strany).
-8. **FAQ** ve dvou sloupcích.
-9. **Registrace** (`#registrace`) — zároveň závěrečné CTA (panáčci + „Přečti graf líp než soupeř.“ + formulář).
+0. **Hero** — „Dvě příležitosti. Jedna minuta. Žádné výmluvy.“, CTA Vyzkoušet hru (→ ukázka).
+1. **Jak se hraje** (`#jak`, v panelu, který vyjede přes hero) — „Graf před tebou. Rozhodnutí na tobě.“ + kroky 01–04.
+2. **Tutoriál** (`#tutorial`) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`).
+3. **Čas a příležitosti** (`#play`) — dvě příležitosti, screenshot hry + ranky; pod tím Coins (`#coins`).
+4. **Odměny** (`#odmeny`) — „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“, symboly coin → play → srdíčko → odměny, 3 odměny bez pořadí (`market: true`), mlha.
+5. **Žebříček · Herní statistiky · Academy · Contesty** (`#rank`, `#statistika`, `#academy`, `#contesty`) — jedna sekce, čtyři karty.
+6. **FAQ** (`#faq`) — 7 otázek z copy decku, ve dvou sloupcích.
+7. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
+8. **Patička** — slogan, odkazy; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
+
+V copy decku se odměnám říká „mince“ — na webu jsou to **srdíčka** (coins = vstup do kola).
 
 Ekonomika na webu: **coins** = palivo (vstup do kola), **srdíčka** = výhry, které se mění na slevu v shopu (`candleValue` Kč za srdíčko — název klíče zůstal). Odměny nejsou za umístění: srdíčka se utratí za cokoli, zbytek se doplatí.
 
@@ -41,7 +42,7 @@ Ekonomika na webu: **coins** = palivo (vstup do kola), **srdíčka** = výhry, k
 - [ ] **Výhody registrace** (early access, startovní bonus, founder badge) — nechat jen potvrzené.
 - [ ] **Mock data** — žebříček, statistiky a Academy kvíz jsou ilustrační (`main.js`, `index.html`).
 - [ ] **Právní texty** — patička a FAQ tvrdí: není to investiční služba, coins nelze vyměnit za peníze, 18+. Nechat zkontrolovat právníkem (kupované coins + reálné produkty).
-- [ ] Údaje o provozovateli, obchodní podmínky, GDPR — doplnit do patičky.
+- [ ] Údaje o provozovateli, obchodní podmínky, GDPR — doplnit do patičky (odkazy „Pravidla hry“ a „Ochrana osobních údajů“ v patičce zatím nikam nevedou).
 - [ ] `og:image` a další meta používají relativní cesty; po nasazení přepsat na absolutní URL domény.
 
 ## Licence třetích stran

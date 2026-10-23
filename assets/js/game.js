@@ -99,7 +99,7 @@
   var cfg = null;
   var S = { sc: null, view: 'M', shown: 0, revealed: 0, bought: false, pick: null, playing: false, hitShown: false, round: 0,
     ind: { ema: false, sma: false, bb: false }, opt: { grid: true, axis: true, time: true }, shapes: [], tool: null, preview: null,
-    coins: 100, candles: 0, t: 90, t2: 171, timerId: null, mode: 'tutorial', scale: null };
+    coins: 100, candles: 0, t: 60, t2: 30, timerId: null, mode: 'tutorial', scale: null };
 
   /* ---------- drawing ---------- */
   var W = 0, H = 0, dpr = 1;
@@ -326,7 +326,7 @@
     clearInterval(S.timerId); S.t = cfg.game.roundSeconds; renderTimer();
     S.timerId = setInterval(function () {
       var r = game.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) return;
-      S.t2 = S.t2 > 0 ? S.t2 - 1 : 180;
+      S.t2 = S.t2 > 0 ? S.t2 - 1 : 60;
       if (S.bought && !S.pick && ui.over.hidden && S.mode === 'play') { S.t--; if (S.t <= 0) { toast('Čas vypršel. Nerozhodnout se je taky rozhodnutí. Nový graf.'); startRound(); return; } }
       renderTimer();
     }, 1000);
@@ -581,7 +581,7 @@
 
   var ready = window.CoC && window.CoC.config ? window.CoC.config : Promise.resolve(null);
   ready.then(function (c) {
-    cfg = c || { currency: 'Kč', candleValue: 50, maxDiscountPct: 80, game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 90 }, products: [{ name: 'iPhone', price: 34990, icon: 'phone', featured: true }] };
+    cfg = c || { currency: 'Kč', candleValue: 50, maxDiscountPct: 80, game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 60 }, products: [{ name: 'iPhone', price: 34990, icon: 'phone', featured: true }] };
     cfg.game.candlesPerWin = cfg.game.candlesPerWin || 1;
     S.coins = cfg.game.startCoins; renderCoins(); renderCandles(); renderClock(); setInterval(renderClock, 30000);
     startRound('up'); resize();

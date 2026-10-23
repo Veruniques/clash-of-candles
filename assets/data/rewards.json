@@ -6,7 +6,7 @@
     "startCoins": 100,
     "entry": 10,
     "candlesPerWin": 1,
-    "roundSeconds": 90
+    "roundSeconds": 60
   },
   "products": [
     {

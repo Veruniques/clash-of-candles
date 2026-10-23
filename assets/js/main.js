@@ -12,7 +12,7 @@
      point data-rewards on #game at it — everything below and game.js reads from it. */
   var DEFAULT_CONFIG = {
     currency: 'Kč', candleValue: 50, maxDiscountPct: 80,
-    game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 90 },
+    game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 60 },
     products: [
       { id: 'iphone', name: 'iPhone 18 Pro', price: 34990, icon: 'phone', image: 'assets/img/products/phone.svg', featured: true, market: true },
       { id: 'airpods-max', name: 'AirPods Max', price: 13990, icon: 'headphones', image: 'assets/img/products/headphones.svg', market: true },
