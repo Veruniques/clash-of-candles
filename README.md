@@ -28,7 +28,7 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
 7. **Patička** (nízká) — vlevo logo, slogan, odkazy; vpravo právní text; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
 
-Rytmus mezer: `--sec` mezi sekcemi (160 px desktop / 96 px mobil), `--in` uvnitř sekce (56/40), `--head` pod nadpisem (32/24) — v `styles.css` (v17). Odstavce mají na desktopu max. 35 % šířky obsahu. Nic se nezarovnává na střed — texty i layout jsou zarovnané doleva (právní text v patičce doprava).
+Rytmus mezer: `--sec` mezi sekcemi (160 px desktop / 96 px mobil), `--in` uvnitř sekce (56/40), `--head` pod nadpisem (32/24) — v `styles.css` (v17). Odstavce mají na desktopu max. 40 % šířky obsahu. Nic se nezarovnává na střed (kromě bloku FAQ) — texty i layout jsou zarovnané doleva (právní text v patičce doprava).
 
 V copy decku se odměnám říká „mince“ — na webu jsou to **srdíčka** (coins = vstup do kola).
 

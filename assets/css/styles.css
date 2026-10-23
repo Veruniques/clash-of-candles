@@ -1780,7 +1780,7 @@ main .rankwin p { color: inherit; }
 
 /* v16 — paragraphs at most 35 % of the content width on desktop */
 @media (min-width: 1000px) {
-  :root { --para: calc(min(var(--wrap), 100vw - 40px) * .35); }
+  :root { --para: calc(min(var(--wrap), 100vw - 40px) * .40); }
   .lede, .hero__sub, .earn__body .fine, .play__inner > .wrap > .fine, .fuel__head .lede, .final--reg .lede,
   .sechead .lede, .play__head .lede, #play .lede, .howto .sechead .lede { max-width: var(--para); }
   .earn__body { max-width: none; }
@@ -1822,3 +1822,8 @@ main .rankwin p { color: inherit; }
   .hero__copy { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 40px; }
   .hero__q { max-width: 14ch; }
 }
+
+/* v19 — FAQ block centered in the page (questions stay left-aligned inside) */
+#faq .wrap { display: flex; flex-direction: column; align-items: center; }
+#faq .h2 { text-align: center; }
+#faq .faq { width: 100%; max-width: 860px; margin-inline: auto; }
