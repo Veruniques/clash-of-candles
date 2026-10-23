@@ -1905,3 +1905,10 @@ main .rankwin p { color: inherit; }
 .fogv__veil { padding: 22px 14px 20px; }
 .fogv__veil .fog__title, .fogv__veil .fog__text { padding-inline: 6px; }
 .fogv__veil .btn { align-self: stretch; width: 100%; }
+
+/* v25 — smaller title + fighters, more air in the hero */
+.hero__scene { --w: min(840px, 84vw, calc((100svh - var(--navh) - 330px) / 1.054)); }
+@media (max-width: 700px) { .hero__scene { --w: min(86vw, calc((100svh - var(--navh) - 400px) / 1.054)); } }
+@media (min-width: 1000px) { .hero__scene { --w: min(860px, 80vw, calc((100svh - var(--navh) - 250px) / 1.054)); } }
+.hero__copy { margin-top: clamp(16px, 3svh, 36px); }
+@media (max-width: 700px) { .hero__scene { --w: min(76vw, calc((100svh - var(--navh) - 420px) / 1.054)); --tw: min(80vw, calc(var(--w) * 1.3)); } }

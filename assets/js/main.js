@@ -16,7 +16,7 @@
     products: [
       { id: 'iphone', name: 'iPhone 18 Pro', price: 34990, icon: 'phone', image: 'assets/img/products/phone.svg', featured: true, market: true },
       { id: 'airpods-max', name: 'AirPods Max', price: 13990, icon: 'headphones', image: 'assets/img/products/headphones.svg', market: true },
-      { id: 'watch', name: 'Apple Watch Series 12', price: 10990, icon: 'clock', market: true },
+      { id: 'watch', name: 'Apple Watch', price: 10990, icon: 'clock', market: true },
       { id: 'airpods-pro', name: 'AirPods Pro 3', price: 6490, icon: 'headphones' }
     ],
     teasers: ['MacBook Air', 'iPad Air', 'Herní konzole', 'Voucher na výlet']
