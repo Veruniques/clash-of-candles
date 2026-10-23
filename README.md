@@ -24,11 +24,11 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 2. **Tutoriál** (`#tutorial`, odkaz „Jak se hraje“) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`). Pod grafem kroky 01–04 (`#jak`).
 3. **Ranky** (`#play`) — „Každý rank, jiná hra.“: vyšší rank = těžší čtení grafu, vyšší vstup i výhry; v contestech jsou si všichni rovni. Screenshot hry + obrazovka Ranks.
 4. **Žebříček · Academy · Herní statistiky · Contesty** (`#rank`, `#academy`, `#statistika`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
-5. **FAQ** (`#faq`) — 7 otázek z copy decku, ve dvou sloupcích.
+5. **FAQ** (`#faq`) — 7 otázek z copy decku, jeden sloupec.
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
 7. **Patička** (nízká) — vlevo logo, slogan, odkazy; vpravo právní text; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
 
-Odstavce mají na desktopu max. 35 % šířky obsahu. Nic se nezarovnává na střed — texty i layout jsou zarovnané doleva (právní text v patičce doprava).
+Rytmus mezer: `--sec` mezi sekcemi (160 px desktop / 96 px mobil), `--in` uvnitř sekce (56/40), `--head` pod nadpisem (32/24) — v `styles.css` (v17). Odstavce mají na desktopu max. 35 % šířky obsahu. Nic se nezarovnává na střed — texty i layout jsou zarovnané doleva (právní text v patičce doprava).
 
 V copy decku se odměnám říká „mince“ — na webu jsou to **srdíčka** (coins = vstup do kola).
 

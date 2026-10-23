@@ -1785,3 +1785,33 @@ main .rankwin p { color: inherit; }
   .sechead .lede, .play__head .lede, #play .lede, .howto .sechead .lede { max-width: var(--para); }
   .earn__body { max-width: none; }
 }
+
+/* v17 — one vertical rhythm for the whole page
+   --sec: between sections · --in: between blocks inside a section · --head: heading → its content */
+:root { --sec: clamp(96px, 11vw, 160px); --in: clamp(40px, 4vw, 56px); --head: clamp(24px, 2.2vw, 32px); }
+#play.section, #contesty.section, #faq.section { padding-block: calc(var(--sec) / 2); }
+.play__inner { padding-top: calc(var(--sec) / 2); padding-bottom: calc(var(--sec) / 2); }
+.final--reg { padding-block: calc(var(--sec) / 2); }
+
+/* section 2: title → symbols → text → rewards | coins | demo + steps */
+.earn__title { margin: 0 0 var(--head); }
+.flow { margin: 0 0 var(--head); }
+.earn__body { margin: 0 0 var(--in); }
+.market-wrap { margin: 0 0 var(--sec); }
+.play__inner .fuel { margin: 0 0 var(--sec); }
+.fuel__head { margin-bottom: var(--head); }
+.fuel__head .h2 { margin-bottom: 14px; }
+.play__head { margin: 0 0 var(--head); }
+.play__head .h2 { margin-bottom: 14px; }
+.tsteps { margin-bottom: 20px; }
+.tctl { margin-top: 24px; }
+.howto { margin-top: var(--in); }
+
+/* ranks + cards + FAQ + sign-up */
+#play .split { align-items: start; }
+#play .h2 { margin-bottom: var(--head); }
+#faq .h2 { margin: 0 0 var(--head); }
+.faq { display: grid; gap: 10px; max-width: 860px; }
+.faq details { margin: 0; }
+.wave__grid { align-items: start; }
+.reg__copy .h2 { margin-bottom: 14px; }
