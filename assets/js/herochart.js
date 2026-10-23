@@ -41,9 +41,6 @@
     if (prog <= 0) return;
     ctx.save(); ctx.globalAlpha = 0.5; // low-opacity shade behind the fighters
     ctx.beginPath(); ctx.rect(0, 0, W * prog, H); ctx.clip();
-    // grid
-    ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
-    for (var g = 1; g < 6; g++) { var gy = Math.round(H * g / 6) + 0.5; ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
     // left half: line + shade
     ctx.beginPath(); ctx.moveTo(X(0), Y(pts[0]));
     for (var a = 1; a <= HALF; a++) ctx.lineTo(X(a), Y(pts[a]));
