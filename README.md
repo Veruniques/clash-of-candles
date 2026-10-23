@@ -27,8 +27,9 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 4. **Pilíře** — 90 s, 15 let dat, 2 výsledky, contesty.
 5. **Play** — „Tohle je tvoje útočiště“ + žebříček ranků.
    **Coins** (`#coins`) — ve stejné sekci jako Play: palivo, balíčky, free to play (hex mince `img/coin-hex.webp`).
-7. **Contesty · Academy · Rank** (`#contesty`, `#academy`, `#rank`) — jedna sekce, tři karty.
-8. **Statistika** · Registrace · FAQ · závěrečné CTA.
+7. **Contesty · Academy · Rank · Statistika** (`#contesty`, `#academy`, `#rank`, `#statistika`) — jedna sekce, čtyři karty (na mobilu posuvné do strany).
+8. **FAQ** ve dvou sloupcích.
+9. **Registrace** (`#registrace`) — zároveň závěrečné CTA (panáčci + „Přečti graf líp než soupeř.“ + formulář).
 
 Ekonomika na webu: **coins** = palivo (vstup do kola), **srdíčka** = výhry, které se mění na slevu v shopu (`candleValue` Kč za srdíčko — název klíče zůstal). Odměny nejsou za umístění: srdíčka se utratí za cokoli, zbytek se doplatí.
 

@@ -1550,3 +1550,56 @@ main .rankwin p { color: inherit; }
 .fuel__head .h2 { margin: 0; max-width: none; }
 .fuel__head .lede { margin: 0; max-width: 44ch; }
 .fuel .coins3 { margin-top: 0; }
+
+/* v9 — lower half chunked: tighter rhythm, 4-card block, 2-col FAQ, sign-up = final CTA */
+#play.section, #contesty.section, #faq.section { padding-block: clamp(56px, 6vw, 88px); }
+#play .pts { gap: 8px; }
+#play .pts li { padding: 12px 16px 12px 52px; }
+#play .pts li span { font-size: 14px; }
+.fuel { margin-top: clamp(40px, 5vw, 64px); }
+.fuel__head { margin-bottom: 18px; }
+.fuel .coins3 { gap: 12px; }
+.fuel .coinCard { display: grid; grid-template-columns: 64px 1fr; gap: 4px 16px; align-items: center; padding: 18px 20px; }
+.fuel .coin3d { grid-row: 1 / 3; width: 60px; height: 60px; margin: 0; }
+.fuel .coin3d span { font-size: 11px; padding: 2px 7px; right: -8px; }
+.fuel .coinCard .h3 { margin: 0; font-size: 17px; align-self: end; }
+.fuel .coinCard p { font-size: 14px; line-height: 1.45; align-self: start; }
+
+.trio--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.trio--4 .trio__card { padding: 22px 20px; }
+.trio--4 .trio__card .h3 { font-size: 19px; }
+.trio--4 .trio__card > p { font-size: 14px; }
+.trio--4 .ct li { padding: 10px 12px; font-size: 13.5px; }
+.trio--4 .ct b { font-size: 13.5px; }
+.stats-mini { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; }
+.stats-mini .ring { width: 86px; height: 86px; }
+.stats-mini .ring b { font-size: 20px; }
+.stats-mini .ring span { font-size: 10.5px; }
+.stats-mini .stats__kpi { grid-template-columns: 1fr 1fr; gap: 6px; }
+.stats-mini .stats__kpi div { padding: 6px 8px; }
+.stats-mini .stats__kpi dt { font-size: 11px; } .stats-mini .stats__kpi dd { font-size: 15px; }
+.stats-mini .heat { grid-column: 1 / -1; margin: 0; }
+@media (max-width: 1180px) { .trio--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 680px) { .trio--4 { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; } }
+
+.faq--2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; align-items: start; }
+.faq--2 details { margin: 0; }
+@media (max-width: 800px) { .faq--2 { grid-template-columns: 1fr; } }
+
+.final--reg { text-align: left; margin-top: 0; padding-block: clamp(48px, 6vw, 84px); }
+.final--reg::before { display: none; }
+.final--reg .h2 { margin-inline: 0; }
+.final--reg .lede { margin: 0; color: #17485A; }
+.reg__copy .final__duo { width: min(360px, 70%); margin: 0 0 6px -10px; display: block; }
+.perks--chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.perks--chips li { padding: 8px 14px 8px 36px; border-radius: 999px; background: rgba(255,255,255,.6); border: 1px solid rgba(255,255,255,.85); }
+.perks--chips li::before { left: 10px; top: 50%; translate: 0 -50%; width: 16px; height: 16px; }
+.perks--chips b { font-size: 14px; }
+@media (max-width: 900px) { .reg__copy { text-align: center; } .reg__copy .final__duo { margin: 0 auto 6px; } .final--reg .lede { margin-inline: auto; } .perks--chips { justify-content: center; } }
+.perks--chips li::before { border-radius: 0; box-shadow: none; background: url(../img/coin-hex-sm.webp?v=1) center / contain no-repeat; }
+@media (max-width: 680px) {
+  .trio--4 { display: flex; max-width: none; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin-inline: -20px; padding: 6px 20px 18px; scrollbar-width: none; }
+  .trio--4::-webkit-scrollbar { display: none; }
+  .trio--4 .trio__card { flex: 0 0 84%; scroll-snap-align: center; }
+  #play .playshot { margin-top: 8px; }
+}
