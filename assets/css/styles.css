@@ -1693,3 +1693,5 @@ main .rankwin p { color: inherit; }
 .hero__q { margin: 0; }
 .hero__q { margin: 0 0 12px; }
 @media (min-width: 1000px) { .hero__q { margin: 0; } }
+.hero__chart { top: 40%; height: 40%; opacity: 0; transform: scale(.985); transition: opacity .12s ease-out, transform .25s cubic-bezier(.34,1.56,.64,1); }
+.hero__chart.is-on { opacity: 1; transform: none; }

@@ -163,7 +163,7 @@
       .add(function () {
         g.fromTo(impact, { opacity: 1, scale: 0.2 }, { opacity: 0, scale: 1.7, duration: 0.5, ease: 'power2.out' });
         Dust.sparks(impact); shake(12);
-        if (window.HeroChart) HeroChart.reveal(1500); // the chart appears when they collide
+        if (window.HeroChart) HeroChart.reveal(); // the chart snaps in when they collide
       }, 0.78)
       .to(red, { x: '2.2%', rotation: 3, duration: 0.09, ease: 'power2.out' }, 0.78)
       .to(red, { x: 0, rotation: 0, duration: 0.7, ease: 'elastic.out(1, 0.45)' }, 0.87)

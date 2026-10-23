@@ -18,7 +18,16 @@
   var lo = Math.min.apply(null, pts) - 3, hi = Math.max.apply(null, pts) + 3;
   var prog = 0, W = 0, H = 0, raf = 0;
 
+  // sit between the bottom of the title and the floor line, never over the title
+  var hero = cv.parentNode, title = document.getElementById('titleWrap'), floor = document.querySelector('.hero__floor'), scene = document.getElementById('scene');
+  function place() {
+    if (!scene || !title || !floor) return;
+    var top = scene.offsetTop + title.offsetTop + title.offsetHeight + 8;
+    var bottom = scene.offsetTop + floor.offsetTop;
+    cv.style.top = top + 'px'; cv.style.height = Math.max(60, bottom - top) + 'px';
+  }
   function size() {
+    place();
     var r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
     W = r.width; H = r.height; if (!W) return;
     cv.width = Math.round(W * d); cv.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
@@ -52,18 +61,11 @@
     });
     ctx.restore();
   }
-  function reveal(ms) {
-    cancelAnimationFrame(raf);
-    var t0 = performance.now(), dur = ms || 1400;
-    cv.classList.add('is-on');
-    (function f(now) {
-      var t = Math.min(1, (now - t0) / dur); prog = 1 - Math.pow(1 - t, 3); draw();
-      if (t < 1) raf = requestAnimationFrame(f);
-    })(t0);
-  }
+  // the whole chart snaps in at once, the moment the fighters collide
+  function reveal() { prog = 1; draw(); cv.classList.add('is-on'); }
   function show() { prog = 1; cv.classList.add('is-on'); draw(); }
 
-  if ('ResizeObserver' in window) new ResizeObserver(size).observe(cv); else window.addEventListener('resize', size);
+  if ('ResizeObserver' in window) new ResizeObserver(size).observe(hero); else window.addEventListener('resize', size);
   size();
   window.HeroChart = { reveal: reveal, show: show };
 })();
