@@ -21,7 +21,7 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 ## Struktura stránky (podle připomínek šéfa)
 
 0. **Hero** — animace beze změny; slogan, Registruj se.
-1. **Jak to funguje** (`#jak`, v panelu, který vyjede přes hero) — jen symboly: coin → play → srdíčko → odměny (♥ + Kč). Žádné texty.
+1. **Vyber si, co chceš.** (`#jak`, v panelu, který vyjede přes hero) — nadpis + jedna věta, pod tím jen symboly: coin → play → srdíčko → odměny (♥ + Kč). Žádné texty.
 2. **Marketplace** (`#odmeny`) — 3 odměny vedle sebe bez pořadí (`market: true` v `rewards.json`), cena = srdíčka + doplatek; pod tím další odměny v mlze.
 3. **Tutoriál** (`#tutorial`) — hra se sama přehraje s kurzorem, pak volné hraní. Bez panelu odměn vedle grafu; po kole se objeví „Další graf“.
 4. **Pilíře** — 90 s, 15 let dat, 2 výsledky, contesty.

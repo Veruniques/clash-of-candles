@@ -1603,3 +1603,5 @@ main .rankwin p { color: inherit; }
   .trio--4 .trio__card { flex: 0 0 84%; scroll-snap-align: center; }
   #play .playshot { margin-top: 8px; }
 }
+.flow-head { margin-bottom: clamp(28px, 4vw, 44px); }
+.flow-head .lede { max-width: 58ch; }

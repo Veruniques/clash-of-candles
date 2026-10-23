@@ -327,7 +327,7 @@
     S.timerId = setInterval(function () {
       var r = game.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) return;
       S.t2 = S.t2 > 0 ? S.t2 - 1 : 180;
-      if (S.bought && !S.pick && ui.over.hidden && S.mode === 'play') { S.t--; if (S.t <= 0) { toast('Čas vypršel. Nový graf, nová šance.'); startRound(); return; } }
+      if (S.bought && !S.pick && ui.over.hidden && S.mode === 'play') { S.t--; if (S.t <= 0) { toast('Čas vypršel. Nerozhodnout se je taky rozhodnutí. Nový graf.'); startRound(); return; } }
       renderTimer();
     }, 1000);
   }
@@ -344,7 +344,7 @@
   function buy() {
     if (S.bought) return;
     if (S.coins < cfg.game.entry) {
-      overlay('Došly ti coins', 'Každý den se ti peněženka dobije na ' + cfg.game.startCoins + ' coins. V ukázce to zvládneme hned.', 'Denní doplnění', function () { S.coins = cfg.game.startCoins; renderCoins(true); });
+      overlay('Došly ti coins', 'Zítra se ti peněženka dobije na ' + cfg.game.startCoins + ' coins. V ukázce nečekáme.', 'Dobít', function () { S.coins = cfg.game.startCoins; renderCoins(true); });
       return;
     }
     S.bought = true; S.coins -= cfg.game.entry; renderCoins(true);
@@ -382,7 +382,7 @@
     setStatus(win ? 'win' : 'loss', win ? 'Win +' + per + ' srdíčko' : 'Loss');
     var d = S.sc.date; ui.date.textContent = d.getUTCDate() + '. ' + (d.getUTCMonth() + 1) + '. ' + d.getUTCFullYear() + ' v ' + hhmm(S.sc.startMin + (HIST + S.sc.hit) * 5); ui.date.hidden = false;
     if (win) { S.candles += per; renderCandles(true); ui.win.hidden = false; }
-    if (!win && S.mode === 'play') toast('Cena prorazila ' + where + ' hranici jako první. Tentokrát ne.');
+    if (!win && S.mode === 'play') toast('Cena prorazila ' + where + ' hranici jako první. Tentokrát ne. Příště jo.');
     if (S.mode === 'play') { ui.rwNext.hidden = false; setTimeout(function () { ui.rwNext.focus({ preventScroll: true }); }, 450); }
   }
 
@@ -525,18 +525,18 @@
       var g = game.getBoundingClientRect(), z = S.sc.zone;
       ui.cursor.style.transitionDuration = '0ms'; ui.cursor.style.transform = 'translate(' + (g.width * 0.45) + 'px,' + (g.height * 0.85) + 'px)';
       return sleep(500, id)
-        .then(function () { caption(0, 'Kup si graf', 'Každé kolo je skutečný historický graf. Vstup stojí ' + cfg.game.entry + ' coins, denně máš ' + cfg.game.startCoins + ' zdarma.'); return click(ui.buyBtn, id); })
+        .then(function () { caption(0, 'Kup si graf', 'Skutečný graf z historie. Vstup stojí ' + cfg.game.entry + ' coins, denně jich máš ' + cfg.game.startCoins + ' zdarma.'); return click(ui.buyBtn, id); })
         .then(function () { buy(); return sleep(900, id); })
-        .then(function () { caption(1, 'Prohlédni si celou příležitost', 'Denní, hodinový a minutový pohled. Stejný trh, tři úhly.'); return click(ui.views[0], id); })
+        .then(function () { caption(1, 'Prohlédni si celou příležitost', 'Denní, hodinový, minutový. Stejný trh, tři úhly.'); return click(ui.views[0], id); })
         .then(function () { setView('D'); return sleep(1300, id); })
         .then(function () { return click(ui.views[1], id, 450); }).then(function () { setView('H'); return sleep(1300, id); })
         .then(function () { return click(ui.views[2], id, 450); }).then(function () { setView('M'); return sleep(700, id); })
-        .then(function () { caption(2, 'Zapni si indikátor', 'Zelené tlačítko otevře nástroje. Přidáme EMA 100.'); return click(ui.fab, id); })
+        .then(function () { caption(2, 'Zapni si indikátor', 'Zelené tlačítko schovává nástroje. Přidáme EMA 100.'); return click(ui.fab, id); })
         .then(function () { toggleMenu(true); return sleep(450, id); })
         .then(function () { return click(ui.indBtn, id, 450); }).then(function () { openDrawer('ind'); return sleep(500, id); })
         .then(function () { return click(ui.emaRow.querySelector('.sw'), id, 500); })
         .then(function () { setInd('ema', true); return sleep(900, id); }).then(function () { closePanels(); return sleep(300, id); })
-        .then(function () { caption(3, 'Označ zónu odporu', 'Obdélníkem zakresli místo, kde cena opakovaně narazila. Může se stát magnetem pro další pohyb.'); return click(ui.fab, id); })
+        .then(function () { caption(3, 'Označ zónu odporu', 'Obdélníkem zakresli místo, kde se cena už párkrát odrazila. Trh má dobrou paměť.'); return click(ui.fab, id); })
         .then(function () { toggleMenu(true); return sleep(400, id); })
         .then(function () { return click(ui.drawBtn, id, 450); }).then(function () { openDrawer('draw'); return sleep(450, id); })
         .then(function () { return click(ui.rectRow, id, 500); }).then(function () { closePanels(); setTool('rect'); return sleep(300, id); })
@@ -555,9 +555,9 @@
           });
         })
         .then(function () { return sleep(800, id); })
-        .then(function () { caption(4, 'Vyber úroveň', 'Cena se drží nad EMA a míří k zóně odporu. Klikni na BREAKOUT.'); return click(ui.up, id, 800); })
+        .then(function () { caption(4, 'Rozhodni se', 'Cena se drží nad EMA a míří k odporu. Tipneme BREAKOUT.'); return click(ui.up, id, 800); })
         .then(function () { return choose('up'); }).then(function () { return sleep(400, id); })
-        .then(function () { caption(5, 'Výhra!', 'Trefa. Za každé vyhrané kolo dostaneš srdíčko, srdíčka se mění na slevu na odměny.'); return sleep(4600, id); })
+        .then(function () { caption(5, 'Trefa.', 'Tady je tvoje srdíčko. Nasbírej jich dost a vybereš si odměnu.'); return sleep(4600, id); })
         .then(function () { ui.win.hidden = true; ui.cap.classList.remove('is-on'); return sleep(600, id); })
         .then(loop);
     }
