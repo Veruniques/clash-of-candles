@@ -20,7 +20,7 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 ## Struktura stránky (texty podle copy decku, 10/2026)
 
 0. **Hero** — „Graf před tebou. Rozhodnutí na tobě.“ + úvodní text, CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se naráz v momentě srážky, vždy pod titulkem.
-1. **Odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ → symboly coin → play → srdíčko → odměny → text + CTA → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → Coins (`#coins`).
+1. **Odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — symboly coin → play → srdíčko → odměny → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ → dva sloupce: text + CTA vlevo, Coins (`#coins`) vpravo → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers`.
 2. **Tutoriál** (`#tutorial`, odkaz „Jak se hraje“) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`). Pod grafem kroky 01–04 (`#jak`).
 3. **Ranky** (`#play`) — „Každý rank, jiná hra.“: vyšší rank = těžší čtení grafu, vyšší vstup i výhry; v contestech jsou si všichni rovni. Screenshot hry + obrazovka Ranks.
 4. **Žebříček · Academy · Herní statistiky · Contesty** (`#rank`, `#academy`, `#statistika`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).

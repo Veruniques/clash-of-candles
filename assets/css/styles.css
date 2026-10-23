@@ -1842,3 +1842,16 @@ main .rankwin p { color: inherit; }
   .tctl { justify-content: flex-end; }
 }
 .earn__text .fine { margin: 14px 0 0; }
+
+/* v22 — symbols → title → [rewards text | coins] → rewards */
+.flow { margin: 0 0 var(--in); }
+.earn__title { margin: 0 0 var(--head); }
+.earn__body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--in) clamp(40px, 5vw, 72px); align-items: start; margin: 0 0 var(--in); }
+.earn__text .btn { margin: 22px 0 0; justify-self: auto; }
+.earn__body .fuel { margin: 0; }
+.earn__body .fuel__head { display: block; margin: 0 0 18px; }
+.fuel__title { margin: 0 0 8px; font-stretch: 112%; font-weight: 800; font-size: clamp(22px, 2vw, 28px); letter-spacing: -0.02em; line-height: 1.1; }
+.earn__body .fuel__head .lede { margin: 0; justify-self: auto; }
+.earn__body .coins3 { grid-template-columns: 1fr; gap: 10px; }
+.earn__body .coinCard { padding: 14px 18px; }
+@media (max-width: 860px) { .earn__body { grid-template-columns: 1fr; } }

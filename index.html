@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610231500">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610231510">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -114,7 +114,6 @@
       <div class="play__inner" id="playInner">
         <div class="wrap">
           <!-- ============ 2. ODMĚNY: nadpis → symboly → text → odměny → coins ============ -->
-          <h2 id="prizes-h" class="h2 earn__title">Hraj chytře. Sbírej srdíčka. Vyber si odměnu.</h2>
           <div class="flow" role="img" aria-label="Za coins si koupíš vstup do kola, za vyhrané kolo dostaneš srdíčko, za srdíčka a doplatek si vybereš odměnu.">
             <div class="flow__node flow__node--coin"><img src="assets/img/coin-hex.webp?v=1" alt="" width="640" height="640"><b class="flow__badge">10</b></div>
             <span class="flow__arrow" aria-hidden="true"><i></i></span>
@@ -127,14 +126,38 @@
               <b class="flow__pay"><i class="heart-ico" aria-hidden="true"></i>+<span>Kč</span></b>
             </div>
           </div>
+          <h2 id="prizes-h" class="h2 earn__title">Hraj chytře. Sbírej srdíčka. Vyber si odměnu.</h2>
 
           <div class="earn__body">
             <div class="earn__text">
               <p class="lede">Za hraní můžeš získávat srdíčka, která využiješ na herním marketu. Vyber si odměnu, která tě zajímá, a použij nasbíraná srdíčka na její pořízení.</p>
               <p class="lede">Na vybrané produkty můžeš využít srdíčka a doplatit zbývající část ceny.</p>
               <p class="fine"><em>Konkrétní podmínky uplatnění srdíček a doplatků budou uvedeny u jednotlivých odměn.</em></p>
+              <a class="btn btn--primary" href="#odmeny">Prozkoumat odměny</a>
             </div>
-            <a class="btn btn--primary" href="#odmeny">Prozkoumat odměny</a>
+        <div class="fuel" id="coins">
+          <div class="fuel__head">
+            <h3 class="h3 fuel__title">Coins jsou palivo. Srdíčka kořist.</h3>
+            <p class="lede">Za coins hraješ. Srdíčka vyhráváš. Nepleť si to.</p>
+          </div>
+            <div class="coins3">
+            <article class="coinCard">
+              <div class="coin3d coin3d--stack" aria-hidden="true"><span>+</span></div>
+              <h3 class="h3">Víc coins, víc kol</h3>
+              <p>Každé kolo tě něco naučí. Hlavně to prohrané.</p>
+            </article>
+            <article class="coinCard">
+              <div class="coin3d" aria-hidden="true"><span>100</span></div>
+              <h3 class="h3">100 coins zdarma. Denně.</h3>
+              <p>Peněženka se ti každý den dobije. Hrát můžeš bez jediné koruny.</p>
+            </article>
+            <article class="coinCard">
+              <div class="coin3d coin3d--skill" aria-hidden="true"><span>1.</span></div>
+              <h3 class="h3">Výhru si nekoupíš</h3>
+              <p>Coins ano, srdíčka ne. Ta dostaneš jen za to, že čteš graf líp.</p>
+            </article>
+          </div>
+        </div>
           </div>
 
           <div class="market-wrap" id="odmeny">
@@ -149,30 +172,6 @@
               </article>
             </div>
           </div>
-
-    <div class="fuel" id="coins">
-      <div class="fuel__head">
-        <h3 class="h2 h2--md">Coins jsou palivo. Srdíčka kořist.</h3>
-        <p class="lede">Za coins hraješ. Srdíčka vyhráváš. Nepleť si to.</p>
-      </div>
-        <div class="coins3">
-        <article class="coinCard">
-          <div class="coin3d coin3d--stack" aria-hidden="true"><span>+</span></div>
-          <h3 class="h3">Víc coins, víc kol</h3>
-          <p>Každé kolo tě něco naučí. Hlavně to prohrané.</p>
-        </article>
-        <article class="coinCard">
-          <div class="coin3d" aria-hidden="true"><span>100</span></div>
-          <h3 class="h3">100 coins zdarma. Denně.</h3>
-          <p>Peněženka se ti každý den dobije. Hrát můžeš bez jediné koruny.</p>
-        </article>
-        <article class="coinCard">
-          <div class="coin3d coin3d--skill" aria-hidden="true"><span>1.</span></div>
-          <h3 class="h3">Výhru si nekoupíš</h3>
-          <p>Coins ano, srdíčka ne. Ta dostaneš jen za to, že čteš graf líp.</p>
-        </article>
-      </div>
-    </div>
 
           <!-- ============ 2. TUTORIÁL (hratelná hra s automatickou ukázkou) ============ -->
           <header class="play__head" id="tutorial">
