@@ -7,7 +7,7 @@ index.html
 assets/
   css/styles.css
   js/main.js          config, nav, intro hero, scroll přechod, ranky (obtížnost), odměny (TOP 3 + mlha), contesty, žebříček, statistiky, formulář
-  js/logo3d.js        3D značka v navigaci a patičce — stojí, jen po ní občas přejede odlesk (vlastní mini WebGL; SVG jako záloha)
+  img/logo-mark-gloss*.svg  2D značka s pevným odleskem (navigace tmavá, patička světlá)
   js/game.js          hra ve skutečném UI (světlý graf, G1/G2, FAB menu Indikátory/Kreslení/Akce, štítky BREAKOUT/BREAKDOWN, stavy Čeká/Spárováno/Výhra): tutoriál s kurzorem + volné hraní
   data/rewards.json   PLACEHOLDER ekonomika a produkty — panel odměn, TOP 3 i „mlha“ se kreslí odsud
   js/vendor/gsap.min.js
