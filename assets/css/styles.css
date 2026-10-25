@@ -2094,3 +2094,9 @@ main .rankwin p { color: inherit; }
 }
 .lbg-cols, .lbg__row { grid-template-columns: 20px minmax(0, 1fr) 36px 62px; }
 .lbg-cols span:last-child { text-align: right; letter-spacing: .02em; }
+.lbg-cols, .lbg__row { grid-template-columns: 16px minmax(0, 1fr) 32px auto; gap: 6px; }
+.lbg-cols { font-size: 9.5px; letter-spacing: .03em; padding-inline: 16px; }
+.lbg__row { padding: 8px 8px; }
+.lbg__name { font-size: 12.5px; }
+.lbg .rkp-badge { font-size: 10px; }
+.lbg .rkp-val { font-size: 12.5px; }
