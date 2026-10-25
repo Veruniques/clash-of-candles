@@ -2221,3 +2221,16 @@ main .rankwin p { color: inherit; }
 .pack__pile img { height: auto; width: calc(var(--s, 1) * 100%); max-height: 140px; }
 .pack__pile { height: 150px; padding: 10px 6px 0; box-sizing: border-box; }
 .pack__pile img { max-height: 132px; max-width: 92%; }
+
+/* v43 — green candle sitting on the "Oblíbený" card */
+.packs--sec .packs__track { padding-top: 132px; margin-top: -100px; }
+.pack--hot { z-index: 1; }
+.pack__mascot { position: absolute; left: 44%; top: 0; width: 132px; height: auto; transform: translate(-50%, -66.6%); z-index: 2; pointer-events: none;
+  filter: drop-shadow(0 10px 10px rgba(4,60,40,.25)); }
+@media (prefers-reduced-motion: no-preference) { .pack--hot:hover .pack__mascot { transform: translate(-50%, -68%) rotate(-3deg); transition: transform .3s ease; } }
+.packs--sec .packs__track { padding-top: 156px; margin-top: -118px; }
+.pack__mascot { left: 38%; width: 128px; }
+.pack--hot .pack__pile { padding-top: 34px; }
+.packs--sec .packs__track { margin-top: -28px; padding-top: 150px; }
+.packs--sec .packs__head { margin-bottom: 0; }
+@media (max-width: 600px) { .pack__mascot { width: 104px; left: 34%; } .packs--sec .packs__track { padding-top: 118px; margin-top: -10px; } }
