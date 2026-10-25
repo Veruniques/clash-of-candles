@@ -2001,3 +2001,7 @@ main .rankwin p { color: inherit; }
 @media (max-width: 600px) { .rtiles { scroll-padding-inline: 20px; } }
 .rtile__tag { position: static; display: inline-block; }
 .rtile__steps { display: flex; align-items: center; min-height: 22px; }
+
+/* v30 — symbol row across the full content width (symbols stay compact, arrows fill the gaps) */
+.flow { justify-content: space-between; max-width: none; margin-right: 0; }
+.flow__arrow { flex: 1 1 0; max-width: none; min-width: 18px; }
