@@ -2207,3 +2207,8 @@ main .rankwin p { color: inherit; }
 .pile__stack i:last-child { margin-top: 0; }
 .pack .pack__coins .coin-ico { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: no-preference) { .pack:hover .pile__stack { transform: translateY(-3px); transition: transform .3s ease; } }
+
+/* v41 — loose 3D coin heap */
+.pack__pile.heap { position: relative; display: block; height: 124px; overflow: visible; }
+.heap i { position: absolute; background: url(../img/coin-hex-sm.webp?v=1) center / contain no-repeat; transform-origin: 50% 80%; }
+.pack__pile.heap { overflow: hidden; border-radius: 14px; }
