@@ -2185,3 +2185,11 @@ main .rankwin p { color: inherit; }
   #heroSub { grid-row: auto; grid-column: auto; justify-self: stretch; align-self: start; }
 }
 @media (max-width: 700px) { .hero__scene { --w: min(66vw, calc((100svh - var(--navh) - 520px) / 1.054)); } }
+
+/* v38 — coin pile next to the "Balíčky coins" title */
+.earn__body .fuel__head { padding-right: 0; }
+.packs--sec .packs__head { position: relative; justify-content: flex-start; gap: 18px; }
+.packs--sec .packs__nav { margin-left: auto; }
+.packs__art { width: clamp(96px, 9vw, 132px); height: auto; margin: -36px 0 -18px; pointer-events: none; filter: drop-shadow(0 14px 18px rgba(120,80,0,.35)); }
+@media (prefers-reduced-motion: no-preference) { .packs__art { animation: hoverS 4s ease-in-out infinite alternate; } }
+@media (max-width: 600px) { .packs__art { width: 76px; margin: -20px 0 -10px; } }
