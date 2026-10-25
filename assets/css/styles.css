@@ -2219,3 +2219,5 @@ main .rankwin p { color: inherit; }
 .pack:hover .pack__pile img { transform: translateY(-3px); transition: transform .3s ease; }
 .pack__pile { height: 140px; }
 .pack__pile img { height: auto; width: calc(var(--s, 1) * 100%); max-height: 140px; }
+.pack__pile { height: 150px; padding: 10px 6px 0; box-sizing: border-box; }
+.pack__pile img { max-height: 132px; max-width: 92%; }
