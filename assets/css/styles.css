@@ -2178,3 +2178,10 @@ main .rankwin p { color: inherit; }
 .packs--sec .pack__coins .coin-ico { width: 24px; height: 24px; }
 .packs--sec .pack__price { font-size: 15px; padding: 6px 14px; }
 .packs--sec .packs__btn { width: 40px; height: 40px; font-size: 22px; }
+
+/* v37 — banner back in the hero: undo the CTA-only hero overrides */
+@media (min-width: 1000px) {
+  .hero__scene { --w: min(800px, 74vw, calc((100svh - var(--navh) - 340px) / 1.054)); }
+  #heroSub { grid-row: auto; grid-column: auto; justify-self: stretch; align-self: start; }
+}
+@media (max-width: 700px) { .hero__scene { --w: min(66vw, calc((100svh - var(--navh) - 520px) / 1.054)); } }

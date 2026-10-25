@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610251610">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610251620">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -103,8 +103,22 @@
           <p class="hero__intro">Otestuj své schopnosti, vyzvi ostatní hráče a zapoj se do contestů o auta, motorky a další atraktivní ceny. Každé rozhodnutí je nová výzva.</p>
         </div>
         <div class="hero__sub" id="heroSub">
-          <div class="hero__cta" id="heroCta">
-            <a class="btn btn--primary btn--lg" href="#registrace">Vyzkoušet hru</a>
+          <div class="cban" id="contestBanner" aria-label="Contesty: výherní bank a čas do konce">
+            <div class="cban__tabs" role="tablist">
+              <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Daily contest</button>
+              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Weekly contest</button>
+              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Monthly contest</button>
+            </div>
+            <div class="cban__panel">
+              <i class="cban__bars" aria-hidden="true"></i>
+              <p class="cban__live"><i aria-hidden="true"></i>Live · končí za</p>
+              <div class="cban__pool"><span>Výherní bank</span><b id="cbanPool">30 000 €</b></div>
+              <div class="cban__clock" id="cbanClock" aria-live="off"></div>
+            </div>
+            <div class="cban__foot hero__cta" id="heroCta">
+              <p class="cban__claim">Hraj zdarma. Každý den 100 coins.</p>
+              <a class="btn btn--primary btn--sm cban__btn" href="#registrace">Vyzkoušet hru</a>
+            </div>
           </div>
         </div>
       </div>
@@ -222,32 +236,6 @@
             </li>
           </ul>
         </div>
-
-          <!-- ============ CONTESTY (samostatná sekce, banner v designu hry) ============ -->
-          <div class="contest-sec" id="contesty">
-            <div class="contest-sec__copy">
-              <span class="chip"><svg aria-hidden="true"><use href="#i-trophy"/></svg>Contesty</span>
-              <h2 id="contest-h" class="h2">Jedna soutěž. Stejné podmínky. Ti nejlepší na vrcholu.</h2>
-              <p class="lede">Zapoj se do denních, týdenních a měsíčních contestů. Bez ohledu na rank začínají všichni účastníci za stejných podmínek. Předveď své schopnosti, sbírej body a bojuj o přední příčky.</p>
-            </div>
-            <div class="cban" id="contestBanner" aria-label="Contesty: výherní bank a čas do konce">
-              <div class="cban__tabs" role="tablist">
-                <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Daily contest</button>
-                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Weekly contest</button>
-                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Monthly contest</button>
-              </div>
-              <div class="cban__panel">
-                <i class="cban__bars" aria-hidden="true"></i>
-                <p class="cban__live"><i aria-hidden="true"></i>Live · končí za</p>
-                <div class="cban__pool"><span>Výherní bank</span><b id="cbanPool">30 000 €</b></div>
-                <div class="cban__clock" id="cbanClock" aria-live="off"></div>
-              </div>
-              <div class="cban__foot">
-                <p class="cban__claim">Hraj zdarma. Každý den 100 coins.</p>
-                <a class="btn btn--primary btn--sm cban__btn" href="#registrace">Chci soutěžit</a>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -269,12 +257,12 @@
     </section>
 
     <!-- ============ CONTESTY · ACADEMY · RANK (jedna sekce) ============ -->
-    <section class="section" id="karty" aria-labelledby="trio-h">
+    <section class="section" id="contesty" aria-labelledby="trio-h">
       <div class="wrap">
         <div class="sechead">
-          <h2 id="trio-h" class="sr">Žebříček, Academy a statistiky</h2>
+          <h2 id="trio-h" class="sr">Žebříček, Academy, statistiky a contesty</h2>
         </div>
-        <div class="trio trio--4 trio--3">
+        <div class="trio trio--4">
           <article class="trio__card glass" id="rank">
             <span class="chip"><svg aria-hidden="true"><use href="#i-split"/></svg>Žebříček</span>
             <h3 class="h3">Ukaž, co umíš. Získej své místo v žebříčku.</h3>
@@ -323,6 +311,21 @@
               </dl>
               <div class="heat" id="heat"></div>
               </div>
+            </div>
+          </article>
+          <article class="trio__card glass">
+            <span class="chip"><svg aria-hidden="true"><use href="#i-trophy"/></svg>Contesty</span>
+            <h3 class="h3">Jedna soutěž. Stejné podmínky. Ti nejlepší na vrcholu.</h3>
+            <div class="trio__txt">
+              <p>Zapoj se do denních, týdenních a měsíčních contestů. Bez ohledu na rank začínají všichni účastníci za stejných podmínek. Předveď své schopnosti, sbírej body a bojuj o přední příčky.</p>
+            </div>
+            <div class="gpanel" aria-label="Contesty a čas do konce">
+              <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Contesty</p></div>
+              <ul class="gpanel__body gp-list">
+                <li class="gp-row"><span>Denní souboj</span><b class="gp-timer" data-countdown="day">--:--:--</b></li>
+                <li class="gp-row is-hot"><span>Týdenní liga</span><b class="gp-timer" data-countdown="week">--:--:--</b></li>
+                <li class="gp-row"><span>Měsíční šampionát</span><b class="gp-timer" data-countdown="month">--:--:--</b></li>
+              </ul>
             </div>
           </article>
         </div>
@@ -395,6 +398,6 @@
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
   <script src="assets/js/herochart.js?v=202610231300" defer></script>
-  <script src="assets/js/main.js?v=202610251610" defer></script>
+  <script src="assets/js/main.js?v=202610251620" defer></script>
 </body>
 </html>
