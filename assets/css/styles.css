@@ -1929,3 +1929,16 @@ main .rankwin p { color: inherit; }
 .market-wrap { margin-bottom: calc(var(--in) * 1.6); }
 /* hero CTA on the right edge of the content */
 @media (min-width: 1000px) { .hero__cta { justify-content: flex-end; } }
+
+/* prize symbol: phone, headphones, controller + a car in front */
+.flow__node--prize { width: clamp(96px, 13vw, 184px); aspect-ratio: 1.45; }
+.flow__fan img { width: 56%; height: 82%; top: 38%; }
+.flow__fan img:nth-child(1) { translate: -88% -50%; }
+.flow__fan img:nth-child(2) { translate: -12% -48%; }
+.flow__fan img:nth-child(3) { translate: -50% -54%; }
+.flow__fan img.flow__car { width: 104%; height: auto; top: 74%; left: 50%; translate: -50% -50%; rotate: 0deg; opacity: 1; filter: drop-shadow(0 12px 12px rgba(4,32,45,.35)); }
+.flow__node--prize .flow__pay { bottom: -16%; }
+/* demo note straight under the chart, buttons on the same row to the right */
+.tctl { align-items: center; margin-top: 14px; }
+.tctl__note { margin: 0 auto 0 0; max-width: none !important; font-size: 13.5px; }
+@media (max-width: 859px) { .tctl__note { flex-basis: 100%; margin-bottom: 8px; } }
