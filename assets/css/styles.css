@@ -1942,3 +1942,20 @@ main .rankwin p { color: inherit; }
 .tctl { align-items: center; margin-top: 14px; }
 .tctl__note { margin: 0 auto 0 0; max-width: none !important; font-size: 13.5px; }
 @media (max-width: 859px) { .tctl__note { flex-basis: 100%; margin-bottom: 8px; } }
+
+/* prize symbol, calmer: car in front, phone + headphones peeking from behind */
+.flow__fan--clean img { position: absolute; translate: none; rotate: none; opacity: 1; filter: none; }
+.flow__fan--clean .ff-head { width: 40%; height: auto; left: 8%; top: 4%; rotate: -10deg; opacity: .85; }
+.flow__fan--clean .ff-phone { width: 40%; height: auto; right: 6%; left: auto; top: -2%; rotate: 8deg; }
+.flow__fan--clean .flow__car { width: 100%; height: auto; left: 0; top: auto; bottom: 4%; translate: none; filter: drop-shadow(0 10px 10px rgba(4,32,45,.28)); }
+@media (prefers-reduced-motion: no-preference) { .flow__fan--clean { animation: hoverS 3.6s ease-in-out infinite alternate; } .flow__fan--clean img { animation: none; } }
+.flow__fan--clean .ff-head { width: 30%; left: 16%; top: 16%; rotate: -8deg; opacity: 1; }
+.flow__fan--clean .ff-phone { width: 30%; right: 16%; top: 4%; rotate: 6deg; }
+.flow__fan--clean .flow__car { bottom: 14%; }
+.flow__node--prize .flow__pay { bottom: -14%; }
+.flow__fan--clean .ff-head { width: 36%; left: 12%; top: 14%; rotate: -10deg; }
+.flow__fan--clean .ff-phone { width: 40%; right: 12%; top: 2%; rotate: 8deg; }
+.flow__fan--clean .flow__car { width: 96%; left: 2%; bottom: 10%; }
+.flow__node--prize .flow__pay { bottom: -20%; }
+.flow__fan--clean .ff-head { top: 30%; left: 14%; }
+.flow__fan--clean .ff-phone { top: 18%; right: 14%; }
