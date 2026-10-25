@@ -338,13 +338,13 @@
     var lb = $('#leaderboard');
     if (lb) {
       // weekly board in the game's Ranks look: position, player, rank badge, hearts (no share)
-      var rows = [['OndraB', 'S+', 412], ['Kačka_EMA', 'A++', 377], ['Medvěd77', 'A+', 341], ['GrafBijec', 'A', 318], ['Ty', 'C', 211, 27]];
+      var rows = [['OndraB', 'S+', 77], ['Kačka_EMA', 'A++', 72], ['Medvěd77', 'A+', 68], ['GrafBijec', 'A', 63], ['Ty', 'C', 54, 27]]; // úspěšnost v %
       lb.innerHTML = rows.map(function (r, i) {
         var t = r[1].charAt(0), c = TIER[t === 'G' ? 'G' : t] || '#20E39B', light = /[BAG]/.test(t);
         return '<li class="rkp lbg__row' + (r[3] ? ' is-me' : '') + '"><span class="lbg__pos' + (i < 3 && !r[3] ? ' top' + (i + 1) : '') + '">' + (r[3] || i + 1) + '</span>' +
           '<span class="lbg__name">' + r[0] + '</span>' +
           '<b class="rkp-badge' + (light ? ' is-light' : '') + '" style="--rc:' + c + '">' + r[1] + '</b>' +
-          '<span class="rkp-val"><i class="heart-ico" aria-hidden="true"></i>' + r[2] + '</span></li>';
+          '<span class="rkp-val">' + r[2] + ' %</span></li>';
       }).join('');
     }
     var heat = $('#heat');

@@ -2092,3 +2092,5 @@ main .rankwin p { color: inherit; }
   .cban__claim { white-space: normal; }
   .hero__scene { --w: min(72vw, calc((100svh - var(--navh) - 460px) / 1.054)); }
 }
+.lbg-cols, .lbg__row { grid-template-columns: 20px minmax(0, 1fr) 36px 62px; }
+.lbg-cols span:last-child { text-align: right; letter-spacing: .02em; }
