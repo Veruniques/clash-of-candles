@@ -22,7 +22,7 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 1. **Odměny** (`#odmeny`, panel, který vyjede přes hero) — symboly coin → play → srdíčko → odměny → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ + text vlevo, Coins (`#coins`) vpravo; pod tím samostatný blok (`#balicky`, místo kroků 01–04) carousel „Balíčky coins“ (Starting 200/29 Kč, S 1 250/129, M 4 000/349, L 10 000/749, XL 20 000/1 249, XXL 35 000/1 899 — natvrdo v `index.html`; hromádky `img/packs/pile-*.webp`, velikost přes `--s`).
 3. **Ranky** (`#play`) — „Každý rank, jiná hra.“ vlevo, vpravo karta Ranks se řádkem pro každý rank F → G.O.A.T. (bez čísel vstupu/výhry).
 4. **Žebříček · Academy · Herní statistiky · Contesty** (`#contesty`: `#rank`, `#academy`, `#statistika`) — čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
-4b. **O nás** (`#o-nas`) — „Clash of Candles je soutěžní hra…“
+4b. **O Clash of Candles** (`#o-nas`) — „Clash of Candles je soutěžní hra…“
 5. **FAQ** (`#faq`) — 7 otázek z copy decku, jeden sloupec.
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
 7. **Patička** (nízká) — vlevo logo, slogan, odkazy; vpravo právní text; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
