@@ -1925,3 +1925,5 @@ main .rankwin p { color: inherit; }
 .hero__intro { margin: 12px 0 0; font-size: clamp(15px, 1.15vw, 16.5px); line-height: 1.55; color: #17485A; max-width: 44ch; }
 @media (min-width: 1000px) { .hero__lead { grid-row: 1 / 3; align-self: start; } .hero__q { margin: 0; } }
 @media (max-width: 999px) { .hero__lead { margin-bottom: 12px; } .hero__q { margin-bottom: 0; } }
+.flow { margin-bottom: var(--in); }
+.market-wrap { margin-bottom: calc(var(--in) * 1.6); }
