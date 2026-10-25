@@ -2166,3 +2166,15 @@ main .rankwin p { color: inherit; }
 }
 @media (max-width: 700px) { .hero__scene { --w: min(76vw, calc((100svh - var(--navh) - 420px) / 1.054)); } }
 @media (min-width: 1000px) { #heroSub { grid-row: 1 / 3; grid-column: 2; } }
+
+/* v36 — coin packages as their own block (where steps 01–04 were) */
+.packs--sec { margin: 0 0 var(--sec); padding: 0; border: 0; }
+.packs--sec .packs__head { padding: 0; margin-bottom: var(--head); align-items: end; }
+.packs--sec .packs__title { margin: 0; font-size: clamp(30px, 3.2vw, 46px); }
+.packs--sec .packs__track { margin: 0 -20px; padding: 6px 20px 26px; scroll-padding-inline: 20px; gap: 14px; }
+.packs--sec .pack { flex: 0 0 clamp(170px, 17vw, 220px); padding: 20px 18px 18px; gap: 10px; border-radius: 20px; }
+.packs--sec .pack__name { font-size: 14px; }
+.packs--sec .pack__coins { font-size: 28px; }
+.packs--sec .pack__coins .coin-ico { width: 24px; height: 24px; }
+.packs--sec .pack__price { font-size: 15px; padding: 6px 14px; }
+.packs--sec .packs__btn { width: 40px; height: 40px; font-size: 22px; }

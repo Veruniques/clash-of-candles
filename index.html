@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610251600">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610251610">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -171,55 +171,57 @@
               <p>Coins slouží ke vstupu do hry. Srdíčka získáváš na základě svých herních výsledků.</p>
             </article>
           </div>
-          <div class="packs" aria-label="Balíčky coins">
-            <div class="packs__head">
-              <p class="packs__title">Balíčky coins</p>
-              <div class="packs__nav">
-                <button type="button" class="packs__btn" data-dir="-1" aria-label="Předchozí balíčky">‹</button>
-                <button type="button" class="packs__btn" data-dir="1" aria-label="Další balíčky">›</button>
-              </div>
-            </div>
-            <ul class="packs__track" id="packTrack">
-              <li class="pack">
-                <span class="pack__name">Starting</span>
-                <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>200</span>
-                <span class="pack__price">29 Kč</span>
-                
-              </li>
-              <li class="pack">
-                <span class="pack__name">S</span>
-                <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>1 250</span>
-                <span class="pack__price">129 Kč</span>
-                
-              </li>
-              <li class="pack pack--hot">
-                <span class="pack__name">M</span>
-                <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>4 000</span>
-                <span class="pack__price">349 Kč</span>
-                <em class="pack__tag">Oblíbený</em>
-              </li>
-              <li class="pack">
-                <span class="pack__name">L</span>
-                <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>10 000</span>
-                <span class="pack__price">749 Kč</span>
-                
-              </li>
-              <li class="pack">
-                <span class="pack__name">XL</span>
-                <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>20 000</span>
-                <span class="pack__price">1 249 Kč</span>
-                
-              </li>
-              <li class="pack">
-                <span class="pack__name">XXL</span>
-                <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>35 000</span>
-                <span class="pack__price">1 899 Kč</span>
-                
-              </li>
-            </ul>
-          </div>
         </div>
           </div>
+
+          <!-- ============ BALÍČKY COINS (místo kroků 01–04) ============ -->
+        <div class="packs packs--sec" id="balicky" aria-labelledby="packs-h">
+          <div class="packs__head">
+            <h2 id="packs-h" class="h2 packs__title">Balíčky coins</h2>
+            <div class="packs__nav">
+              <button type="button" class="packs__btn" data-dir="-1" aria-label="Předchozí balíčky">‹</button>
+              <button type="button" class="packs__btn" data-dir="1" aria-label="Další balíčky">›</button>
+            </div>
+          </div>
+          <ul class="packs__track" id="packTrack">
+            <li class="pack">
+              <span class="pack__name">Starting</span>
+              <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>200</span>
+              <span class="pack__price">29 Kč</span>
+              
+            </li>
+            <li class="pack">
+              <span class="pack__name">S</span>
+              <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>1 250</span>
+              <span class="pack__price">129 Kč</span>
+              
+            </li>
+            <li class="pack pack--hot">
+              <span class="pack__name">M</span>
+              <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>4 000</span>
+              <span class="pack__price">349 Kč</span>
+              <em class="pack__tag">Oblíbený</em>
+            </li>
+            <li class="pack">
+              <span class="pack__name">L</span>
+              <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>10 000</span>
+              <span class="pack__price">749 Kč</span>
+              
+            </li>
+            <li class="pack">
+              <span class="pack__name">XL</span>
+              <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>20 000</span>
+              <span class="pack__price">1 249 Kč</span>
+              
+            </li>
+            <li class="pack">
+              <span class="pack__name">XXL</span>
+              <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>35 000</span>
+              <span class="pack__price">1 899 Kč</span>
+              
+            </li>
+          </ul>
+        </div>
 
           <!-- ============ CONTESTY (samostatná sekce, banner v designu hry) ============ -->
           <div class="contest-sec" id="contesty">
@@ -393,6 +395,6 @@
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
   <script src="assets/js/herochart.js?v=202610231300" defer></script>
-  <script src="assets/js/main.js?v=202610251600" defer></script>
+  <script src="assets/js/main.js?v=202610251610" defer></script>
 </body>
 </html>
