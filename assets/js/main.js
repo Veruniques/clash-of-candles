@@ -235,14 +235,11 @@
     var order = ['F', 'E', 'D', 'C', 'B', 'A', 'S', 'G'], groups = {};
     RANKS.forEach(function (r) { (groups[r[0][0]] = groups[r[0][0]] || []).push(r); });
     el.innerHTML = order.map(function (t, i) {
-      var g = groups[t], lo = g[0], hi = g[g.length - 1], goat = t === 'G', light = /[BAG]/.test(t);
-      var range = function (a, b) { return a === b ? fmt(a) : fmt(a) + '–' + fmt(b); };
-      return '<li class="rtile' + (i === 0 ? ' is-start' : '') + '" style="--rc:' + TIER[t] + '">' +
-        '<b class="rtile__badge' + (light ? ' is-light' : '') + (goat ? ' is-goat' : '') + '">' + (goat ? 'G.O.A.T.' : t) + '</b>' +
-        '<span class="rtile__steps">' + (i === 0 ? '<em class="rtile__tag">Tady začínáš</em>' : goat ? 'vrchol' : g.map(function (r) { return r[0]; }).join(' · ')) + '</span>' +
-        '<span class="rtile__row"><span>Vstup</span><b><i class="coin-ico" aria-hidden="true"></i>' + range(lo[1], hi[1]) + '</b></span>' +
-        '<span class="rtile__row"><span>Výhra</span><b><i class="heart-ico" aria-hidden="true"></i>+' + range(lo[2], hi[2]) + '</b></span>' +
-        '</li>';
+      var g = groups[t], goat = t === 'G', light = /[BAG]/.test(t);
+      return '<li class="rkp rline' + (i === 0 ? ' is-me' : '') + '" style="--rc:' + TIER[t] + '">' +
+        '<b class="rkp-badge' + (light ? ' is-light' : '') + (goat ? ' is-goat' : '') + '">' + (goat ? 'G.O.A.T.' : t) + '</b>' +
+        '<span class="rline__steps">' + (goat ? 'Vrchol' : g.length < 2 ? '' : g.map(function (r) { return r[0]; }).join(' · ')) + '</span>' +
+        (i === 0 ? '<em class="rtile__tag">Tady začínáš</em>' : '') + '</li>';
     }).join('');
   })();
   (function () {
@@ -284,6 +281,36 @@
     paint(); window.addEventListener('resize', paint); if (document.fonts) document.fonts.ready.then(paint);
   })();
 
+
+  /* ---------------- hero contest banner (game look): tabs + prize pool + flip-clock (hours : minutes) ----------------
+     PLACEHOLDER pools — replace with the real contest banks before launch. */
+  (function () {
+    var root = $('#contestBanner'); if (!root) return;
+    var POOL = { day: '30 000 €', week: '75 000 €', month: '150 000 €' };
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('.cban__tab')), clock = $('#cbanClock'), pool = $('#cbanPool'), cur = 'day';
+    function end(kind) {
+      var n = new Date(), e = new Date(n);
+      if (kind === 'day') e.setHours(24, 0, 0, 0);
+      else if (kind === 'week') { e.setHours(24, 0, 0, 0); e.setDate(e.getDate() + ((7 - n.getDay()) % 7)); }
+      else e = new Date(n.getFullYear(), n.getMonth() + 1, 1);
+      return e;
+    }
+    function tick() {
+      var m = Math.max(0, Math.floor((end(cur) - new Date()) / 60000)), h = Math.floor(m / 60), mm = m % 60;
+      var str = String(h) + ':' + (mm < 10 ? '0' : '') + mm;
+      var html = str.split('').map(function (ch) { return ch === ':' ? '<i class="cban__sep">:</i>' : '<b class="cban__d">' + ch + '</b>'; }).join('');
+      if (clock.innerHTML !== html) clock.innerHTML = html;
+      clock.setAttribute('aria-label', 'Do konce zbývá ' + h + ' h ' + mm + ' min');
+    }
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        cur = t.getAttribute('data-c');
+        tabs.forEach(function (x) { var on = x === t; x.classList.toggle('is-on', on); x.setAttribute('aria-selected', on); });
+        pool.textContent = POOL[cur]; tick();
+      });
+    });
+    tick(); setInterval(tick, 15000);
+  })();
 
   /* ---------------- contests: live countdowns ---------------- */
   (function () {

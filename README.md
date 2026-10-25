@@ -18,11 +18,12 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 
 ## Struktura stránky (texty podle copy decku 10/2026 a úprav 25. 10. 2026)
 
-0. **Hero** — „Přečti graf. Poraz soupeře. Hraj o velké ceny.“ + dva odstavce, CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se naráz v momentě srážky, vždy pod titulkem.
+0. **Hero** — „Přečti graf. Poraz soupeře. Hraj o velké ceny.“ + úvod; vpravo contest banner v designu hry (záložky Daily/Weekly/Monthly, výherní bank, odpočet h:mm — částky jsou PLACEHOLDER v `main.js`, `POOL`), CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se naráz v momentě srážky, vždy pod titulkem.
 1. **Odměny** (`#odmeny`, panel, který vyjede přes hero) — symboly coin → play → srdíčko → odměny → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ + text vlevo, Coins (`#coins`) vpravo.
 2. **Jak se hraje** (`#jak`) — kroky 01–04. (Ukázková hra byla 25. 10. odstraněna.)
-3. **Ranky** (`#play`) — „Každý rank, jiná hra.“ + „Contesty? Tam začínají všichni na stejné čáře.“; pod tím dlaždice F → G.O.A.T. se vstupem a výhrou (počítá se z pole `RANKS` v `main.js`).
+3. **Ranky** (`#play`) — „Každý rank, jiná hra.“ vlevo, vpravo karta Ranks se řádkem pro každý rank F → G.O.A.T. (bez čísel vstupu/výhry).
 4. **Žebříček · Academy · Herní statistiky · Contesty** (`#rank`, `#academy`, `#statistika`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
+4b. **O nás** (`#o-nas`) — „Clash of Candles je soutěžní hra…“
 5. **FAQ** (`#faq`) — 7 otázek z copy decku, jeden sloupec.
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
 7. **Patička** (nízká) — vlevo logo, slogan, odkazy; vpravo právní text; „Pravidla hry“ a „Ochrana osobních údajů“ zatím bez URL (doplnit).
@@ -38,6 +39,7 @@ Ekonomika na webu: **coins** = palivo (vstup do kola), **srdíčka** = výhry, k
 - [ ] **Endpoint formuláře.** `index.html` → `<form id="signup" data-endpoint="">`. Formulář posílá `POST` JSON `{ email, adult, source, ts }`. Dokud je prázdný, e-maily se nikam neodesílají (jen `console.warn` a localStorage v prohlížeči hráče).
 - [ ] **Produkty v `rewards.json`** — skutečné produkty a ceny dle apple.com/cz (iPhone 18 Pro 34 990 Kč, AirPods Max 13 990 Kč, Apple Watch 10 990 Kč, AirPods Pro 3 6 490 Kč). **Fotky jsou zatím odkazované přímo z Apple CDN** — před spuštěním nahradit licencovanými fotkami shopu/partnera (přepsat `image`). Hodnota srdíčka (50 Kč) a max. sleva 80 % jsou placeholder; ceny v marketplace (♥ + Kč) se z nich počítají automaticky.
 - [ ] **Ranky** jsou podle hry: F → E → D → C → B → A → S → G.O.A.T. (s +/++), získávají se hrou, začíná se na F. Rozhraní Ranks kopíruje obrazovku ze hry; sloupce Vstup (10–1 000 coins) a Výhra (1–100 srdíček) jsou placeholder. `assets/js/main.js`, pole `RANKS`.
+- [ ] **Výherní banky contestů** v hero banneru (30 000 / 75 000 / 150 000 €) jsou placeholder — `main.js`, `POOL`.
 - [ ] **Výhody registrace** (early access, startovní bonus, founder badge) — nechat jen potvrzené.
 - [ ] **Mock data** — žebříček, statistiky a Academy kvíz jsou ilustrační (`main.js`, `index.html`).
 - [ ] **Právní texty** — patička a FAQ tvrdí: není to investiční služba, coins nelze vyměnit za peníze, 18+. Nechat zkontrolovat právníkem (kupované coins + reálné produkty).

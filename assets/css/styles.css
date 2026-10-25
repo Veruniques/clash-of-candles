@@ -2005,3 +2005,57 @@ main .rankwin p { color: inherit; }
 /* v30 — symbol row across the full content width (symbols stay compact, arrows fill the gaps) */
 .flow { justify-content: space-between; max-width: none; margin-right: 0; }
 .flow__arrow { flex: 1 1 0; max-width: none; min-width: 18px; }
+
+/* v31 — hero contest banner in the game's look */
+.cban { --cg: #6BE6A5; --cg-d: #0F5E3A; width: min(100%, 440px); font-family: inherit; }
+.cban__tabs { display: grid; grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+.cban__tab { position: relative; padding: 12px 16px 10px; border: 0; border-radius: 12px 12px 0 0; background: transparent; cursor: pointer;
+  font: inherit; font-size: 15px; font-weight: 600; line-height: 1.2; text-align: left; color: rgba(11,44,58,.38); }
+.cban__tab + .cban__tab:not(.is-on)::before { content: ""; position: absolute; left: 0; top: 12px; bottom: 10px; width: 2px; background: rgba(11,44,58,.12); }
+.cban__tab.is-on { background: var(--cg); color: var(--cg-d); }
+.cban__tab.is-on + .cban__tab::before { display: none; }
+.cban__tab:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.cban__panel { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; padding: 18px;
+  background: var(--cg); border-radius: 0 12px 12px 12px; box-shadow: 0 24px 44px -26px rgba(4,60,40,.6); }
+
+.cban__bars { position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(90deg, transparent 0 8px, rgba(255,255,255,.14) 8px 12px) 62% 0 / 34% 100% no-repeat; opacity: .8; }
+.cban__pool { position: relative; display: grid; justify-items: center; gap: 2px; padding: 14px 10px 16px; border-radius: 4px; text-align: center;
+  background: linear-gradient(115deg, #fff 0 46%, #EEFBF4 46% 60%, #fff 60%); color: var(--cg-d); }
+.cban__pool span { font-size: 14px; font-weight: 600; }
+.cban__pool b { font-stretch: 105%; font-weight: 800; font-size: clamp(22px, 2vw, 28px); letter-spacing: -0.01em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.cban__pool b::after { content: ""; display: block; height: 5px; margin-top: 6px; border-radius: 3px; background: var(--cg); }
+.cban__clock { position: relative; display: flex; align-items: center; gap: 6px; }
+.cban__d { display: grid; place-items: center; width: 38px; height: 56px; border-radius: 6px; background: #333637; color: #fff;
+  font-weight: 600; font-size: 30px; font-variant-numeric: tabular-nums; box-shadow: inset 0 -1px 0 rgba(255,255,255,.06); }
+.cban__sep { font-style: normal; font-weight: 700; font-size: 20px; color: #333637; }
+.cban__note { margin: 14px 0 0; font-size: 13.5px; line-height: 1.5; color: #17485A; max-width: 440px; }
+.cban__note b { color: var(--ink); }
+@media (max-width: 520px) { .cban__tab { font-size: 13px; padding: 10px 10px 8px; } .cban__panel { grid-template-columns: 1fr; } .cban__clock { justify-content: center; } }
+
+/* O nás */
+.about__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--head) clamp(40px, 5vw, 72px); align-items: start; }
+.about__grid .h2, .about__grid .lede { margin: 0; }
+@media (max-width: 860px) { .about__grid { grid-template-columns: 1fr; } }
+#o-nas.section { padding-block: calc(var(--sec) / 2); }
+
+/* v32 — ranks: text left, one game card with a line per rank (no economy numbers) */
+.ranks__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--in) clamp(40px, 5vw, 72px); align-items: start; }
+.ranks__grid .h2 { margin: 0 0 var(--head); }
+.ranks__grid .lede { margin: 0; }
+.rcard { margin: 0; width: min(100%, 460px); justify-self: end; }
+.rlines { gap: 5px; }
+.rline { display: flex; align-items: center; gap: 14px; padding: 9px 12px; }
+.rline .rkp-badge { width: 44px; min-width: 44px; height: 28px; padding: 0; font-size: 13px; }
+.rline .rkp-badge.is-goat { width: auto; padding: 0 8px; font-size: 11px; height: 28px; box-shadow: none; }
+.rline__steps { font-size: 13px; font-weight: 700; color: #4F6470; }
+.rline .rtile__tag { margin-left: auto; }
+@media (max-width: 860px) { .ranks__grid { grid-template-columns: 1fr; } .rcard { justify-self: start; } }
+
+/* hero banner, mobile: compact */
+@media (max-width: 700px) {
+  .cban__panel { grid-template-columns: 1fr auto; padding: 12px; gap: 10px; }
+  .cban__pool { padding: 8px 6px 10px; } .cban__pool span { font-size: 12px; } .cban__pool b { font-size: 20px; }
+  .cban__d { width: 28px; height: 42px; font-size: 22px; } .cban__sep { font-size: 16px; }
+  .cban__tab { padding: 8px 10px 6px; font-size: 12px; }
+}
