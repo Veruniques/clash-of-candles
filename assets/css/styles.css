@@ -2193,3 +2193,7 @@ main .rankwin p { color: inherit; }
 .packs__art { width: clamp(96px, 9vw, 132px); height: auto; margin: -36px 0 -18px; pointer-events: none; filter: drop-shadow(0 14px 18px rgba(120,80,0,.35)); }
 @media (prefers-reduced-motion: no-preference) { .packs__art { animation: hoverS 4s ease-in-out infinite alternate; } }
 @media (max-width: 600px) { .packs__art { width: 76px; margin: -20px 0 -10px; } }
+
+/* v39 — hero banner spans the whole right column (right edge = content edge below) */
+@media (min-width: 1000px) { #heroSub { justify-self: stretch; } #heroSub .cban { width: 100%; max-width: none; } }
+@media (min-width: 1000px) { .hero__copy .hero__sub#heroSub { max-width: none; width: 100%; margin: 0; } }
