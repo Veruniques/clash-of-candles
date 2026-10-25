@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610251510">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610251520">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -105,19 +105,20 @@
         <div class="hero__sub" id="heroSub">
           <div class="cban" id="contestBanner" aria-label="Contesty: výherní bank a čas do konce">
             <div class="cban__tabs" role="tablist">
-              <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Daily<br>contest</button>
-              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Weekly<br>contest</button>
-              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Monthly<br>contest</button>
+              <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Daily contest</button>
+              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Weekly contest</button>
+              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Monthly contest</button>
             </div>
             <div class="cban__panel">
               <i class="cban__bars" aria-hidden="true"></i>
               <div class="cban__pool"><span>Výherní bank</span><b id="cbanPool">30 000 €</b></div>
               <div class="cban__clock" id="cbanClock" aria-live="off"></div>
             </div>
+            <div class="cban__foot hero__cta" id="heroCta">
+              <p class="cban__claim">Hraj zdarma. Každý den 100 coins.</p>
+              <a class="btn btn--primary btn--sm cban__btn" href="#registrace">Vyzkoušet hru</a>
+            </div>
           </div>
-        </div>
-        <div class="hero__cta" id="heroCta">
-          <a class="btn btn--primary btn--lg" href="#registrace">Vyzkoušet hru</a>
         </div>
       </div>
       <div class="scroll-cue" id="scrollCue" aria-hidden="true"><span></span></div>
