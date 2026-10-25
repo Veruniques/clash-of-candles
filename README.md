@@ -17,12 +17,12 @@ assets/
 Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://localhost:8000`.
 Žádné externí CDN ani Google Fonts. Assety mají `?v=` verzi — při změně CSS/JS ji zvedněte (jinak prohlížeče drží starou cache).
 
-## Struktura stránky (texty podle copy decku, 10/2026)
+## Struktura stránky (texty podle copy decku 10/2026 a úprav 25. 10. 2026)
 
-0. **Hero** — „Graf před tebou. Rozhodnutí na tobě.“ + úvodní text, CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se naráz v momentě srážky, vždy pod titulkem.
-1. **Odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — symboly coin → play → srdíčko → odměny → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ → dva sloupce: text + CTA vlevo, Coins (`#coins`) vpravo → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers`.
+0. **Hero** — „Přečti graf. Poraz soupeře. Hraj o velké ceny.“ + dva odstavce, CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se naráz v momentě srážky, vždy pod titulkem.
+1. **Odměny** (`#odmeny`, první věc v panelu, který vyjede přes hero) — 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers`; pod nimi vpravo CTA Prozkoumat odměny → symboly coin → play → srdíčko → odměny → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ + text vlevo, Coins (`#coins`) vpravo.
 2. **Tutoriál** (`#tutorial`, odkaz „Jak se hraje“) — ukázková hra; G1 začíná na 1:00, G2 už běží od 0:30 (`roundSeconds: 60`). Pod grafem kroky 01–04 (`#jak`).
-3. **Ranky** (`#play`) — „Každý rank, jiná hra.“: vyšší rank = těžší čtení grafu, vyšší vstup i výhry; v contestech jsou si všichni rovni. Screenshot hry + obrazovka Ranks.
+3. **Ranky** (`#play`) — „Každý rank, jiná hra.“ + „Contesty? Tam začínají všichni na stejné čáře.“ Screenshot hry + obrazovka Ranks.
 4. **Žebříček · Academy · Herní statistiky · Contesty** (`#rank`, `#academy`, `#statistika`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
 5. **FAQ** (`#faq`) — 7 otázek z copy decku, jeden sloupec.
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.

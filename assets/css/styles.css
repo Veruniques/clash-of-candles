@@ -1912,3 +1912,9 @@ main .rankwin p { color: inherit; }
 @media (min-width: 1000px) { .hero__scene { --w: min(860px, 80vw, calc((100svh - var(--navh) - 250px) / 1.054)); } }
 .hero__copy { margin-top: clamp(16px, 3svh, 36px); }
 @media (max-width: 700px) { .hero__scene { --w: min(76vw, calc((100svh - var(--navh) - 420px) / 1.054)); --tw: min(80vw, calc(var(--w) * 1.3)); } }
+
+/* v26 — rewards first in section 2, CTA under them on the right; ranks copy with a sub-heading */
+.market-wrap { margin: 0 0 calc(var(--in) * 1.6); }
+.market__more { display: flex; justify-content: flex-end; margin-top: 24px; }
+.rank__sub { margin: var(--in) 0 10px; font-stretch: 112%; font-weight: 800; font-size: clamp(20px, 1.8vw, 26px); letter-spacing: -0.02em; line-height: 1.15; max-width: 22ch; }
+.trio--4 .trio__card > .chip { justify-self: start; align-self: start; }
