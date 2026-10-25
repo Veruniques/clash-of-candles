@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610250945">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610251330">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -98,9 +98,11 @@
       <canvas class="hero__dust" id="dust" aria-hidden="true"></canvas>
 
       <div class="hero__copy" id="heroCopy">
-        <h2 class="hero__q" id="heroQ">Přečti graf. Poraz soupeře. Hraj o velké ceny.</h2>
+        <div class="hero__lead" id="heroQ">
+          <h2 class="hero__q"><span>Přečti graf.</span> <span>Poraz soupeře.</span> <span>Hraj o velké ceny.</span></h2>
+          <p class="hero__intro">Otestuj své schopnosti, vyzvi ostatní hráče a zapoj se do contestů o auta, motorky a další atraktivní ceny. Každé rozhodnutí je nová výzva.</p>
+        </div>
         <div class="hero__sub" id="heroSub">
-          <p>Otestuj své schopnosti, vyzvi ostatní hráče a zapoj se do contestů o auta, motorky a další atraktivní ceny. Každé rozhodnutí je nová výzva.</p>
           <p>Clash of Candles je soutěžní hra založená na historických tržních grafech. Analyzuj situaci, rozhodni se mezi Breakout a Breakdown a poměř své výsledky s ostatními hráči. Za úspěšná rozhodnutí můžeš získávat srdíčka a využívat je na odměny.</p>
         </div>
         <div class="hero__cta" id="heroCta">
@@ -481,7 +483,7 @@
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
   <script src="assets/js/herochart.js?v=202610231300" defer></script>
-  <script src="assets/js/main.js?v=202610231850" defer></script>
+  <script src="assets/js/main.js?v=202610251330" defer></script>
   <script src="assets/js/game.js?v=202610231300" defer></script>
 </body>
 </html>

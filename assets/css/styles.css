@@ -1918,3 +1918,10 @@ main .rankwin p { color: inherit; }
 .market__more { display: flex; justify-content: flex-end; margin-top: 24px; }
 .rank__sub { margin: var(--in) 0 10px; font-stretch: 112%; font-weight: 800; font-size: clamp(20px, 1.8vw, 26px); letter-spacing: -0.02em; line-height: 1.15; max-width: 22ch; }
 .trio--4 .trio__card > .chip { justify-self: start; align-self: start; }
+
+/* v27 — hero: three-line headline, intro under it, smaller */
+.hero__q { font-size: clamp(22px, 2.2vw, 32px); line-height: 1.08; max-width: none; }
+.hero__q span { display: block; }
+.hero__intro { margin: 12px 0 0; font-size: clamp(15px, 1.15vw, 16.5px); line-height: 1.55; color: #17485A; max-width: 44ch; }
+@media (min-width: 1000px) { .hero__lead { grid-row: 1 / 3; align-self: start; } .hero__q { margin: 0; } }
+@media (max-width: 999px) { .hero__lead { margin-bottom: 12px; } .hero__q { margin-bottom: 0; } }
