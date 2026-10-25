@@ -313,28 +313,6 @@
     tick(); setInterval(tick, 15000);
   })();
 
-  /* ---------------- coin heaps in package cards: a loose 3D-ish mound, size grows with the package ---------------- */
-  (function () {
-    Array.prototype.forEach.call(document.querySelectorAll('.heap[data-n]'), function (el) {
-      var n = +el.getAttribute('data-n'), seed = n * 7919, out = [];
-      function r() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-      var spread = Math.min(36, 16 + Math.sqrt(n) * 5), peak = Math.min(86, 20 + Math.sqrt(n) * 9.5);   // % of the box
-      for (var i = 0; i < n; i++) {
-        var x = 50 + (r() + r() + r() - 1.5) / 1.5 * spread;                 // bell-shaped: dense in the middle
-        var prof = Math.max(0, 1 - Math.pow(Math.abs(x - 50) / (spread + 6), 2)); // dome profile
-        var y = 100 - prof * peak * Math.sqrt(r());                          // anywhere inside the dome
-        var front = (y - (100 - peak)) / peak;                               // 0 top/back … 1 bottom/front
-        var size = 30 + front * 12 + r() * 6, tilt = (r() - 0.5) * 80, flat = 0.5 + r() * 0.45;
-        out.push({ x: x, y: y, z: y, size: size, tilt: tilt, flat: flat, dim: 0.8 + front * 0.2 });
-      }
-      out.sort(function (a, b) { return a.z - b.z; });
-      el.innerHTML = out.map(function (c) {
-        return '<i style="left:' + c.x.toFixed(1) + '%;top:' + c.y.toFixed(1) + '%;width:' + c.size.toFixed(0) + 'px;height:' + c.size.toFixed(0) + 'px;' +
-          'transform:translate(-50%,-100%) rotate(' + c.tilt.toFixed(0) + 'deg) scaleY(' + c.flat.toFixed(2) + ');filter:brightness(' + c.dim.toFixed(2) + ') drop-shadow(0 3px 2px rgba(120,80,0,.35))"></i>';
-      }).join('');
-    });
-  })();
-
   /* ---------------- coin packages carousel ---------------- */
   (function () {
     var tr = $('#packTrack'); if (!tr) return;
