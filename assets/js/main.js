@@ -298,7 +298,8 @@
     function tick() {
       var m = Math.max(0, Math.floor((end(cur) - new Date()) / 60000)), h = Math.floor(m / 60), mm = m % 60;
       var str = String(h) + ':' + (mm < 10 ? '0' : '') + mm;
-      var html = str.split('').map(function (ch) { return ch === ':' ? '<i class="cban__sep">:</i>' : '<b class="cban__d">' + ch + '</b>'; }).join('');
+      var part = function (txt, lab) { return '<span class="cban__grp"><span class="cban__ds">' + txt.split('').map(function (ch) { return '<b class="cban__d">' + ch + '</b>'; }).join('') + '</span><small>' + lab + '</small></span>'; };
+      var html = part(String(h), 'hod') + '<i class="cban__sep">:</i>' + part((mm < 10 ? '0' : '') + mm, 'min');
       if (clock.innerHTML !== html) clock.innerHTML = html;
       clock.setAttribute('aria-label', 'Do konce zbývá ' + h + ' h ' + mm + ' min');
     }
@@ -310,6 +311,17 @@
       });
     });
     tick(); setInterval(tick, 15000);
+  })();
+
+  /* ---------------- coin packages carousel ---------------- */
+  (function () {
+    var tr = $('#packTrack'); if (!tr) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.packs__btn'), function (b) {
+      b.addEventListener('click', function () {
+        var card = tr.querySelector('.pack'); var step = card ? card.getBoundingClientRect().width + 10 : 160;
+        tr.scrollBy({ left: step * Number(b.getAttribute('data-dir')), behavior: reduced ? 'auto' : 'smooth' });
+      });
+    });
   })();
 
   /* ---------------- contests: live countdowns ---------------- */

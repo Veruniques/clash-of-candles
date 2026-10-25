@@ -19,7 +19,7 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 ## Struktura stránky (texty podle copy decku 10/2026 a úprav 25. 10. 2026)
 
 0. **Hero** — „Přečti graf. Poraz soupeře. Hraj o velké ceny.“ + úvod; vpravo contest banner v designu hry (záložky Daily/Weekly/Monthly, výherní bank, odpočet h:mm — částky jsou PLACEHOLDER v `main.js`, `POOL`), CTA Vyzkoušet hru (→ ukázka). Za panáčky slabý graf ze hry (vlevo čára se stínem, vpravo svíčky, `js/herochart.js`), objeví se naráz v momentě srážky, vždy pod titulkem.
-1. **Odměny** (`#odmeny`, panel, který vyjede přes hero) — symboly coin → play → srdíčko → odměny → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ + text vlevo, Coins (`#coins`) vpravo.
+1. **Odměny** (`#odmeny`, panel, který vyjede přes hero) — symboly coin → play → srdíčko → odměny → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ + text vlevo, Coins (`#coins`) vpravo; pod Coins carousel „Balíčky coins“ (Starting 200/29 Kč, S 1 250/129, M 4 000/349, L 10 000/749, XL 20 000/1 249, XXL 35 000/1 899 — natvrdo v `index.html`).
 2. **Jak se hraje** (`#jak`) — kroky 01–04. (Ukázková hra byla 25. 10. odstraněna.)
 3. **Ranky** (`#play`) — „Každý rank, jiná hra.“ vlevo, vpravo karta Ranks se řádkem pro každý rank F → G.O.A.T. (bez čísel vstupu/výhry).
 4. **Žebříček · Academy · Herní statistiky · Contesty** (`#rank`, `#academy`, `#statistika`, `#contesty`) — jedna sekce, čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).

@@ -2100,3 +2100,39 @@ main .rankwin p { color: inherit; }
 .lbg__name { font-size: 12.5px; }
 .lbg .rkp-badge { font-size: 10px; }
 .lbg .rkp-val { font-size: 12.5px; }
+
+/* v34 — coin packages carousel (inside the Coins panel) */
+.packs { margin: 6px -28px -10px; padding: 16px 0 22px; border-top: 1px solid rgba(11,44,58,.1); }
+.packs__head { display: flex; align-items: center; justify-content: space-between; padding: 0 28px 12px; }
+.packs__title { margin: 0; font-weight: 800; font-size: 15px; color: var(--ink); }
+.packs__nav { display: flex; gap: 6px; }
+.packs__btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(11,44,58,.15); background: #fff; color: var(--ink); font-size: 18px; line-height: 1; cursor: pointer; }
+.packs__btn:hover { background: var(--ink); color: #fff; }
+.packs__track { list-style: none; margin: 0; padding: 4px 28px 6px; display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 28px; scrollbar-width: none; }
+.packs__track::-webkit-scrollbar { display: none; }
+.pack { position: relative; flex: 0 0 132px; scroll-snap-align: start; display: grid; gap: 6px; padding: 14px 14px 12px; border-radius: 16px; background: #fff;
+  box-shadow: 0 1px 2px rgba(19,35,44,.06), 0 14px 26px -20px rgba(4,60,80,.5); }
+.pack__name { font-stretch: 112%; font-weight: 800; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: #7C8B94; }
+.pack__coins { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 20px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.pack__coins .coin-ico { width: 18px; height: 18px; }
+.pack__price { justify-self: start; padding: 4px 10px; border-radius: 999px; background: var(--ink); color: #fff; font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums; }
+.pack--hot { box-shadow: 0 0 0 2px #2EEA9C, 0 14px 26px -20px rgba(4,60,80,.5); }
+.pack__tag { position: absolute; top: 10px; right: 10px; padding: 2px 7px; border-radius: 6px; background: #2EEA9C; color: #0B2C1E; font-style: normal; font-size: 10px; font-weight: 800; }
+@media (max-width: 860px) { .packs { margin-inline: -20px; } .packs__head, .packs__track { padding-inline: 20px; } .packs__track { scroll-padding-inline: 20px; } }
+
+/* contest banner, more designed: live pill, glossy flip tiles with labels */
+.cban__panel { grid-template-columns: 1fr auto; grid-template-rows: auto 1fr; row-gap: 8px; }
+.cban__live { grid-column: 1 / -1; margin: 0; display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #0F5E3A; position: relative; }
+.cban__live i { width: 8px; height: 8px; border-radius: 50%; background: #E0195A; box-shadow: 0 0 0 0 rgba(224,25,90,.5); }
+@media (prefers-reduced-motion: no-preference) { .cban__live i { animation: livePulse 1.6s ease-out infinite; } }
+@keyframes livePulse { 0% { box-shadow: 0 0 0 0 rgba(224,25,90,.55); } 100% { box-shadow: 0 0 0 8px rgba(224,25,90,0); } }
+.cban__clock { align-items: flex-start; gap: 4px; }
+.cban__grp { display: grid; justify-items: center; gap: 4px; }
+.cban__ds { display: flex; gap: 4px; }
+.cban__grp small { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #7C8B94; }
+.cban__d { position: relative; overflow: hidden; background: linear-gradient(180deg, #45494A 0 50%, #2C2F30 50% 100%); box-shadow: 0 6px 12px -6px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.12); }
+.cban__d::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,.55); }
+.cban__sep { margin-top: 10px; }
+.cban__pool { border: 1px solid rgba(107,230,165,.6); }
+@media (min-width: 1000px) { .hero__scene { --w: min(800px, 74vw, calc((100svh - var(--navh) - 340px) / 1.054)); } }
+@media (max-width: 700px) { .hero__scene { --w: min(66vw, calc((100svh - var(--navh) - 520px) / 1.054)); } .cban__live { font-size: 10px; } }
