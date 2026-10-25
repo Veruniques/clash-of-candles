@@ -1967,3 +1967,5 @@ main .rankwin p { color: inherit; }
 .flow__arrow { flex: 0 0 clamp(28px, 4.5vw, 72px); min-width: 0; }
 .flow__badge, .flow__pay { font-size: clamp(10px, 1vw, 13px); }
 @media (max-width: 520px) { .flow { gap: 6px; } .flow__node { width: 46px; } .flow__node--prize { width: 78px; } .flow__arrow { flex-basis: 18px; } .flow__arrow::after { width: 6px; height: 6px; } }
+/* no demo game any more: steps follow the rewards block with an in-section gap */
+.howto { margin-top: 0; }

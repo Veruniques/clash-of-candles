@@ -9,7 +9,7 @@
 
   /* ---------------- shared config (rewards.json) ----------------
      Placeholder data lives in assets/data/rewards.json. When the shop API exists,
-     point data-rewards on #game at it — everything below and game.js reads from it. */
+     point data-rewards on <main> at it — everything below reads from it. */
   var DEFAULT_CONFIG = {
     currency: 'Kč', candleValue: 50, maxDiscountPct: 80,
     game: { startCoins: 100, entry: 10, candlesPerWin: 1, roundSeconds: 60 },
@@ -21,7 +21,7 @@
     ],
     teasers: ['MacBook Air', 'iPad Air', 'Herní konzole', 'Voucher na výlet']
   };
-  var gameEl = $('#game');
+  var gameEl = document.querySelector('[data-rewards]');
   var src = gameEl && gameEl.getAttribute('data-rewards');
   window.CoC = window.CoC || {};
   window.CoC.config = (src && window.fetch
