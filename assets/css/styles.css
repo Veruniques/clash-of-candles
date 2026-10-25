@@ -1959,3 +1959,11 @@ main .rankwin p { color: inherit; }
 .flow__node--prize .flow__pay { bottom: -20%; }
 .flow__fan--clean .ff-head { top: 30%; left: 14%; }
 .flow__fan--clean .ff-phone { top: 18%; right: 14%; }
+
+/* v28 — compact symbol row: smaller symbols, short arrows, starts at the left */
+.flow { justify-content: flex-start; gap: clamp(8px, 1.2vw, 16px); }
+.flow__node { width: clamp(52px, 6vw, 84px); }
+.flow__node--prize { width: clamp(84px, 9.5vw, 136px); }
+.flow__arrow { flex: 0 0 clamp(28px, 4.5vw, 72px); min-width: 0; }
+.flow__badge, .flow__pay { font-size: clamp(10px, 1vw, 13px); }
+@media (max-width: 520px) { .flow { gap: 6px; } .flow__node { width: 46px; } .flow__node--prize { width: 78px; } .flow__arrow { flex-basis: 18px; } .flow__arrow::after { width: 6px; height: 6px; } }
