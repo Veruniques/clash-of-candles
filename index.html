@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610201838">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610251420">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610251430">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -191,23 +191,18 @@
 
     <!-- ============ 4. PLAY ============ -->
     <section class="section" id="play" aria-labelledby="play-h">
-      <div class="wrap split split--wide">
-        <div>
-          <h2 id="play-h" class="h2">Každý rank, jiná hra.</h2>
-          <p class="lede">Každý rank přináší nové herní podmínky, výzvy a možnosti. S postupem na vyšší úrovně se zvyšuje obtížnost i odměny za úspěšná kola.</p>
-          <h3 class="h3 rank__sub">Contesty? Tam začínají všichni na stejné čáře.</h3>
-          <p class="lede">Bez ohledu na rank se účastníci zapojují za stejných podmínek. Rozhodují výsledky v konkrétní soutěži.</p>
-        </div>
-        <div class="playshot" aria-label="Ukázka obrazovky hry a přehledu ranků">
-          <div class="playshot__screen playshot__screen--real">
-            <img src="assets/img/play-real.webp?v=202610201838" width="1400" height="972" alt="Skutečná obrazovka hry: graf EUR/USD s EMA 100, pohledy denní, hodinový a minutový, odpočet kola a hranice breakout a breakdown" loading="lazy" decoding="async">
+      <div class="wrap">
+        <div class="ranks__head">
+          <div>
+            <h2 id="play-h" class="h2">Každý rank, jiná hra.</h2>
+            <p class="lede">Každý rank přináší nové herní podmínky, výzvy a možnosti. S postupem na vyšší úrovně se zvyšuje obtížnost i odměny za úspěšná kola.</p>
           </div>
-          <div class="rankwin" id="rankWin" aria-label="Obrazovka Ranks ze hry">
-            <div class="rkp-top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Ranks</p></div>
-            <div class="rkp-cols" aria-hidden="true"><span>Rank</span><span>Vstup</span><span>Výhra</span></div>
-            <ol class="rkp-list" id="rankList"></ol>
+          <div class="ranks__contest">
+            <h3 class="h3 rank__sub">Contesty? Tam začínají všichni na stejné čáře.</h3>
+            <p class="lede">Bez ohledu na rank se účastníci zapojují za stejných podmínek. Rozhodují výsledky v konkrétní soutěži.</p>
           </div>
         </div>
+        <ol class="rtiles" id="rankTiles" aria-label="Ranky od F po G.O.A.T."></ol>
       </div>
     </section>
 
@@ -345,6 +340,6 @@
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
   <script src="assets/js/herochart.js?v=202610231300" defer></script>
-  <script src="assets/js/main.js?v=202610251420" defer></script>
+  <script src="assets/js/main.js?v=202610251430" defer></script>
 </body>
 </html>

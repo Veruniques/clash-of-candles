@@ -229,6 +229,22 @@
     ['S', 500, 50], ['S+', 650, 65], ['S++', 800, 80], ['G.O.A.T.', 1000, 100]
   ];
   var fmt = window.CoC.fmt;
+  // rank tiles: one per tier F → G.O.A.T., entry + win ranges from RANKS
+  (function () {
+    var el = $('#rankTiles'); if (!el) return;
+    var order = ['F', 'E', 'D', 'C', 'B', 'A', 'S', 'G'], groups = {};
+    RANKS.forEach(function (r) { (groups[r[0][0]] = groups[r[0][0]] || []).push(r); });
+    el.innerHTML = order.map(function (t, i) {
+      var g = groups[t], lo = g[0], hi = g[g.length - 1], goat = t === 'G', light = /[BAG]/.test(t);
+      var range = function (a, b) { return a === b ? fmt(a) : fmt(a) + '–' + fmt(b); };
+      return '<li class="rtile' + (i === 0 ? ' is-start' : '') + '" style="--rc:' + TIER[t] + '">' +
+        '<b class="rtile__badge' + (light ? ' is-light' : '') + (goat ? ' is-goat' : '') + '">' + (goat ? 'G.O.A.T.' : t) + '</b>' +
+        '<span class="rtile__steps">' + (i === 0 ? '<em class="rtile__tag">Tady začínáš</em>' : goat ? 'vrchol' : g.map(function (r) { return r[0]; }).join(' · ')) + '</span>' +
+        '<span class="rtile__row"><span>Vstup</span><b><i class="coin-ico" aria-hidden="true"></i>' + range(lo[1], hi[1]) + '</b></span>' +
+        '<span class="rtile__row"><span>Výhra</span><b><i class="heart-ico" aria-hidden="true"></i>+' + range(lo[2], hi[2]) + '</b></span>' +
+        '</li>';
+    }).join('');
+  })();
   (function () {
     var list = $('#rankList'); if (!list) return;
     var me = 0, open = 4; // demo player: fresh on F; the first tier group is visible, the rest unlocks by playing

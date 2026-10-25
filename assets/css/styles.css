@@ -1969,3 +1969,35 @@ main .rankwin p { color: inherit; }
 @media (max-width: 520px) { .flow { gap: 6px; } .flow__node { width: 46px; } .flow__node--prize { width: 78px; } .flow__arrow { flex-basis: 18px; } .flow__arrow::after { width: 6px; height: 6px; } }
 /* no demo game any more: steps follow the rewards block with an in-section gap */
 .howto { margin-top: 0; }
+
+/* v29 — ranks as tiles F → G.O.A.T. */
+.ranks__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--head) clamp(40px, 5vw, 72px); align-items: end; margin-bottom: var(--in); }
+.ranks__head .h2 { margin: 0 0 var(--head); }
+.ranks__head .lede { margin: 0; }
+.ranks__contest .rank__sub { margin: 0 0 10px; }
+@media (max-width: 860px) { .ranks__head { grid-template-columns: 1fr; } }
+.rtiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 10px; }
+.rtile { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 16px 14px 14px; border-radius: 18px;
+  background: #F2F6F9; border: 1px solid #fff; color: #13232C; box-shadow: 0 22px 40px -28px rgba(4,32,45,.55); }
+.rtile::before { content: ""; position: absolute; left: 14px; right: 14px; top: 0; height: 3px; border-radius: 0 0 3px 3px; background: var(--rc); }
+.rtile.is-start { border-color: #22D98C; box-shadow: 0 0 0 1.5px #22D98C, 0 22px 40px -28px rgba(4,32,45,.55); }
+.rtile__badge { align-self: flex-start; display: inline-grid; place-items: center; min-width: 40px; height: 40px; padding: 0 8px; border-radius: 10px;
+  background: var(--rc); color: #0B2C1E; font-stretch: 112%; font-weight: 800; font-size: 20px; }
+.rtile__badge.is-light { color: #fff; }
+.rtile__badge.is-goat { font-size: 13px; letter-spacing: .02em; }
+.rtile__steps { font-size: 11.5px; font-weight: 700; color: #7C8B94; min-height: 1.4em; }
+.rtile__row { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 7px 9px; border-radius: 8px; background: #fff;
+  font-size: 11px; font-weight: 700; color: #7C8B94; text-transform: uppercase; letter-spacing: .04em; }
+.rtile__row b { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; color: #13232C; text-transform: none; letter-spacing: 0; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rtile__row .coin-ico { width: 13px; height: 13px; } .rtile__row .heart-ico { margin: 0; }
+.rtile__tag { position: absolute; right: 10px; top: 14px; padding: 3px 7px; border-radius: 6px; background: #2EEA9C; color: #0B2C1E; font-style: normal; font-size: 10px; font-weight: 800; }
+@media (max-width: 1180px) { .rtiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .rtiles { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -20px; padding: 6px 20px 18px; scrollbar-width: none; }
+  .rtiles::-webkit-scrollbar { display: none; } .rtile { flex: 0 0 44%; scroll-snap-align: start; } }
+.rtile__row { flex-direction: column; align-items: flex-start; gap: 2px; padding: 7px 9px; }
+.rtile__row span { font-size: 10px; }
+.rtile__row b { font-size: 14px; }
+.rtile__tag { top: auto; bottom: calc(100% - 10px); right: 8px; }
+@media (max-width: 600px) { .rtiles { scroll-padding-inline: 20px; } }
+.rtile__tag { position: static; display: inline-block; }
+.rtile__steps { display: flex; align-items: center; min-height: 22px; }
