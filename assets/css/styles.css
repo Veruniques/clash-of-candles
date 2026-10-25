@@ -2197,3 +2197,13 @@ main .rankwin p { color: inherit; }
 /* v39 — hero banner spans the whole right column (right edge = content edge below) */
 @media (min-width: 1000px) { #heroSub { justify-self: stretch; } #heroSub .cban { width: 100%; max-width: none; } }
 @media (min-width: 1000px) { .hero__copy .hero__sub#heroSub { max-width: none; width: 100%; margin: 0; } }
+
+/* v40 — package cards: a coin pile that grows with the package */
+.pack__pile { display: flex; align-items: flex-end; justify-content: center; height: 118px; margin: -4px 0 6px; padding-bottom: 4px;
+  border-radius: 14px; background: radial-gradient(70% 60% at 50% 85%, #FFF3D1, rgba(255,243,209,0) 70%); }
+.pile__stack { display: flex; flex-direction: column-reverse; margin: 0 -9px; }
+.pile__stack i { display: block; width: 40px; height: 40px; margin-top: -32px; background: url(../img/coin-hex-sm.webp?v=1) center / contain no-repeat;
+  filter: drop-shadow(0 2px 1.5px rgba(120,80,0,.35)); }
+.pile__stack i:last-child { margin-top: 0; }
+.pack .pack__coins .coin-ico { width: 18px; height: 18px; }
+@media (prefers-reduced-motion: no-preference) { .pack:hover .pile__stack { transform: translateY(-3px); transition: transform .3s ease; } }
