@@ -2234,3 +2234,10 @@ main .rankwin p { color: inherit; }
 .packs--sec .packs__track { margin-top: -28px; padding-top: 150px; }
 .packs--sec .packs__head { margin-bottom: 0; }
 @media (max-width: 600px) { .pack__mascot { width: 104px; left: 34%; } .packs--sec .packs__track { padding-top: 118px; margin-top: -10px; } }
+
+/* v44 — PLAY as a chunky 3D tile, same depth language as the coin */
+.flow__node--play .play3d { width: 96%; height: auto; display: block; }
+@media (prefers-reduced-motion: no-preference) { .flow__node--play .play3d { animation: hoverS 3.6s ease-in-out -1.2s infinite alternate; } }
+.flow__node--play { perspective: 420px; }
+.flow__node--play .play3d { width: 92%; transform: rotateX(16deg) rotateY(-16deg) rotateZ(-4deg); filter: drop-shadow(0 12px 12px rgba(4,50,63,.28)); }
+@media (prefers-reduced-motion: no-preference) { .flow__node--play .play3d { animation: none; } .flow__node--play { animation: hoverS 3.6s ease-in-out -1.2s infinite alternate; } }
