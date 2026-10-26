@@ -2241,3 +2241,7 @@ main .rankwin p { color: inherit; }
 .flow__node--play { perspective: 420px; }
 .flow__node--play .play3d { width: 92%; transform: rotateX(16deg) rotateY(-16deg) rotateZ(-4deg); filter: drop-shadow(0 12px 12px rgba(4,50,63,.28)); }
 @media (prefers-reduced-motion: no-preference) { .flow__node--play .play3d { animation: none; } .flow__node--play { animation: hoverS 3.6s ease-in-out -1.2s infinite alternate; } }
+/* PLAY stands upright like the coin: no CSS tilt, depth is in the artwork (edge toward bottom-left) */
+.flow__node--play { perspective: none; }
+.flow__node--play .play3d { width: 96%; transform: rotate(-8deg); filter: drop-shadow(0 16px 14px rgba(4,50,63,.28)); }
+.flow__node--play .play3d { transform: none; }

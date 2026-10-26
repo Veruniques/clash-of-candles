@@ -1,33 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 252">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
   <defs>
-    <linearGradient id="side" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#9FB0BC"/><stop offset=".18" stop-color="#D9E2E9"/><stop offset=".5" stop-color="#F4F8FB"/><stop offset=".78" stop-color="#C9D5DE"/><stop offset="1" stop-color="#8B9DAA"/>
-    </linearGradient>
-    <linearGradient id="top" x1="0" y1="0" x2=".9" y2="1">
-      <stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#EEF3F8"/><stop offset="1" stop-color="#D6E0E8"/>
-    </linearGradient>
-    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#C8D4DD"/><stop offset="1" stop-color="#8E9FAC"/>
-    </linearGradient>
+    <linearGradient id="top" x1="0" y1="0" x2=".85" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#EEF3F8"/><stop offset="1" stop-color="#D3DDE6"/></linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#C9D4DD"/><stop offset="1" stop-color="#8FA0AD"/></linearGradient>
     <linearGradient id="ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A3640"/><stop offset="1" stop-color="#0E161C"/></linearGradient>
-    <radialGradient id="gloss" cx=".3" cy=".18" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".5" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-    <filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="14" stdDeviation="10" flood-color="#04323F" flood-opacity=".35"/></filter>
+    <radialGradient id="gloss" cx=".28" cy=".16" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".5" stop-color="#fff" stop-opacity=".15"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
     <filter id="emb"><feDropShadow dx="0" dy="2" stdDeviation="0" flood-color="#fff" flood-opacity=".9"/></filter>
   </defs>
-  <g filter="url(#sh)">
-    <!-- slab thickness -->
-    <rect x="14" y="44" width="212" height="190" rx="46" fill="url(#side)"/>
-    <rect x="14" y="200" width="212" height="34" rx="17" fill="#6F8290" opacity=".25"/>
-    <rect x="14" y="44" width="212" height="190" rx="46" fill="none" stroke="#7E909D" stroke-opacity=".5" stroke-width="2"/>
-    <!-- top face -->
-    <rect x="14" y="14" width="212" height="180" rx="46" fill="url(#rim)"/>
-    <rect x="22" y="20" width="196" height="166" rx="40" fill="url(#top)"/>
-    <rect x="22" y="20" width="196" height="166" rx="40" fill="url(#gloss)"/>
-    <rect x="22.5" y="20.5" width="195" height="165" rx="39.5" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".9"/>
-  </g>
-  <!-- embossed icon + label -->
+  <rect x="11.6" y="35.6" width="196" height="196" rx="44" fill="#8a98a2"/><rect x="12.8" y="34.2" width="196" height="196" rx="44" fill="#8d9ba5"/><rect x="13.9" y="32.9" width="196" height="196" rx="44" fill="#919fa9"/><rect x="15.1" y="31.6" width="196" height="196" rx="44" fill="#95a3ad"/><rect x="16.2" y="30.2" width="196" height="196" rx="44" fill="#99a7b1"/><rect x="17.4" y="28.9" width="196" height="196" rx="44" fill="#9dabb5"/><rect x="18.5" y="27.5" width="196" height="196" rx="44" fill="#a1afb9"/><rect x="19.6" y="26.1" width="196" height="196" rx="44" fill="#a5b3bd"/><rect x="20.8" y="24.8" width="196" height="196" rx="44" fill="#a9b7c1"/><rect x="22.0" y="23.5" width="196" height="196" rx="44" fill="#acbac4"/><rect x="23.1" y="22.1" width="196" height="196" rx="44" fill="#b0bec8"/><rect x="24.2" y="20.8" width="196" height="196" rx="44" fill="#b4c2cc"/><rect x="25.4" y="19.4" width="196" height="196" rx="44" fill="#b8c6d0"/><rect x="26.6" y="18.1" width="196" height="196" rx="44" fill="#bccad4"/><rect x="27.7" y="16.7" width="196" height="196" rx="44" fill="#c0ced8"/><rect x="28.9" y="15.3" width="196" height="196" rx="44" fill="#c4d2dc"/>
+  <rect x="30" y="14" width="196" height="196" rx="44" fill="url(#rim)"/>
+  <rect x="37" y="20" width="182" height="182" rx="38" fill="url(#top)"/>
+  <rect x="37" y="20" width="182" height="182" rx="38" fill="url(#gloss)"/>
+  <rect x="37.5" y="20.5" width="181" height="181" rx="37.5" fill="none" stroke="#fff" stroke-width="1.5" stroke-opacity=".9"/>
   <g filter="url(#emb)">
-    <path d="M86 98V60L106 78L146 38V98M106 78V98M126 58V98" fill="none" stroke="url(#ink)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 8) scale(.97)"/>
-    <text x="120" y="160" text-anchor="middle" font-family="Archivo, Arial Black, sans-serif" font-weight="900" font-size="46" letter-spacing="1" fill="url(#ink)">PLAY</text>
+    <path d="M92 108V70L112 88L152 48V108M112 88V108M132 68V108" fill="none" stroke="url(#ink)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" transform="translate(-4 4)"/>
+    <text x="128" y="168" text-anchor="middle" font-family="Archivo, Arial Black, sans-serif" font-weight="900" font-size="44" letter-spacing="1" fill="url(#ink)">PLAY</text>
   </g>
 </svg>
