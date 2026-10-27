@@ -2279,3 +2279,12 @@ main .rankwin p { color: inherit; }
 .pack--beggar { position: relative; }
 .pack__mascot--beggar { left: 58%; width: 130px; transform: translate(-50%, -76.5%); }
 @media (max-width: 600px) { .pack__mascot--beggar { width: 104px; left: 56%; } }
+/* v47 — new mascots: jumping green on M, beggar red inside Starting (in place of the pile) */
+.pack--hot .pack__mascot { left: 50%; width: 150px; transform: translate(-50%, -78.8%); }
+@media (prefers-reduced-motion: no-preference) { .pack--hot:hover .pack__mascot { transform: translate(-50%, -80%) rotate(-3deg); } }
+.pack--beggar .pack__pile { visibility: hidden; }
+.pack__mascot--beggar { left: 58%; top: -46px; width: 138px; transform: translate(-50%, 0); }
+@media (max-width: 600px) {
+  .pack--hot .pack__mascot { width: 124px; }
+  .pack__mascot--beggar { width: 120px; top: -34px; }
+}
