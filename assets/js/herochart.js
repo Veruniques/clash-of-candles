@@ -10,14 +10,14 @@
   var ctx = cv.getContext('2d');
   var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   // game palette (arena screenshots): jade breakout, ruby breakdown
-  var C = { line: '#16C985', up: '#22C98A', down: '#E0195A', out: '#4FDB9B', dn: '#FF5C7F' };
-  var N = 150, HALF = 70, TAIL = 26, BASE = N - TAIL, seed = 11, pts = [], p = 0;
+  var C = { line: '#3FDB94', up: '#4CC98A', down: '#E0335A', wick: '#6B7378', out: '#4FD893', dn: '#E0335A', dash: '#A3AEB4' };
+  var N = 112, HALF = 50, TAIL = 22, BASE = N - TAIL, seed = 11, pts = [], p = 0;
   function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
   // fixed history: slow base on the left, a rally, then a range just under the breakout ceiling
   function shape(i) {
     if (i < HALF) return 1 + i * 0.07 + Math.sin(i / 7) * 1.1;
-    if (i < 104) return 1 + HALF * 0.07 + (i - HALF) * 0.27;
-    return 13.2 + Math.sin((i - 104) / 3.2) * 0.9;
+    if (i < 76) return 1 + HALF * 0.07 + (i - HALF) * 0.36;
+    return 13.2 + Math.sin((i - 76) / 3.2) * 0.9;
   }
   for (var i = 0; i < BASE; i++) { p = shape(i) + (rnd() - 0.5) * 1.3; pts.push(p); }
   var bars = [];
@@ -27,7 +27,7 @@
   }
   var ceil = -Infinity;
   bars.slice(-20).forEach(function (b) { ceil = Math.max(ceil, b.h); });
-  var OUT = ceil + 0.5, DOWN = 8.6;                        // the two game levels
+  var OUT = ceil + 0.5, DOWN = 6.4;                        // the two game levels
   var lo = -1.5, hi = OUT + 3.2;
 
   // the growing tail: a short dip, then a climb that pierces the breakout level
@@ -67,45 +67,41 @@
     var c = partial == null ? b.c : b.o + (b.c - b.o) * partial, h = partial == null ? b.h : Math.max(b.o, c), l = partial == null ? b.l : Math.min(b.o, c);
     var col = c >= b.o ? C.up : C.down, xc = Math.round(X(b.i)) + 0.5, bw = Math.max(2, (W - TAGW) / N * 0.62);
     ctx.globalAlpha = alpha;
-    ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xc, Y(h)); ctx.lineTo(xc, Y(l)); ctx.stroke();
+    ctx.strokeStyle = C.wick; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xc, Y(h)); ctx.lineTo(xc, Y(l)); ctx.stroke();
     ctx.fillStyle = col; ctx.fillRect(xc - bw / 2, Y(Math.max(b.o, c)), bw, Math.max(1.5, Math.abs(Y(b.o) - Y(c))));
   }
-  function rr(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w, y); ctx.lineTo(x + w, y + h); ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r); ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r); ctx.closePath(); }
-  function level(v, col, label, on) {
-    var y = Math.round(Y(v)) + 0.5, x0 = X(HALF + 4);
+  function rr(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  function level(v, col, label) {
+    var y = Math.round(Y(v)) + 0.5, small = W < 700;
     ctx.save();
-    ctx.globalAlpha = on ? 0.9 : 0.55; ctx.setLineDash([5, 5]); ctx.strokeStyle = col; ctx.lineWidth = 1.2;
-    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(W - TAGW, y); ctx.stroke(); ctx.setLineDash([]);
-    // the game's level tag: pill flush with the right edge, white caps
-    ctx.font = '800 ' + (W < 700 ? 9.5 : 11.5) + 'px ' + getComputedStyle(document.body).fontFamily;
-    var tw = ctx.measureText(label).width, ph = W < 700 ? 20 : 26, pw = tw + (W < 700 ? 16 : 26);
-    ctx.globalAlpha = on ? 1 : 0.6;
-    if (on && flash > 0) { ctx.shadowColor = col; ctx.shadowBlur = 18 * flash; }
-    ctx.fillStyle = col; rr(W - pw, y - ph / 2, pw, ph, ph / 2.6); ctx.fill(); ctx.shadowBlur = 0;
-    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(label, W - pw + (pw - tw) / 2, y + 0.5);
+    ctx.font = '800 ' + (small ? 10 : 13) + 'px ' + getComputedStyle(document.body).fontFamily;
+    var tw = ctx.measureText(label).width, ph = small ? 22 : 30, pw = tw + (small ? 16 : 26), x = W - pw;
+    // short dashed lead-in, like the game's level line
+    ctx.setLineDash([6, 6]); ctx.strokeStyle = C.dash; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.9;
+    ctx.beginPath(); ctx.moveTo(x - 6 - (small ? 70 : 190), y); ctx.lineTo(x - 6, y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+    if (label === 'BREAKOUT' && flash > 0) { ctx.shadowColor = col; ctx.shadowBlur = 20 * flash; }
+    ctx.fillStyle = col; rr(x, y - ph / 2, pw, ph, small ? 5 : 6); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(label, x + (pw - tw) / 2, y + 0.5);
     ctx.restore();
   }
   function draw() {
     if (!W) return;
     ctx.clearRect(0, 0, W, H);
     if (prog <= 0) return;
-    TAGW = W < 700 ? 6 : 14;
-    ctx.save(); ctx.globalAlpha = 0.5;
+    TAGW = W < 700 ? 104 : 330;
+    ctx.save(); ctx.globalAlpha = 0.8;
     // left: line + shade
     ctx.beginPath(); ctx.moveTo(X(0), Y(pts[0]));
     for (var a = 1; a <= HALF; a++) ctx.lineTo(X(a), Y(pts[a]));
-    ctx.lineJoin = 'round'; ctx.lineWidth = 2; ctx.strokeStyle = C.line; ctx.stroke();
-    ctx.lineTo(X(HALF), H); ctx.lineTo(X(0), H); ctx.closePath();
-    var sh = ctx.createLinearGradient(0, 0, 0, H);
-    sh.addColorStop(0, 'rgba(22,201,133,.35)'); sh.addColorStop(1, 'rgba(22,201,133,0)');
-    ctx.fillStyle = sh; ctx.fill();
-    bars.forEach(function (b) { candle(b, 0.5); });
+    ctx.lineJoin = 'round'; ctx.lineWidth = 2.2; ctx.strokeStyle = C.line; ctx.stroke();
+    bars.forEach(function (b) { candle(b, 0.8); });
     // the growing end of the chart
-    for (var t = 0; t < shown; t++) candle(tail[t], 0.62 * fade, t === shown - 1 ? grow : null);
+    for (var t = 0; t < shown; t++) candle(tail[t], 0.95 * fade, t === shown - 1 ? grow : null);
     ctx.restore();
     var broke = shown === TAIL && phase !== 'grow';
-    level(OUT, C.out, 'BREAKOUT', true);
-    level(DOWN, C.dn, 'BREAKDOWN', false);
+    level(OUT, C.out, 'BREAKOUT');
+    level(DOWN, C.dn, 'BREAKDOWN');
     if (broke) {
       ctx.save(); ctx.globalAlpha = 0.85 * fade; ctx.fillStyle = C.out;
       var b = tail[TAIL - 1]; ctx.beginPath(); ctx.arc(X(b.i), Y(b.c), 3.5 + flash * 3, 0, Math.PI * 2); ctx.fill(); ctx.restore();
