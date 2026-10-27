@@ -2245,3 +2245,6 @@ main .rankwin p { color: inherit; }
 .flow__node--play { perspective: none; }
 .flow__node--play .play3d { width: 96%; transform: rotate(-8deg); filter: drop-shadow(0 16px 14px rgba(4,50,63,.28)); }
 .flow__node--play .play3d { transform: none; }
+/* heart symbol: the candle heart artwork */
+.flow__node--heart > img { width: 100%; filter: drop-shadow(0 14px 16px rgba(160,11,40,.35)); }
+.flow__node--heart > img { width: 118%; max-width: none; margin-inline: -9%; }
