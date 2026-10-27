@@ -2263,3 +2263,15 @@ main .rankwin p { color: inherit; }
 @media (max-width: 800px) { .foot__fighter { width: 96px; bottom: calc(100% - 40px); } }
 .foot__fighter { bottom: calc(100% - 16px); transform: rotate(6deg); }
 @media (max-width: 800px) { .foot__fighter { bottom: calc(100% - 10px); } }
+
+/* v45 — all six packages visible at once (no carousel) */
+.packs--sec .packs__track { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; overflow: visible; margin-inline: 0; padding-inline: 0; scroll-snap-type: none; }
+.packs--sec .pack { flex: none; min-width: 0; padding: 16px 14px 14px; }
+.packs--sec .pack__coins { font-size: clamp(18px, 1.6vw, 24px); }
+.packs--sec .pack__coins .coin-ico { width: 18px; height: 18px; }
+.packs--sec .pack__price { font-size: 13.5px; padding: 5px 11px; }
+.packs--sec .pack__pile { height: 118px; }
+.packs--sec .pack__pile img { max-height: 108px; }
+@media (max-width: 1100px) { .packs--sec .packs__track { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 16px; } }
+@media (max-width: 600px) { .packs--sec .packs__track { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .packs--sec .pack--hot { order: -1; } }

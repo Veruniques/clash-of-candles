@@ -313,17 +313,6 @@
     tick(); setInterval(tick, 15000);
   })();
 
-  /* ---------------- coin packages carousel ---------------- */
-  (function () {
-    var tr = $('#packTrack'); if (!tr) return;
-    Array.prototype.forEach.call(document.querySelectorAll('.packs__btn'), function (b) {
-      b.addEventListener('click', function () {
-        var card = tr.querySelector('.pack'); var step = card ? card.getBoundingClientRect().width + 10 : 160;
-        tr.scrollBy({ left: step * Number(b.getAttribute('data-dir')), behavior: reduced ? 'auto' : 'smooth' });
-      });
-    });
-  })();
-
   /* ---------------- contests: live countdowns ---------------- */
   (function () {
     var els = Array.prototype.slice.call(document.querySelectorAll('[data-countdown]')); if (!els.length) return;
