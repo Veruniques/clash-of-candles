@@ -2302,3 +2302,6 @@ main .rankwin p { color: inherit; }
 .pack__mascot--beggar { left: 63%; width: 122px; top: -20px; }
 .pack__mascot--rich { width: 162px; }
 @media (max-width: 600px) { .pack__mascot--beggar { left: 64%; width: 104px; top: -16px; } .pack__mascot--rich { width: 128px; } }
+/* beggar anchored to the right edge so his feet never cover the STARTING label */
+.pack__mascot--beggar { left: auto; right: 6px; top: -20px; transform: none; width: min(122px, calc((100% - 116px) * 2.2)); }
+@media (max-width: 600px) { .pack__mascot--beggar { left: auto; right: 4px; top: -14px; width: min(100px, calc((100% - 112px) * 2.2)); } }
