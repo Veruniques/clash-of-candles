@@ -25,25 +25,25 @@
   // 1) line history (the game's "hourly" view)
   var LN = 320, line = anchors([[0, 84], [.03, 92], [.12, 86], [.2, 84], [.27, 74], [.3, 60], [.34, 52], [.4, 57], [.47, 56], [.48, 38], [.55, 34], [.6, 40],
     [.68, 33], [.72, 22], [.78, 38], [.82, 52], [.86, 44], [.9, 38], [.95, 41], [1, 33]], LN);
-  var walk = 0; line = line.map(function (v) { walk = walk * 0.6 + (rnd() - 0.5) * 5; return v + walk; });
+  var walk = 0; line = line.map(function (v) { walk = walk * 0.6 + (rnd() - 0.5) * 5; return 30 + (v + walk - 20) * 0.55; });
   // 2) small candles that continue it (faint), then 3) the live stretch that grows
   var CB = 62, TAIL = 24, bars = [], last = line[LN - 1];
-  var cpath = anchors([[0, last], [.2, 30], [.35, 33], [.5, 41], [.65, 38], [.85, 34], [1, 32]], CB);
-  cpath.forEach(function (c, i) { var o = i ? bars[i - 1].c : last; c += (rnd() - 0.5) * 2.4; var w = 0.6 + rnd() * 1.6;
+  var cpath = anchors([[0, last], [.2, 34], [.35, 36], [.5, 41], [.65, 39], [.85, 36], [1, 35]], CB);
+  cpath.forEach(function (c, i) { var o = i ? bars[i - 1].c : last; c += (rnd() - 0.5) * 1.6; var w = 0.4 + rnd() * 1.1;
     bars.push({ o: o, c: c, h: Math.max(o, c) + rnd() * w, l: Math.min(o, c) - rnd() * w }); });
-  var OUT = 50, DOWN = 21, lo = 4, hi = 100;
+  var OUT = 50, DOWN = 20, lo = 12, hi = 72;
   var tail = [];
   function makeTail() {
     tail = []; var tseed = 3 + Math.floor(Math.random() * 1e6);
     var tr = function () { tseed = (tseed * 48271) % 2147483647; return tseed / 2147483647; };
-    var path = [33, 34, 32.5, 35, 36.5, 35, 38, 40, 38.5, 41, 58, 56, 52, 47, 49, 45, 44, 47.5, 46, 49, 48, 46.5, 48.5, 47];
+    var path = [35, 36, 34.5, 37, 38.5, 37.5, 40, 42, 41, 44, 46.5, 45.5, 48.5, 53, 52, 55.5, 58, 56.5, 60, 58.5, 61, 59.5, 62, 61];
     var prev = bars[CB - 1].c;
-    path.forEach(function (c, i) { c += (tr() - 0.5) * 1.6; var o = i === 10 ? prev + 0.5 : prev, w = 0.5 + tr() * 1.8;
-      tail.push({ o: o, c: c, h: Math.max(o, c) + tr() * w + (i === 10 ? 2 : 0), l: Math.min(o, c) - tr() * w }); prev = c; });
+    path.forEach(function (c, i) { c += (tr() - 0.5) * 1.6; var o = prev, w = 0.4 + tr() * 1.3;
+      tail.push({ o: o, c: c, h: Math.max(o, c) + tr() * w, l: Math.min(o, c) - tr() * w }); prev = c; });
   }
   makeTail();
 
-  var W = 0, H = 0, on = false, shown = 0, grow = 1, fade = 1, flash = 0, raf = 0, visible = true, lastTs = 0, phase = 'grow', hold = 0;
+  var broke = false, W = 0, H = 0, on = false, shown = 0, grow = 1, fade = 1, flash = 0, raf = 0, visible = true, lastTs = 0, phase = 'grow', hold = 0;
   var hero = cv.parentNode, title = document.getElementById('titleWrap'), floor = document.querySelector('.hero__floor'), scene = document.getElementById('scene');
   function place() {
     if (!scene || !title || !floor) return;
@@ -97,7 +97,7 @@
     for (var t = 0; t < shown; t++) candle(tail[t], CB + t, 0.95 * fade, t === shown - 1 ? grow : null);
     ctx.restore();
     var spiked = shown > 10;
-    tag(OUT, C.out, 'BREAKOUT', spiked ? flash : 0);
+    tag(OUT, C.out, 'BREAKOUT', broke ? flash : 0);
     tag(DOWN, C.dn, 'BREAKDOWN', 0);
   }
   // one loop: the live candles build up one by one → spike through BREAKOUT (tag glows) → hold → fade → again
@@ -105,9 +105,9 @@
     raf = 0; if (!visible || document.hidden) return;
     var dt = lastTs ? Math.min(64, ts - lastTs) : 16; lastTs = ts;
     if (phase === 'grow') {
-      grow += dt / (shown === 11 ? 520 : 300);
+      grow += dt / 300;
       if (grow >= 1) {
-        if (shown === 11 && flash === 0) flash = 1;
+        if (!broke && shown && tail[shown - 1].c > OUT) { broke = true; flash = 1; }
         if (shown < TAIL) { shown++; grow = 0; } else { phase = 'hold'; hold = 0; }
       }
       if (flash > 0) flash = Math.max(0, flash - dt / 1400);
@@ -115,7 +115,7 @@
       hold += dt; if (hold > 2200) phase = 'fade';
     } else {
       fade -= dt / 500;
-      if (fade <= 0) { fade = 1; shown = 0; grow = 1; flash = 0; phase = 'grow'; makeTail(); }
+      if (fade <= 0) { fade = 1; shown = 0; grow = 1; flash = 0; broke = false; phase = 'grow'; makeTail(); }
     }
     draw(); raf = requestAnimationFrame(frame);
   }

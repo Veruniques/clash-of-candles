@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610271830">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610272115">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610272150">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -107,20 +107,20 @@
           <div class="cdock" id="cdock">
             <div class="cban" id="contestBanner" aria-label="Arény: výherní bank v srdíčkách">
               <div class="cban__tabs" role="tablist">
-                <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Daily</button>
-                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Weekly</button>
-                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Monthly</button>
+                <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Denní</button>
+                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Týdenní</button>
+                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Měsíční</button>
               </div>
               <div class="cban__panel">
                 <i class="cban__bars" aria-hidden="true"></i>
                 <p class="cban__live"><i aria-hidden="true"></i>Live aréna</p>
-                <div class="cban__pool"><span>Výherní bank</span><b><i class="cban__heart" aria-hidden="true"></i><span id="cbanPool">500</span> <small>srdíček</small></b></div>
+                <div class="cban__pool"><div class="cban__bank"><span>Výherní bank</span><b><i class="cban__heart" aria-label="srdíčka"></i><span id="cbanPool">500</span></b></div><div class="cban__prize"><img src="assets/img/products/car.webp?v=1" alt="Hlavní výhra: auto" loading="lazy"></div></div>
               </div>
             </div>
             <section class="cboard" aria-label="Live pořadí arény">
               <div class="gpanel cpanel">
-                <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title"><i class="cpulse" aria-hidden="true"></i>Live pořadí</p><span class="gpanel__tab" id="liveCtx">Daily</span></div>
-                <div class="lbg-cols" aria-hidden="true"><span>#</span><span>Hráč</span><span>Rank</span></div>
+                <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title"><i class="cpulse" aria-hidden="true"></i>Live pořadí</p><span class="gpanel__tab" id="liveCtx">Denní</span></div>
+                <div class="lbg-cols" aria-hidden="true"><span>#</span><span>Hráč</span><span>Rank</span><span>Úspěšnost</span></div>
                 <ol class="lbg" id="liveTop" aria-live="off"></ol>
               </div>
             </section>
@@ -367,7 +367,7 @@
   </footer>
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
-  <script src="assets/js/herochart.js?v=202610272340" defer></script>
-  <script src="assets/js/main.js?v=202610272210" defer></script>
+  <script src="assets/js/herochart.js?v=202610272150" defer></script>
+  <script src="assets/js/main.js?v=202610272150" defer></script>
 </body>
 </html>

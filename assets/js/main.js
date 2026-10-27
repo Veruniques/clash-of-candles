@@ -301,7 +301,7 @@
   (function () {
     var live = $('#liveTop'), rk = $('#rankTop'), pick = $('#rankPick'), ctx = $('#liveCtx'), rctx = $('#rankCtx'); if (!live || !rk) return;
     var TC = { F: '#20E39B', E: '#20E39B', D: '#B4F23A', C: '#22DDEB', B: '#2F8CFF', A: '#8E1DB8', S: '#F2C524', G: '#F28A1F' };
-    var LABEL = { day: 'Daily', week: 'Weekly', month: 'Monthly' };
+    var LABEL = { day: 'Denní', week: 'Týdenní', month: 'Měsíční' };
     var POOLS = {
       day: [['OndraB', 'S+', 77.4], ['Kačka_EMA', 'A++', 76.1], ['Medvěd77', 'A+', 74.8], ['GrafBijec', 'A', 73.9]],
       week: [['Vlkodlak', 'S++', 79.2], ['OndraB', 'S+', 78.3], ['Lenka.trades', 'A++', 76.6], ['Pepa_Knot', 'A+', 75.7]],
