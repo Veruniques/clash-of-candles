@@ -2418,3 +2418,12 @@ main .rankwin p { color: inherit; }
 @media (max-width: 999px) { .cdock .cban { flex-basis: min(330px, calc(100vw - 72px)); } }
 /* hero chart stays a quiet background layer */
 .hero__chart.is-on { opacity: .62; }
+/* v54 — dock hugs its content and sits at the right edge; free-coins line is quiet secondary text */
+@media (min-width: 1000px) {
+  #heroSub { display: flex; flex-direction: column; align-items: flex-end; }
+  .cdock { max-width: 100%; }
+  .cdock__bar { align-self: stretch; }
+}
+.hero__claim { padding: 0; background: none; border: 0; border-radius: 0; margin-top: 14px; font-size: 13.5px; font-weight: 600; color: #2C5868; gap: 7px; }
+.hero__claim .coin-ico { width: 16px; height: 16px; }
+@media (min-width: 1000px) { .cdock__bar { justify-content: flex-end; gap: 28px; } }

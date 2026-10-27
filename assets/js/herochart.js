@@ -72,12 +72,12 @@
   function tag(v, col, label, lit) {
     var y = Math.round(Y(v)) + 0.5, small = W < 700;
     ctx.save();
-    ctx.font = '800 ' + (small ? 10 : 14) + 'px ' + getComputedStyle(document.body).fontFamily;
-    var tw = ctx.measureText(label).width, ph = small ? 22 : 34, pw = tw + (small ? 14 : 30), x = W - pw, r = small ? 5 : 7;
+    ctx.font = '800 ' + (small ? 9.5 : 12.5) + 'px ' + getComputedStyle(document.body).fontFamily;
+    var tw = ctx.measureText(label).width, ph = small ? 20 : 30, pw = tw + (small ? 12 : 24), x = W - pw, r = small ? 5 : 7;
     // coloured dashed lead-in from the last candles to the tag
-    ctx.setLineDash([small ? 4 : 7, small ? 4 : 6]); ctx.strokeStyle = col; ctx.lineWidth = small ? 1.2 : 1.6; ctx.globalAlpha = 0.9;
+    ctx.setLineDash([small ? 4 : 7, small ? 4 : 6]); ctx.strokeStyle = col; ctx.lineWidth = small ? 1.2 : 1.6; ctx.globalAlpha = 0.5;
     ctx.beginPath(); ctx.moveTo(W * (XE - 0.05), y); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]);
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = 0.62;
     if (lit > 0) { ctx.shadowColor = col; ctx.shadowBlur = 22 * lit; }
     ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x + r, y - ph / 2); ctx.lineTo(W, y - ph / 2); ctx.lineTo(W, y + ph / 2); ctx.lineTo(x + r, y + ph / 2);
     ctx.arcTo(x, y + ph / 2, x, y - ph / 2, r); ctx.arcTo(x, y - ph / 2, x + r, y - ph / 2, r); ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
