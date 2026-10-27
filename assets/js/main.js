@@ -315,57 +315,48 @@
     tick(); setInterval(tick, 15000);
   })();
 
-  /* ---------------- hero dock: live top 3 of the selected contest + top 3 per rank (PLACEHOLDER players) ---------------- */
+  /* ---------------- hero dock: live top 3 of the selected contest + top 3 per rank, drawn like the game's Žebříček (ILLUSTRATIVE players) ---------------- */
   (function () {
-    var live = $('#liveTop'), rk = $('#rankTop'), pick = $('#rankPick'), ctx = $('#liveCtx'); if (!live || !rk) return;
-    var TIERC = { F: '#20E39B', E: '#20E39B', D: '#B4F23A', C: '#22DDEB', B: '#2F8CFF', A: '#8E1DB8', S: '#F2C524', G: '#F28A1F' };
-    var LABEL = { day: 'Daily contest', week: 'Weekly contest', month: 'Monthly contest' };
+    var live = $('#liveTop'), rk = $('#rankTop'), pick = $('#rankPick'), ctx = $('#liveCtx'), rctx = $('#rankCtx'); if (!live || !rk) return;
+    var TC = { F: '#20E39B', E: '#20E39B', D: '#B4F23A', C: '#22DDEB', B: '#2F8CFF', A: '#8E1DB8', S: '#F2C524', G: '#F28A1F' };
+    var LABEL = { day: 'Daily', week: 'Weekly', month: 'Monthly' };
     var POOLS = {
       day: [['OndraB', 'S+', 77.4], ['Kačka_EMA', 'A++', 76.1], ['Medvěd77', 'A+', 74.8], ['GrafBijec', 'A', 73.9]],
       week: [['Vlkodlak', 'S++', 79.2], ['OndraB', 'S+', 78.3], ['Lenka.trades', 'A++', 76.6], ['Pepa_Knot', 'A+', 75.7]],
       month: [['Šakal', 'G.O.A.T.', 81.5], ['Vlkodlak', 'S++', 80.1], ['MiraDoji', 'S+', 79.0], ['OndraB', 'S+', 78.4]]
     };
-    var TIERS = [['F', [['Nováček_Jan', 61], ['Bára.k', 58], ['Tomík', 55]]], ['E', [['Kubaa', 64], ['Ruda_V', 62], ['Iveta', 59]]],
-      ['D', [['Hroch', 66], ['Zuzka_P', 64], ['Matěj', 61]]], ['C', [['Svíčkař', 69], ['Dominik', 67], ['Klára', 64]]],
-      ['B', [['Lenka.trades', 72], ['Bobr', 70], ['Patrik', 68]]], ['A', [['Kačka_EMA', 76], ['Medvěd77', 74], ['GrafBijec', 73]]],
-      ['S', [['OndraB', 78], ['MiraDoji', 77], ['Vlkodlak', 76]]], ['G', [['Šakal', 82], ['Hanka_X', 80], ['Rexx', 79]]]];
-    var hue = function (n) { var h = 0; for (var i = 0; i < n.length; i++) h = (h * 31 + n.charCodeAt(i)) % 360; return h; };
-    var ini = function (n) { var w = n.replace(/[^A-Za-zÁ-ž0-9 ._]/g, '').split(/[ ._]+/).filter(Boolean); return ((w[0] || '?')[0] + ((w[1] || w[0] || '?')[1] || '')).toUpperCase(); };
+    var TIERS = [['F', [['Nováček_Jan', 'F', 61], ['Bára.k', 'F', 58], ['Tomík', 'F', 55]]], ['E', [['Kubaa', 'E++', 64], ['Ruda_V', 'E+', 62], ['Iveta', 'E', 59]]],
+      ['D', [['Hroch', 'D++', 66], ['Zuzka_P', 'D+', 64], ['Matěj', 'D', 61]]], ['C', [['Svíčkař', 'C++', 69], ['Dominik', 'C+', 67], ['Klára', 'C', 64]]],
+      ['B', [['Lenka.trades', 'B++', 72], ['Bobr', 'B+', 70], ['Patrik', 'B', 68]]], ['A', [['Kačka_EMA', 'A++', 76], ['Medvěd77', 'A+', 74], ['GrafBijec', 'A', 73]]],
+      ['S', [['OndraB', 'S++', 78], ['MiraDoji', 'S+', 77], ['Vlkodlak', 'S', 76]]], ['G', [['Šakal', 'G.O.A.T.', 82], ['Hanka_X', 'G.O.A.T.', 80], ['Rexx', 'G.O.A.T.', 79]]]];
     var pct = function (v) { return v.toFixed(1).replace('.', ',') + ' %'; };
-    var badge = function (r) { var t = r.charAt(0); return '<b class="rkp-badge' + (/[BAG]/.test(t) ? ' is-light' : '') + '" style="--rc:' + TIERC[t] + '">' + (t === 'G' ? 'GOAT' : r) + '</b>'; };
+    var badge = function (r) { var t = r.charAt(0); return '<b class="rkp-badge' + (/[BAG]/.test(t) ? ' is-light' : '') + '" style="--rc:' + TC[t] + '">' + (t === 'G' ? 'GOAT' : r) + '</b>'; };
     function row(name, rank, val) {
-      var li = document.createElement('li'); li.className = 'crow'; li.setAttribute('data-n', name);
-      li.innerHTML = '<span class="crow__pos"></span><span class="crow__av" style="--h:' + hue(name) + '">' + ini(name) + '</span>' +
-        '<span class="crow__name"><span class="crow__nm">' + name + '</span>' + '' + '</span><span class="crow__val"><i class="crow__d" aria-hidden="true"></i><b>' + pct(val) + '</b></span>';
+      var li = document.createElement('li'); li.setAttribute('data-n', name);
+      li.innerHTML = '<span class="lbg__pos"></span><span class="lbg__name">' + name + '</span>' + badge(rank) + '<span class="rkp-val"><i class="cdelta" aria-hidden="true"></i><b>' + pct(val) + '</b></span>';
       return li;
     }
-    // ---- live board: values drift, rows re-sort with a FLIP slide
-    var cur = 'day', players = [];
-    function setContest(k) {
-      cur = k; ctx.textContent = LABEL[k];
-      players = POOLS[k].map(function (p) { return { n: p[0], r: p[1], v: p[2] }; });
-      live.innerHTML = ''; draw(true);
-    }
+    var place = function (li, i) { li.className = 'rkp lbg__row'; li.querySelector('.lbg__pos').className = 'lbg__pos top' + (i + 1); li.querySelector('.lbg__pos').textContent = i + 1; };
+    // live board: values drift, rows re-sort with a FLIP slide
+    var players = [];
+    function setContest(k) { ctx.textContent = LABEL[k]; players = POOLS[k].map(function (p) { return { n: p[0], r: p[1], v: p[2] }; }); live.innerHTML = ''; draw(true); }
     function draw(fresh) {
-      var top = players.slice().sort(function (a, b) { return b.v - a.v; }).slice(0, 3);
-      var before = {}; Array.prototype.forEach.call(live.children, function (li) { before[li.getAttribute('data-n')] = li.getBoundingClientRect().top; });
-      var keep = {};
+      var top = players.slice().sort(function (a, b) { return b.v - a.v; }).slice(0, 3), before = {}, keep = {};
+      Array.prototype.forEach.call(live.children, function (li) { before[li.getAttribute('data-n')] = li.getBoundingClientRect().top; });
       top.forEach(function (p, i) {
-        var li = live.querySelector('[data-n="' + p.n + '"]') || row(p.n, p.r, p.v);
-        li.querySelector('.crow__pos').textContent = i + 1; li.className = 'crow p' + (i + 1);
-        var b = li.querySelector('.crow__val b'), d = li.querySelector('.crow__d'), old = parseFloat((b.textContent || '0').replace(',', '.'));
-        b.textContent = pct(p.v);
-        if (!fresh && Math.abs(old - p.v) > 0.001) { d.className = 'crow__d ' + (p.v > old ? 'up' : 'down'); li.classList.add('is-tick'); }
+        var li = live.querySelector('[data-n="' + p.n + '"]') || row(p.n, p.r, p.v), b = li.querySelector('.rkp-val b'), d = li.querySelector('.cdelta');
+        var old = parseFloat(b.textContent.replace(',', '.')); place(li, i); b.textContent = pct(p.v);
+        if (!fresh && Math.abs(old - p.v) > 0.001) { d.className = 'cdelta ' + (p.v > old ? 'up' : 'down'); li.classList.add('is-tick'); }
         live.appendChild(li); keep[p.n] = 1;
       });
       Array.prototype.slice.call(live.children).forEach(function (li) { if (!keep[li.getAttribute('data-n')]) live.removeChild(li); });
       if (fresh || reduced) return;
       Array.prototype.forEach.call(live.children, function (li) {
-        var n = li.getAttribute('data-n'), now = li.getBoundingClientRect().top, was = before[n];
-        if (was == null) { li.animate([{ opacity: 0, transform: 'translateX(24px)' }, { opacity: 1, transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.8,.2,1)' }); return; }
-        if (Math.abs(was - now) > 1) { li.classList.add('is-swap'); li.animate([{ transform: 'translateY(' + (was - now) + 'px)' }, { transform: 'none' }], { duration: 620, easing: 'cubic-bezier(.2,.8,.2,1)' }); }
+        var was = before[li.getAttribute('data-n')], now = li.getBoundingClientRect().top;
+        if (was == null) li.animate([{ opacity: 0, transform: 'translateX(18px)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.2,.8,.2,1)' });
+        else if (Math.abs(was - now) > 1) { li.classList.add('is-swap'); li.animate([{ transform: 'translateY(' + (was - now) + 'px)' }, { transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.2,.8,.2,1)' }); }
       });
-      setTimeout(function () { Array.prototype.forEach.call(live.children, function (li) { li.classList.remove('is-tick', 'is-swap'); }); }, 900);
+      setTimeout(function () { Array.prototype.forEach.call(live.children, function (li) { li.classList.remove('is-tick', 'is-swap'); }); }, 1000);
     }
     function step() {
       if (document.hidden) return;
@@ -374,23 +365,22 @@
       if (Math.random() < 0.25) { var j = (i + 1) % players.length; players[j].v = Math.max(60, players[j].v - Math.random() * 0.6); }
       draw(false);
     }
-    Array.prototype.forEach.call(document.querySelectorAll('#contestBanner .cban__tab'), function (t) {
-      t.addEventListener('click', function () { setContest(t.getAttribute('data-c')); });
-    });
+    Array.prototype.forEach.call(document.querySelectorAll('#contestBanner .cban__tab'), function (t) { t.addEventListener('click', function () { setContest(t.getAttribute('data-c')); }); });
     setContest('day'); if (!reduced) setInterval(step, 2400);
-    // ---- rank board: tier rail F → G.O.A.T., auto-cycles until the visitor picks one
+    // rank board: game rank chips F → G.O.A.T.; auto-cycles until the visitor picks one
     pick.innerHTML = TIERS.map(function (t, i) {
-      return '<button type="button" role="tab" class="cpick' + (/[BAG]/.test(t[0]) ? ' is-light' : '') + '" style="--rc:' + TIERC[t[0]] + '" data-i="' + i + '" aria-selected="false">' + (t[0] === 'G' ? 'GOAT' : t[0]) + '</button>';
+      return '<button type="button" role="tab" class="rkp-badge crail__b' + (/[BAG]/.test(t[0]) ? ' is-light' : '') + '" style="--rc:' + TC[t[0]] + '" data-i="' + i + '" aria-selected="false">' + (t[0] === 'G' ? 'GOAT' : t[0]) + '</button>';
     }).join('');
     var btns = Array.prototype.slice.call(pick.children), ri = 0, auto = null;
     function showRank(i, anim) {
       ri = i; btns.forEach(function (b, k) { b.classList.toggle('is-on', k === i); b.setAttribute('aria-selected', k === i); });
-      var t = TIERS[i]; rk.innerHTML = '';
-      t[1].forEach(function (p, k) { var li = row(p[0], '', p[1]); li.className = 'crow p' + (k + 1); li.querySelector('.crow__pos').textContent = k + 1; rk.appendChild(li);
-        if (anim && !reduced) li.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 380, delay: k * 70, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' }); });
-      rk.style.setProperty('--rc', TIERC[t[0]]);
+      var t = TIERS[i]; rctx.textContent = t[0] === 'G' ? 'G.O.A.T.' : 'Rank ' + t[0]; rk.innerHTML = '';
+      t[1].forEach(function (p, k) {
+        var li = row(p[0], p[1], p[2]); place(li, k); li.querySelector('.rkp-val b').textContent = p[2] + ' %'; rk.appendChild(li);
+        if (anim && !reduced) li.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: k * 60, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+      });
     }
-    btns.forEach(function (b) { b.addEventListener('click', function () { clearInterval(auto); auto = null; showRank(+b.getAttribute('data-i'), true); }); });
+    btns.forEach(function (b) { b.addEventListener('click', function () { clearInterval(auto); showRank(+b.getAttribute('data-i'), true); }); });
     showRank(0, false);
     if (!reduced) auto = setInterval(function () { if (!document.hidden) showRank((ri + 1) % TIERS.length, true); }, 3200);
   })();

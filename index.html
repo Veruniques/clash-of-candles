@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610271830">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610272045">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610272150">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -116,21 +116,28 @@
                 <div class="cban__pool"><span>Výherní bank</span><b id="cbanPool">30 000 €</b></div>
                 <div class="cban__clock" id="cbanClock" aria-live="off"></div>
               </div>
-              <div class="cban__foot hero__cta" id="heroCta">
-                <p class="cban__claim">Hraj zdarma. Každý den 100 coins.</p>
-                <a class="btn btn--primary btn--sm cban__btn" href="#registrace">Vyzkoušet hru</a>
-              </div>
             </div>
-            <section class="cboard cboard--live" aria-label="Live pořadí contestu">
-              <header class="cboard__head"><p class="cboard__kicker"><i class="cboard__pulse" aria-hidden="true"></i>Live pořadí</p><span class="cboard__ctx" id="liveCtx">Daily contest</span></header>
-              <ol class="cboard__list" id="liveTop" aria-live="polite"></ol>
-              <p class="cboard__foot">Úspěšnost obchodů, přepočítává se živě</p>
+            <section class="cboard" aria-label="Live pořadí contestu">
+              <div class="gpanel cpanel">
+                <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title"><i class="cpulse" aria-hidden="true"></i>Live pořadí</p><span class="gpanel__tab" id="liveCtx">Daily</span></div>
+                <div class="lbg-cols" aria-hidden="true"><span>#</span><span>Hráč</span><span>Rank</span><span>Úspěšnost</span></div>
+                <ol class="lbg" id="liveTop" aria-live="off"></ol>
+              </div>
             </section>
-            <section class="cboard cboard--rank" aria-label="Pořadí podle ranku">
-              <header class="cboard__head"><p class="cboard__kicker">Pořadí v ranku</p></header>
-              <div class="cboard__ranks" id="rankPick" role="tablist" aria-label="Vyber rank"></div>
-              <ol class="cboard__list" id="rankTop"></ol>
+            <section class="cboard" aria-label="Pořadí podle ranku">
+              <div class="gpanel cpanel">
+                <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Pořadí v ranku</p><span class="gpanel__tab" id="rankCtx">Rank F</span></div>
+                <div class="crail" id="rankPick" role="tablist" aria-label="Vyber rank"></div>
+                <ol class="lbg" id="rankTop"></ol>
+              </div>
             </section>
+          </div>
+          <div class="cdock__bar">
+            <p class="cdock__note"><i aria-hidden="true">i</i>Ilustrativní ukázka – banky, hráči i pořadí jsou smyšlené.</p>
+            <div class="cdock__cta hero__cta" id="heroCta">
+              <p class="cban__claim">Hraj zdarma. Každý den 100 coins.</p>
+              <a class="btn btn--primary cban__btn" href="#registrace">Vyzkoušet hru</a>
+            </div>
           </div>
         </div>
       </div>
@@ -414,7 +421,7 @@
   </footer>
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
-  <script src="assets/js/herochart.js?v=202610231300" defer></script>
-  <script src="assets/js/main.js?v=202610272030" defer></script>
+  <script src="assets/js/herochart.js?v=202610272150" defer></script>
+  <script src="assets/js/main.js?v=202610272110" defer></script>
 </body>
 </html>
