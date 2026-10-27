@@ -2390,3 +2390,21 @@ main .rankwin p { color: inherit; }
 .cboard { flex-basis: clamp(236px, 17vw, 266px); }
 .cdock__note { white-space: nowrap; }
 @media (max-width: 999px) { .cdock__note { white-space: normal; } }
+/* v52 — pool in hearts, no countdown; free-coins claim under the hero intro */
+.cdock .cban__panel { grid-template-columns: 1fr; align-content: center; }
+.cban__pool b { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.cban__pool b::after { flex-basis: 100%; }
+.cban__pool b small { font-size: .55em; font-weight: 700; color: #3E6676; letter-spacing: 0; }
+.cban__heart { width: 1.25em; height: 1em; background: url(../img/heart-candle.webp?v=1) center / contain no-repeat; filter: drop-shadow(0 3px 4px rgba(160,10,50,.3)); }
+.cdock .cban__pool { padding: 14px 12px 14px; }
+.cdock .cban__pool b { font-size: clamp(28px, 2.6vw, 36px); }
+.hero__claim { display: inline-flex; align-items: center; gap: 8px; margin: 16px 0 0; padding: 8px 14px 8px 10px; border-radius: 999px;
+  background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.8); font-size: 14.5px; font-weight: 700; color: #0E3B4A; }
+.hero__claim .coin-ico { width: 20px; height: 20px; }
+.cdock__bar { margin-top: 12px; }
+.cban__pool b span { font: inherit; color: inherit; }
+/* dock boards without the success %, calmer */
+.cpanel .rkp-val { display: none; }
+.cpanel .lbg-cols, .cpanel .lbg__row { grid-template-columns: 16px minmax(0, 1fr) auto; }
+.cpanel .lbg-cols span:last-child { text-align: right; }
+.cpanel .lbg__name { font-size: 13px; }

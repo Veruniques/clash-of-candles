@@ -38,7 +38,7 @@ Ekonomika na webu: **coins** = palivo (vstup do kola), **srdíčka** = výhry, k
 - [ ] **Endpoint formuláře.** `index.html` → `<form id="signup" data-endpoint="">`. Formulář posílá `POST` JSON `{ email, adult, source, ts }`. Dokud je prázdný, e-maily se nikam neodesílají (jen `console.warn` a localStorage v prohlížeči hráče).
 - [ ] **Produkty v `rewards.json`** — skutečné produkty a ceny dle apple.com/cz (iPhone 18 Pro 34 990 Kč, AirPods Max 13 990 Kč, Apple Watch 10 990 Kč, AirPods Pro 3 6 490 Kč). **Fotky jsou zatím odkazované přímo z Apple CDN** — před spuštěním nahradit licencovanými fotkami shopu/partnera (přepsat `image`). Hodnota srdíčka (50 Kč) a max. sleva 80 % jsou placeholder; ceny v marketplace (♥ + Kč) se z nich počítají automaticky.
 - [ ] **Ranky** jsou podle hry: F → E → D → C → B → A → S → G.O.A.T. (s +/++), získávají se hrou, začíná se na F. Rozhraní Ranks kopíruje obrazovku ze hry; sloupce Vstup (10–1 000 coins) a Výhra (1–100 srdíček) jsou placeholder. `assets/js/main.js`, pole `RANKS`.
-- [ ] **Výherní banky contestů** v hero banneru (30 000 / 75 000 / 150 000 €) jsou placeholder — `main.js`, `POOL`.
+- [ ] **Výherní banky contestů** v hero banneru (500 / 1 000 / 1 500 srdíček) jsou placeholder — `main.js`, `POOL`.
 - [ ] **Výhody registrace** (early access, startovní bonus, founder badge) — nechat jen potvrzené.
 - [ ] **Mock data** — žebříček, statistiky a Academy kvíz jsou ilustrační (`main.js`, `index.html`).
 - [ ] **Právní texty** — patička a FAQ tvrdí: není to investiční služba, coins nelze vyměnit za peníze, 18+. Nechat zkontrolovat právníkem (kupované coins + reálné produkty).

@@ -284,35 +284,17 @@
   })();
 
 
-  /* ---------------- hero contest banner (game look): tabs + prize pool + flip-clock (hours : minutes) ----------------
-     PLACEHOLDER pools — replace with the real contest banks before launch. */
+  /* ---------------- hero contest banner (game look): tabs + prize pool in hearts — PLACEHOLDER pools, replace before launch ---------------- */
   (function () {
     var root = $('#contestBanner'); if (!root) return;
-    var POOL = { day: '30 000 €', week: '75 000 €', month: '150 000 €' };
-    var tabs = Array.prototype.slice.call(root.querySelectorAll('.cban__tab')), clock = $('#cbanClock'), pool = $('#cbanPool'), cur = 'day';
-    function end(kind) {
-      var n = new Date(), e = new Date(n);
-      if (kind === 'day') e.setHours(24, 0, 0, 0);
-      else if (kind === 'week') { e.setHours(24, 0, 0, 0); e.setDate(e.getDate() + ((7 - n.getDay()) % 7)); }
-      else e = new Date(n.getFullYear(), n.getMonth() + 1, 1);
-      return e;
-    }
-    function tick() {
-      var m = Math.max(0, Math.floor((end(cur) - new Date()) / 60000)), h = Math.floor(m / 60), mm = m % 60;
-      var str = String(h) + ':' + (mm < 10 ? '0' : '') + mm;
-      var part = function (txt, lab) { return '<span class="cban__grp"><span class="cban__ds">' + txt.split('').map(function (ch) { return '<b class="cban__d">' + ch + '</b>'; }).join('') + '</span><small>' + lab + '</small></span>'; };
-      var html = part(String(h), 'hod') + '<i class="cban__sep">:</i>' + part((mm < 10 ? '0' : '') + mm, 'min');
-      if (clock.innerHTML !== html) clock.innerHTML = html;
-      clock.setAttribute('aria-label', 'Do konce zbývá ' + h + ' h ' + mm + ' min');
-    }
+    var POOL = { day: '500', week: '1 000', month: '1 500' };
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('.cban__tab')), pool = $('#cbanPool');
     tabs.forEach(function (t) {
       t.addEventListener('click', function () {
-        cur = t.getAttribute('data-c');
         tabs.forEach(function (x) { var on = x === t; x.classList.toggle('is-on', on); x.setAttribute('aria-selected', on); });
-        pool.textContent = POOL[cur]; tick();
+        pool.textContent = POOL[t.getAttribute('data-c')];
       });
     });
-    tick(); setInterval(tick, 15000);
   })();
 
   /* ---------------- hero dock: live top 3 of the selected contest + top 3 per rank, drawn like the game's Žebříček (ILLUSTRATIVE players) ---------------- */
