@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610271830">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610271955">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610272045">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -103,22 +103,34 @@
           <p class="hero__intro">Otestuj své schopnosti, vyzvi ostatní hráče a zapoj se do contestů o auta, motorky a další atraktivní ceny. Každé rozhodnutí je nová výzva.</p>
         </div>
         <div class="hero__sub" id="heroSub">
-          <div class="cban" id="contestBanner" aria-label="Contesty: výherní bank a čas do konce">
-            <div class="cban__tabs" role="tablist">
-              <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Daily contest</button>
-              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Weekly contest</button>
-              <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Monthly contest</button>
+          <div class="cdock" id="cdock">
+            <div class="cban" id="contestBanner" aria-label="Contesty: výherní bank a čas do konce">
+              <div class="cban__tabs" role="tablist">
+                <button type="button" role="tab" class="cban__tab is-on" aria-selected="true" data-c="day">Daily contest</button>
+                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="week">Weekly contest</button>
+                <button type="button" role="tab" class="cban__tab" aria-selected="false" data-c="month">Monthly contest</button>
+              </div>
+              <div class="cban__panel">
+                <i class="cban__bars" aria-hidden="true"></i>
+                <p class="cban__live"><i aria-hidden="true"></i>Live · končí za</p>
+                <div class="cban__pool"><span>Výherní bank</span><b id="cbanPool">30 000 €</b></div>
+                <div class="cban__clock" id="cbanClock" aria-live="off"></div>
+              </div>
+              <div class="cban__foot hero__cta" id="heroCta">
+                <p class="cban__claim">Hraj zdarma. Každý den 100 coins.</p>
+                <a class="btn btn--primary btn--sm cban__btn" href="#registrace">Vyzkoušet hru</a>
+              </div>
             </div>
-            <div class="cban__panel">
-              <i class="cban__bars" aria-hidden="true"></i>
-              <p class="cban__live"><i aria-hidden="true"></i>Live · končí za</p>
-              <div class="cban__pool"><span>Výherní bank</span><b id="cbanPool">30 000 €</b></div>
-              <div class="cban__clock" id="cbanClock" aria-live="off"></div>
-            </div>
-            <div class="cban__foot hero__cta" id="heroCta">
-              <p class="cban__claim">Hraj zdarma. Každý den 100 coins.</p>
-              <a class="btn btn--primary btn--sm cban__btn" href="#registrace">Vyzkoušet hru</a>
-            </div>
+            <section class="cboard cboard--live" aria-label="Live pořadí contestu">
+              <header class="cboard__head"><p class="cboard__kicker"><i class="cboard__pulse" aria-hidden="true"></i>Live pořadí</p><span class="cboard__ctx" id="liveCtx">Daily contest</span></header>
+              <ol class="cboard__list" id="liveTop" aria-live="polite"></ol>
+              <p class="cboard__foot">Úspěšnost obchodů, přepočítává se živě</p>
+            </section>
+            <section class="cboard cboard--rank" aria-label="Pořadí podle ranku">
+              <header class="cboard__head"><p class="cboard__kicker">Pořadí v ranku</p></header>
+              <div class="cboard__ranks" id="rankPick" role="tablist" aria-label="Vyber rank"></div>
+              <ol class="cboard__list" id="rankTop"></ol>
+            </section>
           </div>
         </div>
       </div>
@@ -195,7 +207,7 @@
           <ul class="packs__track" id="packTrack">
             <li class="pack pack--beggar">
                 <img class="pack__mascot pack__mascot--beggar" src="assets/img/candle-beggar.webp?v=4" alt="" width="420" height="609" loading="lazy">
-              <span class="pack__pile" aria-hidden="true"><img src="assets/img/packs/pile-starting.webp?v=3" alt="" style="--s:0.42" loading="lazy"></span>
+              <span class="pack__pile" aria-hidden="true"><img src="assets/img/packs/pile-starting.webp?v=3" alt="" style="--s:0.5" loading="lazy"></span>
                 <span class="pack__name">Starting</span>
               <span class="pack__coins"><i class="coin-ico" aria-hidden="true"></i>200</span>
               <span class="pack__price">29 Kč</span>
@@ -403,6 +415,6 @@
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
   <script src="assets/js/herochart.js?v=202610231300" defer></script>
-  <script src="assets/js/main.js?v=202610251530" defer></script>
+  <script src="assets/js/main.js?v=202610272030" defer></script>
 </body>
 </html>
