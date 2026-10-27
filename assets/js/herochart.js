@@ -31,12 +31,12 @@
   var cpath = anchors([[0, last], [.2, 34], [.35, 36], [.5, 41], [.65, 39], [.85, 36], [1, 35]], CB);
   cpath.forEach(function (c, i) { var o = i ? bars[i - 1].c : last; c += (rnd() - 0.5) * 1.6; var w = 0.4 + rnd() * 1.1;
     bars.push({ o: o, c: c, h: Math.max(o, c) + rnd() * w, l: Math.min(o, c) - rnd() * w }); });
-  var OUT = 50, DOWN = 20, lo = 12, hi = 72;
+  var OUT = 56, DOWN = 14, lo = 4, hi = 74, BASEV = 38;
   var tail = [];
   function makeTail() {
     tail = []; var tseed = 3 + Math.floor(Math.random() * 1e6);
     var tr = function () { tseed = (tseed * 48271) % 2147483647; return tseed / 2147483647; };
-    var path = [35, 36, 34.5, 37, 38.5, 37.5, 40, 42, 41, 44, 46.5, 45.5, 48.5, 53, 52, 55.5, 58, 56.5, 60, 58.5, 61, 59.5, 62, 61];
+    var path = [35, 36, 34.5, 37, 38.5, 37.5, 40, 42, 41, 44, 46.5, 45.5, 48.5, 53, 52, 55.5, 58, 57, 60, 59, 62.5, 61.5, 64.5, 63.5];
     var prev = bars[CB - 1].c;
     path.forEach(function (c, i) { c += (tr() - 0.5) * 1.6; var o = prev, w = 0.4 + tr() * 1.3;
       tail.push({ o: o, c: c, h: Math.max(o, c) + tr() * w, l: Math.min(o, c) - tr() * w }); prev = c; });
@@ -45,10 +45,16 @@
 
   var broke = false, W = 0, H = 0, on = false, shown = 0, grow = 1, fade = 1, flash = 0, raf = 0, visible = true, lastTs = 0, phase = 'grow', hold = 0;
   var hero = cv.parentNode, title = document.getElementById('titleWrap'), floor = document.querySelector('.hero__floor'), scene = document.getElementById('scene');
+  // the candles sit at the fighters' eye level; the canvas is as tall as the space between title and floor
   function place() {
     if (!scene || !title || !floor) return;
     var top = scene.offsetTop + title.offsetTop + title.offsetHeight + 8, bottom = scene.offsetTop + floor.offsetTop;
-    cv.style.top = top + 'px'; cv.style.height = Math.max(60, bottom - top) + 'px';
+    var h = Math.max(200, bottom - top), fg = document.getElementById('exitGreen');
+    if (fg) {
+      var hr = hero.getBoundingClientRect(), g = fg.getBoundingClientRect();
+      if (g.height) { var eye = g.top - hr.top + g.height * 0.42; top = eye - 8 - (hi - BASEV) / (hi - lo) * (h - 16); }
+    }
+    cv.style.top = Math.round(top) + 'px'; cv.style.height = Math.round(h) + 'px';
   }
   function size() {
     place();
@@ -120,7 +126,7 @@
     draw(); raf = requestAnimationFrame(frame);
   }
   function run() { if (!raf && !reduced && on && visible && !document.hidden) { lastTs = 0; raf = requestAnimationFrame(frame); } }
-  function reveal() { on = true; cv.classList.add('is-on'); if (reduced) { shown = TAIL; grow = 1; phase = 'hold'; } draw(); run(); }
+  function reveal() { place(); size(); on = true; cv.classList.add('is-on'); if (reduced) { shown = TAIL; grow = 1; phase = 'hold'; } draw(); run(); }
 
   if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; run(); }).observe(cv);
   document.addEventListener('visibilitychange', run);
