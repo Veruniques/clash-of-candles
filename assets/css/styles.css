@@ -2275,3 +2275,7 @@ main .rankwin p { color: inherit; }
 @media (max-width: 1100px) { .packs--sec .packs__track { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 16px; } }
 @media (max-width: 600px) { .packs--sec .packs__track { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .packs--sec .pack--hot { order: -1; } }
+/* v46 — sad beggar candle sitting on the Starting card */
+.pack--beggar { position: relative; }
+.pack__mascot--beggar { left: 58%; width: 130px; transform: translate(-50%, -76.5%); }
+@media (max-width: 600px) { .pack__mascot--beggar { width: 104px; left: 56%; } }
