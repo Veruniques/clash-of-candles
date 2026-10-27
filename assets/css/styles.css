@@ -2408,3 +2408,11 @@ main .rankwin p { color: inherit; }
 .cpanel .lbg-cols, .cpanel .lbg__row { grid-template-columns: 16px minmax(0, 1fr) auto; }
 .cpanel .lbg-cols span:last-child { text-align: right; }
 .cpanel .lbg__name { font-size: 13px; }
+/* v53 — slimmer contest card, no underline under the pool */
+.cban__pool b::after { display: none; }
+.cdock .cban { flex-basis: clamp(290px, 21vw, 330px); }
+.cdock .cban__tab { font-size: 13px; padding: 7px 8px; }
+.cdock .cban__pool { padding: 10px 10px 12px; }
+.cdock .cban__pool b { font-size: clamp(24px, 2.1vw, 30px); }
+.cdock .cban__panel { padding: 10px; row-gap: 6px; }
+@media (max-width: 999px) { .cdock .cban { flex-basis: min(330px, calc(100vw - 72px)); } }
