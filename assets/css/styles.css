@@ -2248,3 +2248,9 @@ main .rankwin p { color: inherit; }
 /* heart symbol: the candle heart artwork */
 .flow__node--heart > img { width: 100%; filter: drop-shadow(0 14px 16px rgba(160,11,40,.35)); }
 .flow__node--heart > img { width: 118%; max-width: none; margin-inline: -9%; }
+
+/* footer mark in the same proportion to the wordmark as in the nav */
+.foot__brand { gap: 10px; }
+.foot__brand .foot__mark { height: 44px; width: auto; }
+/* new PLAY tile artwork */
+.flow__node--play .play3d { width: 100%; transform: none; filter: drop-shadow(0 12px 12px rgba(4,50,63,.25)); }
