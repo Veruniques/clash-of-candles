@@ -2416,3 +2416,5 @@ main .rankwin p { color: inherit; }
 .cdock .cban__pool b { font-size: clamp(24px, 2.1vw, 30px); }
 .cdock .cban__panel { padding: 10px; row-gap: 6px; }
 @media (max-width: 999px) { .cdock .cban { flex-basis: min(330px, calc(100vw - 72px)); } }
+/* hero chart stays a quiet background layer */
+.hero__chart.is-on { opacity: .62; }

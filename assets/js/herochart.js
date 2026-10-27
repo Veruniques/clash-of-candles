@@ -1,7 +1,7 @@
-/* Clash of Candles — faint chart behind the fighters in the hero, drawn like the game.
-   Left: the game's line chart with a soft shade. Right: the same price path as candles.
-   The game's BREAKOUT / BREAKDOWN levels sit on the right edge. Only the last stretch of candles
-   keeps growing — candle by candle it climbs into the breakout, then that stretch resets and grows again.
+/* Clash of Candles — quiet chart behind the fighters in the hero, drawn like the game's arena:
+   a long line history, then a short run of small candles, the BREAKOUT / BREAKDOWN levels
+   (coloured dashed lead-in + tag on the right edge). Only the newest candles animate:
+   they build up, spike through the breakout, pull back, then that stretch resets and plays again.
    Hidden until the fighters collide; main.js calls HeroChart.reveal() at the impact. */
 (function () {
   'use strict';
@@ -9,48 +9,45 @@
   if (!cv) return;
   var ctx = cv.getContext('2d');
   var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // game palette (arena screenshots): jade breakout, ruby breakdown
-  var C = { line: '#3FDB94', up: '#4CC98A', down: '#E0335A', wick: '#6B7378', out: '#4FD893', dn: '#E0335A', dash: '#A3AEB4' };
-  var N = 112, HALF = 50, TAIL = 22, BASE = N - TAIL, seed = 11, pts = [], p = 0;
-  function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-  // fixed history: slow base on the left, a rally, then a range just under the breakout ceiling
-  function shape(i) {
-    if (i < HALF) return 1 + i * 0.07 + Math.sin(i / 7) * 1.1;
-    if (i < 76) return 1 + HALF * 0.07 + (i - HALF) * 0.36;
-    return 13.2 + Math.sin((i - 76) / 3.2) * 0.9;
-  }
-  for (var i = 0; i < BASE; i++) { p = shape(i) + (rnd() - 0.5) * 1.3; pts.push(p); }
-  var bars = [];
-  for (var k = HALF; k < BASE; k++) {
-    var o = pts[k - 1], c = pts[k], w = 0.3 + rnd() * 0.8;
-    bars.push({ i: k, o: o, c: c, h: Math.max(o, c) + rnd() * w, l: Math.min(o, c) - rnd() * w });
-  }
-  var ceil = -Infinity;
-  bars.slice(-20).forEach(function (b) { ceil = Math.max(ceil, b.h); });
-  var OUT = ceil + 0.5, DOWN = 6.4;                        // the two game levels
-  var lo = -1.5, hi = OUT + 3.2;
+  var C = { line: '#3FD996', up: '#3FC98A', down: '#E0335A', wick: '#59646A', out: '#5FE3A1', dn: '#E0335A' };
 
-  // the growing tail: a short dip, then a climb that pierces the breakout level
-  var tail = [], tseed = 7;
-  function trnd() { tseed = (tseed * 48271) % 2147483647; return tseed / 2147483647; }
-  function makeTail() {
-    tail = []; var v = pts[BASE - 1], start = v, target = OUT + 1.8;
-    for (var t = 0; t < TAIL; t++) {
-      var f = t / (TAIL - 1), goal = f < 0.3 ? start - 1.2 * Math.sin(f / 0.3 * Math.PI / 2) : start - 1.2 + (target - start + 1.2) * Math.pow((f - 0.3) / 0.7, 1.6);
-      var nv = goal + (trnd() - 0.5) * 0.9; if (t === TAIL - 1) nv = target;
-      var w = 0.3 + trnd() * 0.8, o = t ? tail[t - 1].c : v;
-      tail.push({ i: BASE + t, o: o, c: nv, h: Math.max(o, nv) + trnd() * w, l: Math.min(o, nv) - trnd() * w });
-      v = nv;
+  var seed = 5;
+  function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+  function anchors(list, n) { // smooth path through [fraction, value] anchors
+    var out = [];
+    for (var i = 0; i < n; i++) {
+      var f = i / (n - 1), k = 1; while (k < list.length - 1 && list[k][0] < f) k++;
+      var a = list[k - 1], b = list[k], t = (f - a[0]) / (b[0] - a[0] || 1); t = t * t * (3 - 2 * t);
+      out.push(a[1] + (b[1] - a[1]) * t);
     }
+    return out;
+  }
+  // 1) line history (the game's "hourly" view)
+  var LN = 320, line = anchors([[0, 84], [.03, 92], [.12, 86], [.2, 84], [.27, 74], [.3, 60], [.34, 52], [.4, 57], [.47, 56], [.48, 38], [.55, 34], [.6, 40],
+    [.68, 33], [.72, 22], [.78, 38], [.82, 52], [.86, 44], [.9, 38], [.95, 41], [1, 33]], LN);
+  var walk = 0; line = line.map(function (v) { walk = walk * 0.6 + (rnd() - 0.5) * 5; return v + walk; });
+  // 2) small candles that continue it (faint), then 3) the live stretch that grows
+  var CB = 62, TAIL = 24, bars = [], last = line[LN - 1];
+  var cpath = anchors([[0, last], [.2, 30], [.35, 33], [.5, 41], [.65, 38], [.85, 34], [1, 32]], CB);
+  cpath.forEach(function (c, i) { var o = i ? bars[i - 1].c : last; c += (rnd() - 0.5) * 2.4; var w = 0.6 + rnd() * 1.6;
+    bars.push({ o: o, c: c, h: Math.max(o, c) + rnd() * w, l: Math.min(o, c) - rnd() * w }); });
+  var OUT = 50, DOWN = 21, lo = 4, hi = 100;
+  var tail = [];
+  function makeTail() {
+    tail = []; var tseed = 3 + Math.floor(Math.random() * 1e6);
+    var tr = function () { tseed = (tseed * 48271) % 2147483647; return tseed / 2147483647; };
+    var path = [33, 34, 32.5, 35, 36.5, 35, 38, 40, 38.5, 41, 58, 56, 52, 47, 49, 45, 44, 47.5, 46, 49, 48, 46.5, 48.5, 47];
+    var prev = bars[CB - 1].c;
+    path.forEach(function (c, i) { c += (tr() - 0.5) * 1.6; var o = i === 10 ? prev + 0.5 : prev, w = 0.5 + tr() * 1.8;
+      tail.push({ o: o, c: c, h: Math.max(o, c) + tr() * w + (i === 10 ? 2 : 0), l: Math.min(o, c) - tr() * w }); prev = c; });
   }
   makeTail();
 
-  var prog = 0, W = 0, H = 0, shown = 0, grow = 1, fade = 1, flash = 0, raf = 0, visible = true, last = 0, phase = 'grow', hold = 0;
+  var W = 0, H = 0, on = false, shown = 0, grow = 1, fade = 1, flash = 0, raf = 0, visible = true, lastTs = 0, phase = 'grow', hold = 0;
   var hero = cv.parentNode, title = document.getElementById('titleWrap'), floor = document.querySelector('.hero__floor'), scene = document.getElementById('scene');
   function place() {
     if (!scene || !title || !floor) return;
-    var top = scene.offsetTop + title.offsetTop + title.offsetHeight + 8;
-    var bottom = scene.offsetTop + floor.offsetTop;
+    var top = scene.offsetTop + title.offsetTop + title.offsetHeight + 8, bottom = scene.offsetTop + floor.offsetTop;
     cv.style.top = top + 'px'; cv.style.height = Math.max(60, bottom - top) + 'px';
   }
   function size() {
@@ -60,77 +57,74 @@
     cv.width = Math.round(W * d); cv.height = Math.round(H * d); ctx.setTransform(d, 0, 0, d, 0, 0);
     draw();
   }
-  var TAGW = 0;
-  function X(i) { return (i + 0.5) / N * (W - TAGW); }
-  function Y(v) { return 10 + (hi - v) / (hi - lo) * (H - 20); }
-  function candle(b, alpha, partial) {
-    var c = partial == null ? b.c : b.o + (b.c - b.o) * partial, h = partial == null ? b.h : Math.max(b.o, c), l = partial == null ? b.l : Math.min(b.o, c);
-    var col = c >= b.o ? C.up : C.down, xc = Math.round(X(b.i)) + 0.5, bw = Math.max(2, (W - TAGW) / N * 0.62);
+  // layout like the arena: line → ~67 %, candles → ~88 %, tags flush right
+  var XL = 0.67, XE = 0.885;
+  function lx(i) { return i / (LN - 1) * W * XL; }
+  function cx(j) { var slot = W * (XE - XL) / (CB + TAIL); return W * XL + (j + 0.5) * slot; }
+  function Y(v) { return 8 + (hi - v) / (hi - lo) * (H - 16); }
+  function candle(b, j, alpha, part) {
+    var c = part == null ? b.c : b.o + (b.c - b.o) * part, h = part == null ? b.h : Math.max(b.o, c, b.o + (b.h - b.o) * part), l = part == null ? b.l : Math.min(b.o, c);
+    var x = Math.round(cx(j)) + 0.5, bw = Math.max(1.5, W * (XE - XL) / (CB + TAIL) * 0.6);
     ctx.globalAlpha = alpha;
-    ctx.strokeStyle = C.wick; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(xc, Y(h)); ctx.lineTo(xc, Y(l)); ctx.stroke();
-    ctx.fillStyle = col; ctx.fillRect(xc - bw / 2, Y(Math.max(b.o, c)), bw, Math.max(1.5, Math.abs(Y(b.o) - Y(c))));
+    ctx.strokeStyle = C.wick; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, Y(h)); ctx.lineTo(x, Y(l)); ctx.stroke();
+    ctx.fillStyle = c >= b.o ? C.up : C.down; ctx.fillRect(x - bw / 2, Y(Math.max(b.o, c)), bw, Math.max(1, Math.abs(Y(b.o) - Y(c))));
   }
-  function rr(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-  function level(v, col, label) {
+  function tag(v, col, label, lit) {
     var y = Math.round(Y(v)) + 0.5, small = W < 700;
     ctx.save();
-    ctx.font = '800 ' + (small ? 10 : 13) + 'px ' + getComputedStyle(document.body).fontFamily;
-    var tw = ctx.measureText(label).width, ph = small ? 22 : 30, pw = tw + (small ? 16 : 26), x = W - pw;
-    // short dashed lead-in, like the game's level line
-    ctx.setLineDash([6, 6]); ctx.strokeStyle = C.dash; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.9;
-    ctx.beginPath(); ctx.moveTo(x - 6 - (small ? 70 : 190), y); ctx.lineTo(x - 6, y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.font = '800 ' + (small ? 10 : 14) + 'px ' + getComputedStyle(document.body).fontFamily;
+    var tw = ctx.measureText(label).width, ph = small ? 22 : 34, pw = tw + (small ? 14 : 30), x = W - pw, r = small ? 5 : 7;
+    // coloured dashed lead-in from the last candles to the tag
+    ctx.setLineDash([small ? 4 : 7, small ? 4 : 6]); ctx.strokeStyle = col; ctx.lineWidth = small ? 1.2 : 1.6; ctx.globalAlpha = 0.9;
+    ctx.beginPath(); ctx.moveTo(W * (XE - 0.05), y); ctx.lineTo(x, y); ctx.stroke(); ctx.setLineDash([]);
     ctx.globalAlpha = 1;
-    if (label === 'BREAKOUT' && flash > 0) { ctx.shadowColor = col; ctx.shadowBlur = 20 * flash; }
-    ctx.fillStyle = col; rr(x, y - ph / 2, pw, ph, small ? 5 : 6); ctx.fill(); ctx.shadowBlur = 0;
-    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(label, x + (pw - tw) / 2, y + 0.5);
+    if (lit > 0) { ctx.shadowColor = col; ctx.shadowBlur = 22 * lit; }
+    ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(x + r, y - ph / 2); ctx.lineTo(W, y - ph / 2); ctx.lineTo(W, y + ph / 2); ctx.lineTo(x + r, y + ph / 2);
+    ctx.arcTo(x, y + ph / 2, x, y - ph / 2, r); ctx.arcTo(x, y - ph / 2, x + r, y - ph / 2, r); ctx.closePath(); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(label, x + (pw - tw) / 2, y + 1);
     ctx.restore();
   }
   function draw() {
     if (!W) return;
     ctx.clearRect(0, 0, W, H);
-    if (prog <= 0) return;
-    TAGW = W < 700 ? 104 : 330;
-    ctx.save(); ctx.globalAlpha = 0.8;
-    // left: line + shade
-    ctx.beginPath(); ctx.moveTo(X(0), Y(pts[0]));
-    for (var a = 1; a <= HALF; a++) ctx.lineTo(X(a), Y(pts[a]));
-    ctx.lineJoin = 'round'; ctx.lineWidth = 2.2; ctx.strokeStyle = C.line; ctx.stroke();
-    bars.forEach(function (b) { candle(b, 0.8); });
-    // the growing end of the chart
-    for (var t = 0; t < shown; t++) candle(tail[t], 0.95 * fade, t === shown - 1 ? grow : null);
+    if (!on) return;
+    ctx.save();
+    // line history: thin, pale — like the game's faded past
+    ctx.globalAlpha = 0.6; ctx.beginPath(); ctx.moveTo(lx(0), Y(line[0]));
+    for (var i = 1; i < LN; i++) ctx.lineTo(lx(i), Y(line[i]));
+    ctx.lineJoin = 'round'; ctx.lineWidth = W < 700 ? 1.2 : 1.6; ctx.strokeStyle = C.line; ctx.stroke();
+    bars.forEach(function (b, j) { candle(b, j, 0.38); });
+    for (var t = 0; t < shown; t++) candle(tail[t], CB + t, 0.95 * fade, t === shown - 1 ? grow : null);
     ctx.restore();
-    var broke = shown === TAIL && phase !== 'grow';
-    level(OUT, C.out, 'BREAKOUT');
-    level(DOWN, C.dn, 'BREAKDOWN');
-    if (broke) {
-      ctx.save(); ctx.globalAlpha = 0.85 * fade; ctx.fillStyle = C.out;
-      var b = tail[TAIL - 1]; ctx.beginPath(); ctx.arc(X(b.i), Y(b.c), 3.5 + flash * 3, 0, Math.PI * 2); ctx.fill(); ctx.restore();
-    }
+    var spiked = shown > 10;
+    tag(OUT, C.out, 'BREAKOUT', spiked ? flash : 0);
+    tag(DOWN, C.dn, 'BREAKDOWN', 0);
   }
-  // timeline of one loop: candles grow one by one → breakout flash + hold → the tail fades → regrow
-  var STEP = 340;
+  // one loop: the live candles build up one by one → spike through BREAKOUT (tag glows) → hold → fade → again
   function frame(ts) {
     raf = 0; if (!visible || document.hidden) return;
-    var dt = last ? Math.min(64, ts - last) : 16; last = ts;
+    var dt = lastTs ? Math.min(64, ts - lastTs) : 16; lastTs = ts;
     if (phase === 'grow') {
-      grow += dt / STEP;
-      if (grow >= 1) { if (shown < TAIL) { shown++; grow = 0; } else { phase = 'hold'; hold = 0; flash = 1; } }
+      grow += dt / (shown === 11 ? 520 : 300);
+      if (grow >= 1) {
+        if (shown === 11 && flash === 0) flash = 1;
+        if (shown < TAIL) { shown++; grow = 0; } else { phase = 'hold'; hold = 0; }
+      }
+      if (flash > 0) flash = Math.max(0, flash - dt / 1400);
     } else if (phase === 'hold') {
-      hold += dt; flash = Math.max(0, 1 - hold / 900);
-      if (hold > 1800) { phase = 'fade'; }
-    } else if (phase === 'fade') {
-      fade -= dt / 450;
-      if (fade <= 0) { fade = 1; shown = 0; grow = 1; phase = 'grow'; makeTail(); }
+      hold += dt; if (hold > 2200) phase = 'fade';
+    } else {
+      fade -= dt / 500;
+      if (fade <= 0) { fade = 1; shown = 0; grow = 1; flash = 0; phase = 'grow'; makeTail(); }
     }
     draw(); raf = requestAnimationFrame(frame);
   }
-  function run() { if (!raf && !reduced && prog > 0) { last = 0; raf = requestAnimationFrame(frame); } }
-  function reveal() { prog = 1; cv.classList.add('is-on'); if (reduced) { shown = TAIL; grow = 1; phase = 'hold'; } draw(); run(); }
-  function show() { reveal(); }
+  function run() { if (!raf && !reduced && on && visible && !document.hidden) { lastTs = 0; raf = requestAnimationFrame(frame); } }
+  function reveal() { on = true; cv.classList.add('is-on'); if (reduced) { shown = TAIL; grow = 1; phase = 'hold'; } draw(); run(); }
 
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) run(); }).observe(cv);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; run(); }).observe(cv);
   document.addEventListener('visibilitychange', run);
   if ('ResizeObserver' in window) new ResizeObserver(size).observe(hero); else window.addEventListener('resize', size);
   size();
-  window.HeroChart = { reveal: reveal, show: show };
+  window.HeroChart = { reveal: reveal, show: reveal };
 })();
