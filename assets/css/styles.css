@@ -2254,3 +2254,12 @@ main .rankwin p { color: inherit; }
 .foot__brand .foot__mark { height: 44px; width: auto; }
 /* new PLAY tile artwork */
 .flow__node--play .play3d { width: 100%; transform: none; filter: drop-shadow(0 12px 12px rgba(4,50,63,.25)); }
+
+/* red fighter jumping in from the top-right corner of the footer */
+.foot { position: relative; overflow: visible; }
+.foot__fighter { position: absolute; right: max(20px, calc((100% - var(--wrap)) / 2)); bottom: calc(100% - 70px); width: clamp(110px, 11vw, 160px); height: auto; z-index: 3; pointer-events: none;
+  transform: rotate(8deg); filter: drop-shadow(0 16px 18px rgba(4,32,45,.35)); }
+@media (prefers-reduced-motion: no-preference) { .foot__fighter { animation: hoverS 3.4s ease-in-out infinite alternate; } }
+@media (max-width: 800px) { .foot__fighter { width: 96px; bottom: calc(100% - 40px); } }
+.foot__fighter { bottom: calc(100% - 16px); transform: rotate(6deg); }
+@media (max-width: 800px) { .foot__fighter { bottom: calc(100% - 10px); } }
