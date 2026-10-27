@@ -2427,3 +2427,9 @@ main .rankwin p { color: inherit; }
 .hero__claim { padding: 0; background: none; border: 0; border-radius: 0; margin-top: 14px; font-size: 13.5px; font-weight: 600; color: #2C5868; gap: 7px; }
 .hero__claim .coin-ico { width: 16px; height: 16px; }
 @media (min-width: 1000px) { .cdock__bar { justify-content: flex-end; gap: 28px; } }
+/* note starts at the dock's left edge, CTA stays at the content's right edge */
+@media (min-width: 1000px) {
+  #heroSub { justify-self: end; width: fit-content !important; max-width: calc(100% + var(--bleed)); align-items: stretch; }
+  .cdock__bar { justify-content: space-between; }
+}
+@media (min-width: 1000px) { .hero__copy .hero__sub#heroSub { max-width: calc(100% + var(--bleed)) !important; } .cdock { min-width: 0; } }
