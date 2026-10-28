@@ -18,7 +18,7 @@
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo-latin-ext-standard-normal.woff2" crossorigin>
   <link rel="preload" as="image" href="assets/img/candle-green.webp?v=202610201838">
   <link rel="preload" as="image" href="assets/img/candle-red.webp?v=202610271830">
-  <link rel="stylesheet" href="assets/css/styles.css?v=202610280920">
+  <link rel="stylesheet" href="assets/css/styles.css?v=202610281215">
   <script>
     // Hide hero pieces until the intro animation takes over; fail open after 3.5 s.
     (function () {
@@ -148,14 +148,14 @@
       <div class="play__inner" id="playInner">
         <div class="wrap">
           <!-- ============ 2. ODMĚNY: nadpis → symboly → text → odměny → coins ============ -->
-          <div class="flow" id="jak" role="img" aria-label="Za coins si koupíš vstup do kola, za vyhrané kolo dostaneš srdíčko, za srdíčka a doplatek si vybereš odměnu.">
-            <div class="flow__node flow__node--coin"><img src="assets/img/coin-flow.webp?v=1" alt="" width="640" height="640"><b class="flow__badge">10</b></div>
+          <div class="flow" id="jak" role="img" aria-label="Začni: za coins vstoupíš do kola. Hraj. Sbírej: za vyhrané kolo dostaneš srdíčko. Získej: za srdíčka a doplatek si vybereš odměnu.">
+            <div class="flow__node flow__node--coin"><span class="flow__label">Začni</span><img src="assets/img/coin-flow.webp?v=1" alt="" width="640" height="640"><b class="flow__badge">10</b></div>
             <span class="flow__arrow" aria-hidden="true"><i></i></span>
-            <div class="flow__node flow__node--play"><img class="play3d" src="assets/img/play-tile.webp?v=1" alt="" width="360" height="354"></div>
+            <div class="flow__node flow__node--play"><span class="flow__label">Hraj</span><img class="play3d" src="assets/img/play-tile.webp?v=1" alt="" width="360" height="354"></div>
             <span class="flow__arrow" aria-hidden="true"><i></i></span>
-            <div class="flow__node flow__node--heart"><img src="assets/img/heart-candle.webp?v=1" alt="" width="360" height="284"><b class="flow__badge flow__badge--heart">+1</b></div>
+            <div class="flow__node flow__node--heart"><span class="flow__label">Sbírej</span><img src="assets/img/heart-candle.webp?v=1" alt="" width="360" height="284"><b class="flow__badge flow__badge--heart">+1</b></div>
             <span class="flow__arrow" aria-hidden="true"><i></i></span>
-            <div class="flow__node flow__node--prize">
+            <div class="flow__node flow__node--prize"><span class="flow__label">Získej</span>
               <span class="flow__fan flow__fan--clean"><img class="ff-head" src="assets/img/products/headphones.svg" alt="" width="240" height="240"><img class="ff-phone" src="assets/img/products/phone.svg" alt="" width="240" height="240"><img class="flow__car" src="assets/img/products/car.webp?v=1" alt="" width="900" height="367"></span>
               <b class="flow__pay"><i class="heart-ico" aria-hidden="true"></i>+<span>Kč</span></b>
             </div>

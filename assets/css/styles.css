@@ -2448,3 +2448,8 @@ main .rankwin p { color: inherit; }
 .hero__cta--lead { display: flex; justify-content: flex-start; margin: 18px 0 0; }
 @media (min-width: 1000px) { .cdock__bar { justify-content: flex-start; padding-right: 0; } }
 @media (max-width: 999px) { .cdock__bar { flex-direction: row; } }
+/* v57 — one-word action under each flow symbol */
+.flow { padding-bottom: clamp(34px, 3.4vw, 46px); }
+.flow__label { position: absolute; left: 50%; top: calc(100% + clamp(14px, 1.6vw, 24px)); transform: translateX(-50%); white-space: nowrap;
+  font-size: clamp(12px, 1.2vw, 15px); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #0E3B4A; }
+.flow__node--prize .flow__label { top: calc(100% + clamp(14px, 1.6vw, 24px) - 6px); }
