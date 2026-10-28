@@ -121,13 +121,13 @@
             <section class="cboard" aria-label="Live pořadí Areny">
               <div class="gpanel cpanel">
                 <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title"><i class="cpulse" aria-hidden="true"></i>Live pořadí</p><span class="gpanel__tab" id="liveCtx">Denní</span></div>
-                <div class="lbg-cols" aria-hidden="true"><span>#</span><span>Hráč</span><span>Rank</span><span>Úspěšnost</span></div>
+                <div class="lbg-cols" aria-hidden="true"><span>#</span><span>Hráč</span><span>Úroveň</span><span>Úspěšnost</span></div>
                 <ol class="lbg" id="liveTop" aria-live="off"></ol>
               </div>
             </section>
-            <section class="cboard" aria-label="Pořadí podle ranku">
+            <section class="cboard" aria-label="Pořadí podle úrovně">
               <div class="gpanel cpanel">
-                <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Pořadí v ranku</p><span class="gpanel__tab" id="rankCtx">Rank F</span></div>
+                <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Pořadí v úrovni</p><span class="gpanel__tab" id="rankCtx">Úroveň F</span></div>
                 <div class="crail" id="rankPick" role="tablist" aria-label="Vyber rank"></div>
                 <ol class="lbg" id="rankTop"></ol>
               </div>
@@ -216,17 +216,17 @@
     <section class="section" id="play" aria-labelledby="play-h">
       <div class="wrap ranks__grid">
         <div>
-          <h2 id="play-h" class="h2">Každý rank, jiná hra.</h2>
-          <p class="lede">Každý rank přináší nové herní podmínky, výzvy a možnosti. S postupem na vyšší úrovně se zvyšuje obtížnost i odměny za úspěšná kola.</p>
+          <h2 id="play-h" class="h2">Každá úroveň, jiná hra.</h2>
+          <p class="lede">Každá úroveň přináší nové herní podmínky, výzvy a možnosti. S postupem výš se zvyšuje obtížnost i odměny za úspěšná kola.</p>
         </div>
-        <div class="gpanel rcard" aria-label="Ranky od F po G.O.A.T.">
-          <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Ranks</p></div>
+        <div class="gpanel rcard" aria-label="Úrovně od F po G.O.A.T.">
+          <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Úrovně</p></div>
           <ol class="gpanel__body rlines" id="rankTiles"></ol>
         </div>
       </div>
     </section>
 
-    <!-- ============ ARÉNY · ACADEMY · RANK (jedna sekce) ============ -->
+    <!-- ============ ARÉNY · ACADEMY · ÚROVNĚ (jedna sekce) ============ -->
     <section class="section" id="contesty" aria-labelledby="trio-h">
       <div class="wrap">
         <div class="sechead">
@@ -241,7 +241,7 @@
             </div>
             <div class="gpanel" aria-label="Ukázka žebříčku ze hry">
               <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Žebříček</p><span class="gpanel__tab">Týden</span></div>
-              <div class="lbg-cols" aria-hidden="true"><span>#</span><span>Hráč</span><span>Rank</span><span>Úspěšnost</span></div>
+              <div class="lbg-cols" aria-hidden="true"><span>#</span><span>Hráč</span><span>Úroveň</span><span>Úspěšnost</span></div>
               <ol class="lbg" id="leaderboard"></ol>
             </div>
             <a class="btn btn--glass btn--sm trio__cta" href="#registrace">Zobrazit žebříček</a>
@@ -269,14 +269,14 @@
             </div>
             <div class="gpanel" aria-hidden="true">
               <div class="gpanel__top"><span class="rkp-back">‹</span><p class="rkp-title">Statistiky</p></div>
-              <div class="gpanel__body stgrid"><div class="st st--g"><span class="st__l">Odehraná kola</span><b class="st__v">120</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--r"><span class="st__l">Srdíčka</span><b class="st__v">543</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--g"><span class="st__l">Výhra</span><b class="st__v">25 %</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--r"><span class="st__l">Prohra</span><b class="st__v">75 %</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--wide"><span class="st__l">Počet výher <i>/</i> <em>proher</em></span><b class="st__v"><span class="st__w">1</span>/<span class="st__x">3</span></b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--g"><span class="st__l">Rank</span><span class="st__ranks"><i>F</i><i>E</i></span><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--g"><span class="st__l">Her v ranku</span><span class="st__rk"><i>F</i><b>50/50</b></span><span class="st__rk"><i>E</i><b>30/50</b></span><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div></div>
+              <div class="gpanel__body stgrid"><div class="st st--g"><span class="st__l">Odehraná kola</span><b class="st__v">120</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--r"><span class="st__l">Srdíčka</span><b class="st__v">543</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--g"><span class="st__l">Výhra</span><b class="st__v">25 %</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--r"><span class="st__l">Prohra</span><b class="st__v">75 %</b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--wide"><span class="st__l">Počet výher <i>/</i> <em>proher</em></span><b class="st__v"><span class="st__w">1</span>/<span class="st__x">3</span></b><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--g"><span class="st__l">Úroveň</span><span class="st__ranks"><i>F</i><i>E</i></span><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div><div class="st st--g"><span class="st__l">Her v úrovni</span><span class="st__rk"><i>F</i><b>50/50</b></span><span class="st__rk"><i>E</i><b>30/50</b></span><svg class="st__go" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></div></div>
             </div>
           </article>
           <article class="trio__card glass">
             <span class="chip"><svg aria-hidden="true"><use href="#i-trophy"/></svg>Arena</span>
             <h3 class="h3">Jedna soutěž. Stejné podmínky. Ti nejlepší na vrcholu.</h3>
             <div class="trio__txt">
-              <p>Zapoj se do denní, týdenní nebo měsíční Areny. Bez ohledu na rank začínají všichni účastníci za stejných podmínek. Předveď své schopnosti, sbírej body a bojuj o přední příčky.</p>
+              <p>Zapoj se do denní, týdenní nebo měsíční Areny. Bez ohledu na úroveň začínají všichni účastníci za stejných podmínek. Předveď své schopnosti, sbírej body a bojuj o přední příčky.</p>
             </div>
             <div class="gpanel" aria-label="Arena a čas do konce">
               <div class="gpanel__top"><span class="rkp-back" aria-hidden="true">‹</span><p class="rkp-title">Arena</p></div>
@@ -357,6 +357,6 @@
 
   <script src="assets/js/vendor/gsap.min.js?v=202610201838" defer></script>
   <script src="assets/js/herochart.js?v=202610272210" defer></script>
-  <script src="assets/js/main.js?v=202610272150" defer></script>
+  <script src="assets/js/main.js?v=202610281900" defer></script>
 </body>
 </html>

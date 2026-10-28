@@ -356,7 +356,7 @@
     var btns = Array.prototype.slice.call(pick.children), ri = 0, auto = null;
     function showRank(i, anim) {
       ri = i; btns.forEach(function (b, k) { b.classList.toggle('is-on', k === i); b.setAttribute('aria-selected', k === i); });
-      var t = TIERS[i]; rctx.textContent = t[0] === 'G' ? 'G.O.A.T.' : 'Rank ' + t[0]; rk.innerHTML = '';
+      var t = TIERS[i]; rctx.textContent = t[0] === 'G' ? 'G.O.A.T.' : 'Úroveň ' + t[0]; rk.innerHTML = '';
       t[1].forEach(function (p, k) {
         var li = row(p[0], p[1], p[2]); place(li, k); li.querySelector('.rkp-val b').textContent = p[2] + ' %'; rk.appendChild(li);
         if (anim && !reduced) li.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 360, delay: k * 60, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
