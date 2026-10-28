@@ -54,6 +54,7 @@
       var hr = hero.getBoundingClientRect(), g = fg.getBoundingClientRect();
       if (g.height) { var eye = g.top - hr.top + g.height * 0.42; top = eye - 8 - (hi - BASEV) / (hi - lo) * (h - 16); }
     }
+    top = Math.min(top, bottom - h); // never spill below the floor into the copy
     cv.style.top = Math.round(top) + 'px'; cv.style.height = Math.round(h) + 'px';
   }
   function size() {

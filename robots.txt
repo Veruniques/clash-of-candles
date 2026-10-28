@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://veruniques.github.io/clash-of-candles/sitemap.xml

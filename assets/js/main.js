@@ -191,8 +191,9 @@
 
   /* ---------------- scroll hand-off: fighters leave, the game panel arrives ---------------- */
   var heroChartEl = $('#heroChart'), exitG = $('#exitGreen'), exitR = $('#exitRed'), titleWrap = $('#titleWrap'), heroCopy = $('#heroCopy'),
-      cue = $('#scrollCue'), playInner = $('#playInner'), shadowEl = $('.duo__shadow');
+      playInner = $('#playInner'), shadowEl = $('.duo__shadow');
   function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+  var stacked = window.matchMedia('(max-width: 999px)');
   function scrollFx() {
     var vh = window.innerHeight, y = window.scrollY;
     var p = clamp(y / (vh * 0.6)), e = p * p * (3 - 2 * p);
@@ -201,10 +202,11 @@
     titleWrap.style.transform = 'translate3d(0,' + (-e * 22) + 'vh,0) scale(' + (1 + e * 0.12) + ')';
     titleWrap.style.opacity = String(1 - clamp(p * 1.4));
     if (heroChartEl) heroChartEl.style.opacity = String(1 - clamp(p * 1.6));
-    heroCopy.style.opacity = String(1 - clamp(p * 2.2));
-    heroCopy.style.transform = 'translate3d(0,' + (-p * 40) + 'px,0)';
+    if (!stacked.matches) { // desktop: the copy fades as the panel slides over; on phones it simply scrolls
+      heroCopy.style.opacity = String(1 - clamp(p * 2.2));
+      heroCopy.style.transform = 'translate3d(0,' + (-p * 40) + 'px,0)';
+    } else { heroCopy.style.opacity = ''; heroCopy.style.transform = ''; }
     if (introDone) shadowEl.style.opacity = String(1 - clamp(p * 2));
-    if (cue) cue.style.opacity = String(1 - clamp(p * 4));
     // the panel tilts back flat as it rises
     var r = playInner.getBoundingClientRect();
     var q = clamp((r.top - vh * 0.1) / (vh * 0.9));
@@ -244,44 +246,7 @@
         (i === 0 ? '<em class="rtile__tag">Tady začínáš</em>' : '') + '</li>';
     }).join('');
   })();
-  (function () {
-    var list = $('#rankList'); if (!list) return;
-    var me = 0, open = 4; // demo player: fresh on F; the first tier group is visible, the rest unlocks by playing
-    var lock = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3M12 15v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-    list.innerHTML = RANKS.map(function (r, i) {
-      var c = TIER[r[0][0]], dark = /[BAG]/.test(r[0][0]), goat = r[0][0] === 'G';
-      var row = '<li class="rkp' + (i === me ? ' is-me' : '') + (i >= open ? ' is-locked' : '') + '">' +
-        '<b class="rkp-badge' + (dark ? ' is-light' : '') + (goat ? ' is-goat' : '') + '" style="--rc:' + c + '">' + r[0] + '</b>' +
-        '<span class="rkp-val"><i class="coin-ico" aria-hidden="true"></i>' + fmt(r[1]) + '</span>' +
-        '<span class="rkp-val"><i class="heart-ico" aria-hidden="true"></i>+' + r[2] + '</span></li>';
-      if (i === open - 1) row += '<li class="rkp-lock">Postupuj hrou ' + lock + '</li>';
-      return row;
-    }).join('');
-  })();
 
-  /* ---------------- play screenshot: a small static chart ---------------- */
-  (function () {
-    var cv = $('#psChart'); if (!cv) return;
-    function paint() {
-      var r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2), w = r.width, h = r.height; if (!w) return;
-      cv.width = w * d; cv.height = h * d; var c = cv.getContext('2d'); c.setTransform(d, 0, 0, d, 0, 0);
-      var n = 120, seed = 7, p = 0, pts = [];
-      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
-      for (var i = 0; i < n; i++) { p += (rnd() - 0.48) * 3 + Math.sin(i / 14) * 0.6; pts.push(p); }
-      var lo = Math.min.apply(null, pts), hi = Math.max.apply(null, pts), pad = (hi - lo) * 0.35; lo -= pad; hi += pad;
-      var X = function (i) { return 10 + i / (n - 1) * (w * 0.7); }, Y = function (v) { return 10 + (hi - v) / (hi - lo) * (h - 20); };
-      c.strokeStyle = 'rgba(255,255,255,.05)'; for (var g = 1; g < 6; g++) { c.beginPath(); c.moveTo(0, h * g / 6); c.lineTo(w, h * g / 6); c.stroke(); }
-      [['#4FF2B1', hi - pad * 0.45, 'BREAKOUT'], ['#FF6A86', lo + pad * 0.45, 'BREAKDOWN']].forEach(function (L) {
-        c.strokeStyle = L[0]; c.setLineDash([6, 5]); c.beginPath(); c.moveTo(0, Y(L[1])); c.lineTo(w - 76, Y(L[1])); c.stroke(); c.setLineDash([]);
-        c.fillStyle = L[0]; c.beginPath(); c.roundRect ? c.roundRect(w - 74, Y(L[1]) - 9, 68, 18, 6) : c.rect(w - 74, Y(L[1]) - 9, 68, 18); c.fill();
-        c.fillStyle = '#04202D'; c.font = '800 9px Archivo, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(L[2], w - 40, Y(L[1]) + 1);
-      });
-      c.beginPath(); pts.forEach(function (v, i) { i ? c.lineTo(X(i), Y(v)) : c.moveTo(X(i), Y(v)); });
-      c.strokeStyle = '#2EE29A'; c.lineWidth = 1.6; c.shadowColor = 'rgba(46,226,154,.6)'; c.shadowBlur = 6; c.stroke(); c.shadowBlur = 0;
-      for (var k = n - 26; k < n; k++) { var o = pts[k - 1], cl = pts[k], up = cl >= o; c.fillStyle = up ? '#2EE29A' : '#FF4767'; c.fillRect(X(k) - 1.6, Y(Math.max(o, cl)), 3.2, Math.max(1.5, Math.abs(Y(o) - Y(cl)))); }
-    }
-    paint(); window.addEventListener('resize', paint); if (document.fonts) document.fonts.ready.then(paint);
-  })();
 
 
   /* ---------------- hero contest banner (game look): tabs + prize pool in hearts — PLACEHOLDER pools, replace before launch ---------------- */
@@ -388,7 +353,7 @@
     tick(); setInterval(tick, 1000);
   })();
 
-  /* ---------------- leaderboard + heatmap mock data ---------------- */
+  /* ---------------- leaderboard mock data ---------------- */
   (function () {
     var lb = $('#leaderboard');
     if (lb) {
@@ -401,12 +366,6 @@
           '<b class="rkp-badge' + (light ? ' is-light' : '') + '" style="--rc:' + c + '">' + r[1] + '</b>' +
           '<span class="rkp-val">' + r[2] + ' %</span></li>';
       }).join('');
-    }
-    var heat = $('#heat');
-    if (heat) {
-      var html = '', seed = 3;
-      for (var i = 0; i < 24; i++) { seed = (seed * 16807) % 2147483647; var v = 0.25 + (seed / 2147483647) * 0.75 * (i > 7 && i < 22 ? 1 : 0.5); html += '<i style="--v:' + v.toFixed(2) + '" title="' + i + ':00"></i>'; }
-      heat.innerHTML = html;
     }
   })();
 
