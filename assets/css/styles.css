@@ -2453,3 +2453,17 @@ main .rankwin p { color: inherit; }
 .flow__label { position: absolute; left: 50%; top: calc(100% + clamp(14px, 1.6vw, 24px)); transform: translateX(-50%); white-space: nowrap;
   font-size: clamp(12px, 1.2vw, 15px); font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #0E3B4A; }
 .flow__node--prize .flow__label { top: calc(100% + clamp(14px, 1.6vw, 24px) - 6px); }
+/* v58 — wide screens (>1920): scattered coins left, hearts right, faint background touch */
+.sdeco { display: none; }
+@media (min-width: 1921px) {
+  main#obsah { position: relative; }
+  .sdeco { display: block; position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .sdeco__i { position: absolute; width: var(--s); height: auto; opacity: var(--o); transform: rotate(var(--r)); filter: blur(var(--b)) saturate(.9); }
+  .sdeco { --g: calc((100vw - var(--wrap)) / 2 - 60px); }
+  .sdeco__i--l { left: calc(var(--g) * var(--x) / 100); }
+  .sdeco__i--r { right: calc(var(--g) * var(--x) / 100); }
+}
+@media (min-width: 1921px) {
+  .sdeco { z-index: 2; }
+  .sdeco__i { filter: blur(var(--b)) drop-shadow(0 10px 14px rgba(4,60,80,.18)); }
+}
