@@ -2444,3 +2444,7 @@ main .rankwin p { color: inherit; }
 .cpanel .rkp-val { display: flex; }
 .cpanel .lbg-cols, .cpanel .lbg__row { grid-template-columns: 16px minmax(0, 1fr) auto 58px; }
 #rankPick ~ .lbg .lbg__row { grid-template-columns: 16px minmax(0, 1fr) auto 58px; }
+/* v56 — CTA under the hero intro + free-coins line */
+.hero__cta--lead { display: flex; justify-content: flex-start; margin: 18px 0 0; }
+@media (min-width: 1000px) { .cdock__bar { justify-content: flex-start; padding-right: 0; } }
+@media (max-width: 999px) { .cdock__bar { flex-direction: row; } }
