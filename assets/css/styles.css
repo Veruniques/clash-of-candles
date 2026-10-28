@@ -2496,3 +2496,21 @@ main .rankwin p { color: inherit; }
 .acad__cols > span:nth-child(3), .acm__pct { margin-left: 8px; }
 .acad__cols, .acm { grid-template-columns: 18px minmax(0, 1fr) 30px 42px 12px; }
 .acad__done { margin: 10px 16px 0; font-size: 11px; color: #4F6470; }
+/* v60 — stats preview = the game's overview grid */
+.stgrid { grid-template-columns: 1fr 1fr; gap: 6px; padding: 10px; }
+.st { position: relative; display: flex; flex-direction: column; gap: 3px; min-height: 58px; padding: 12px 24px 10px 10px; border-radius: 8px; background: #fff; box-shadow: 0 1px 2px rgba(19,35,44,.05); overflow: hidden; }
+.st--g::before, .st--r::before { content: ""; position: absolute; left: 6px; top: 0; width: 62%; height: 2.5px; border-radius: 0 0 2px 2px; background: #5FE3A1; }
+.st--r::before { background: #E0335A; }
+.st--wide { grid-column: 1 / -1; }
+.st__l { font-size: 10.5px; font-weight: 500; color: #2E8F5E; white-space: nowrap; }
+.st--r .st__l, .st__l em { color: #E0335A; font-style: normal; }
+.st__l i { font-style: normal; color: #13232C; }
+.st__v { font-size: 15px; font-weight: 800; color: #13232C; font-variant-numeric: tabular-nums; }
+.st--wide .st__v { margin-top: 6px; }
+.st__w { color: #2E8F5E; } .st__x { color: #E0335A; }
+.st__go { position: absolute; right: 7px; top: 50%; width: 13px; height: 13px; margin-top: -6px; fill: none; stroke: #5FE3A1; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.st--r .st__go { stroke: #E0335A; }
+.st__ranks { display: flex; gap: 5px; margin-top: 4px; }
+.st__ranks i, .st__rk i { display: grid; place-items: center; width: 16px; height: 18px; border-radius: 4px; background: #E3E9ED; font-style: normal; font-size: 9px; font-weight: 800; color: #13232C; }
+.st__rk { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+.st__rk b { font-size: 12.5px; font-weight: 800; color: #13232C; font-variant-numeric: tabular-nums; }
