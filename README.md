@@ -6,7 +6,7 @@
 index.html
 assets/
   css/styles.css
-  js/main.js          config, nav, intro hero, scroll přechod, ranky (obtížnost), odměny (TOP 3 + mlha), arény, žebříček, statistiky, formulář
+  js/main.js          config, nav, intro hero, scroll přechod, ranky (obtížnost), odměny (TOP 3 + mlha), Arena, žebříček, statistiky, formulář
   data/rewards.json   PLACEHOLDER ekonomika a produkty — panel odměn, TOP 3 i „mlha“ se kreslí odsud
   js/vendor/gsap.min.js
   fonts/              Archivo (variabilní, self-hosted, OFL)
@@ -18,10 +18,10 @@ Lokální náhled: `python3 -m http.server` v kořeni repa a otevřít `http://l
 
 ## Struktura stránky (texty podle copy decku 10/2026 a úprav 25. 10. 2026)
 
-0. **Hero** — „Přečti graf. Poraz soupeře. Hraj o velké ceny.“ + úvod vlevo; vpravo banner arén v designu hry (záložky Daily/Weekly/Monthly, výherní bank, Live flip odpočet h:mm, CTA Vyzkoušet hru — částky PLACEHOLDER v `main.js`, `POOL`). Za panáčky slabý graf ze hry (`js/herochart.js`).
+0. **Hero** — „Přečti graf. Poraz soupeře. Hraj o velké ceny.“ + úvod vlevo; vpravo banner Areny v designu hry (záložky Daily/Weekly/Monthly, výherní bank, Live flip odpočet h:mm, CTA Vyzkoušet hru — částky PLACEHOLDER v `main.js`, `POOL`). Za panáčky slabý graf ze hry (`js/herochart.js`).
 1. **Odměny** (`#odmeny`, panel, který vyjede přes hero) — symboly coin → play → srdíčko → odměny → 3 odměny (`market: true`) + sloupec v mlze, kde poskakují `teasers` → nadpis „Hraj chytře. Sbírej srdíčka. Vyber si odměnu.“ + text vlevo, Coins (`#coins`) vpravo.
 3. **Ranky** (`#play`) — „Každý rank, jiná hra.“ vlevo, vpravo karta Ranks se řádkem pro každý rank F → G.O.A.T. (bez čísel vstupu/výhry).
-4. **Žebříček · Academy · Herní statistiky · Arény** (`#contesty`: `#rank`, `#academy`, `#statistika`) — čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
+4. **Žebříček · Academy · Herní statistiky · Arena** (`#contesty`: `#rank`, `#academy`, `#statistika`) — čtyři karty; ukázky jsou v UI hry (žebříček jako obrazovka Ranks, se srdíčky).
 4b. **O Clash of Candles** (`#o-nas`) — „Clash of Candles je soutěžní hra…“
 5. **FAQ** (`#faq`) — 7 otázek z copy decku, jeden sloupec.
 6. **Závěrečné CTA = registrace** (`#registrace`) — „Myslíš, že umíš číst graf?“, tlačítko Jdu hrát.
@@ -38,7 +38,7 @@ Ekonomika na webu: **coins** = palivo (vstup do kola), **srdíčka** = výhry, k
 - [ ] **Endpoint formuláře.** `index.html` → `<form id="signup" data-endpoint="">`. Formulář posílá `POST` JSON `{ email, adult, source, ts }`. Dokud je prázdný, e-maily se nikam neodesílají (jen `console.warn` a localStorage v prohlížeči hráče).
 - [ ] **Produkty v `rewards.json`** — skutečné produkty a ceny dle apple.com/cz (iPhone 18 Pro 34 990 Kč, AirPods Max 13 990 Kč, Apple Watch 10 990 Kč, AirPods Pro 3 6 490 Kč). **Fotky jsou zatím odkazované přímo z Apple CDN** — před spuštěním nahradit licencovanými fotkami shopu/partnera (přepsat `image`). Hodnota srdíčka (50 Kč) a max. sleva 80 % jsou placeholder; ceny v marketplace (♥ + Kč) se z nich počítají automaticky.
 - [ ] **Ranky** jsou podle hry: F → E → D → C → B → A → S → G.O.A.T. (s +/++), získávají se hrou, začíná se na F. Rozhraní Ranks kopíruje obrazovku ze hry; sloupce Vstup (10–1 000 coins) a Výhra (1–100 srdíček) jsou placeholder. `assets/js/main.js`, pole `RANKS`.
-- [ ] **Výherní banky arén** v hero banneru (500 / 1 000 / 1 500 srdíček) jsou placeholder — `main.js`, `POOL`.
+- [ ] **Výherní banky Areny** v hero banneru (500 / 1 000 / 1 500 srdíček) jsou placeholder — `main.js`, `POOL`.
 - [ ] **Výhody registrace** (early access, startovní bonus, founder badge) — nechat jen potvrzené.
 - [ ] **Mock data** — žebříček, statistiky a Academy kvíz jsou ilustrační (`main.js`, `index.html`).
 - [ ] **Právní texty** — patička a FAQ tvrdí: není to investiční služba, coins nelze vyměnit za peníze, 18+. Nechat zkontrolovat právníkem (kupované coins + reálné produkty).
