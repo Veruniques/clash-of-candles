@@ -112,16 +112,16 @@
     raf = 0; if (!visible || document.hidden) return;
     var dt = lastTs ? Math.min(64, ts - lastTs) : 16; lastTs = ts;
     if (phase === 'grow') {
-      grow += dt / 300;
+      grow += dt / 150;
       if (grow >= 1) {
         if (!broke && shown && tail[shown - 1].c > OUT) { broke = true; flash = 1; }
         if (shown < TAIL) { shown++; grow = 0; } else { phase = 'hold'; hold = 0; }
       }
-      if (flash > 0) flash = Math.max(0, flash - dt / 1400);
+      if (flash > 0) flash = Math.max(0, flash - dt / 1000);
     } else if (phase === 'hold') {
-      hold += dt; if (hold > 2200) phase = 'fade';
+      hold += dt; if (hold > 1200) phase = 'fade';
     } else {
-      fade -= dt / 500;
+      fade -= dt / 350;
       if (fade <= 0) { fade = 1; shown = 0; grow = 1; flash = 0; broke = false; phase = 'grow'; makeTail(); }
     }
     draw(); raf = requestAnimationFrame(frame);

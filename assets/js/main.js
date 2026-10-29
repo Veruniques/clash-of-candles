@@ -280,7 +280,7 @@
     var badge = function (r) { var t = r.charAt(0); return '<b class="rkp-badge' + (/[BAG]/.test(t) ? ' is-light' : '') + '" style="--rc:' + TC[t] + '">' + (t === 'G' ? 'GOAT' : r) + '</b>'; };
     function row(name, rank, val) {
       var li = document.createElement('li'); li.setAttribute('data-n', name);
-      li.innerHTML = '<span class="lbg__pos"></span><span class="lbg__name">' + name + '</span>' + badge(rank) + '<span class="rkp-val"><i class="cdelta" aria-hidden="true"></i><b>' + pct(val) + '</b></span>';
+      li.innerHTML = '<span class="lbg__pos"></span><span class="lbg__name">' + name + '</span>' + badge(rank) + '<span class="rkp-val"><b>' + pct(val) + '</b></span>';
       return li;
     }
     var place = function (li, i) { li.className = 'rkp lbg__row'; li.querySelector('.lbg__pos').className = 'lbg__pos top' + (i + 1); li.querySelector('.lbg__pos').textContent = i + 1; };
@@ -291,9 +291,8 @@
       var top = players.slice().sort(function (a, b) { return b.v - a.v; }).slice(0, 3), before = {}, keep = {};
       Array.prototype.forEach.call(live.children, function (li) { before[li.getAttribute('data-n')] = li.getBoundingClientRect().top; });
       top.forEach(function (p, i) {
-        var li = live.querySelector('[data-n="' + p.n + '"]') || row(p.n, p.r, p.v), b = li.querySelector('.rkp-val b'), d = li.querySelector('.cdelta');
+        var li = live.querySelector('[data-n="' + p.n + '"]') || row(p.n, p.r, p.v), b = li.querySelector('.rkp-val b');
         var old = parseFloat(b.textContent.replace(',', '.')); place(li, i); b.textContent = pct(p.v);
-        if (!fresh && Math.abs(old - p.v) > 0.001) { d.className = 'cdelta ' + (p.v > old ? 'up' : 'down'); li.classList.add('is-tick'); }
         live.appendChild(li); keep[p.n] = 1;
       });
       Array.prototype.slice.call(live.children).forEach(function (li) { if (!keep[li.getAttribute('data-n')]) live.removeChild(li); });
@@ -301,9 +300,8 @@
       Array.prototype.forEach.call(live.children, function (li) {
         var was = before[li.getAttribute('data-n')], now = li.getBoundingClientRect().top;
         if (was == null) li.animate([{ opacity: 0, transform: 'translateX(18px)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.2,.8,.2,1)' });
-        else if (Math.abs(was - now) > 1) { li.classList.add('is-swap'); li.animate([{ transform: 'translateY(' + (was - now) + 'px)' }, { transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.2,.8,.2,1)' }); }
+        else if (Math.abs(was - now) > 1) { li.animate([{ transform: 'translateY(' + (was - now) + 'px)' }, { transform: 'none' }], { duration: 600, easing: 'cubic-bezier(.2,.8,.2,1)' }); }
       });
-      setTimeout(function () { Array.prototype.forEach.call(live.children, function (li) { li.classList.remove('is-tick', 'is-swap'); }); }, 1000);
     }
     function step() {
       if (document.hidden) return;
